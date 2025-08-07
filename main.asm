@@ -113,12 +113,14 @@ if !SAVESTATES
 ; Set SRAM size
 org $00FFD8
     db $08 ; 256kb
+endif
 
 
 ; ------------
 ; Input Checks
 ; ------------
 
+if !SAVESTATES
 ; hijack main game loop for input checks
 org $8A8023
     JSL gamemode_start : BCS end_of_normal_gameplay
@@ -126,9 +128,11 @@ org $8A8023
 org $8A802E
     ; skip gamemode JSR if the current frame doesn't need to be processed any further
     end_of_normal_gameplay:
+endif
 
 
 org !FREESPACE
+if !SAVESTATES
 print pc, " gamemode start"
 gamemode_start:
 {
@@ -192,11 +196,11 @@ post_load_state:
 
 ;    JSL $82BE17 ; Cancel sound effects
     LDA.W #$0002
-    JSL.L $809049
+    JSL $809049
     LDA.W #$0071
-    JSL.L $8090CB
+    JSL $8090CB
     LDA.W #$0001
-    JSL.L $80914D
+    JSL $80914D
 
     PLA : STA $05F5
 

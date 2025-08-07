@@ -1,0 +1,4 @@
+*.s[mf]c
+*.sym
+build/*
+!build/.gitkeep

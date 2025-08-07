@@ -1,6 +1,6 @@
 
-; X-Fusion practice hack
-; Minimal features because there's barely any freespace
+; X-Fusion practice hack v1.0.1
+; Minimal features because there's barely any freespace (extra freespace found at $9BCBFB)
 ; Tinystates will not be supported due to too many things moving around in X-Fusion
 
 ; SD2SNES Savestate code originally by acmlm, total, Myria
@@ -8,7 +8,7 @@
 lorom
 
 ; Savestate code variables
-!FREESPACE = $8BF800 ; repoint to anywhere in banks $80-BF, $80 preferred
+!FREESPACE = $8BF800 ; repoint to anywhere in banks $80-BF
 ; also freespace at $9BCC00
 !SAVESTATES ?= 1
 !RERANDOMIZE ?= 1 ; set to 0 to disable RNG randomization on loadstate
@@ -195,11 +195,11 @@ post_load_state:
     STZ $05F5
 
 ;    JSL $82BE17 ; Cancel sound effects
-    LDA.W #$0002
+    LDA #$0002
     JSL $809049
-    LDA.W #$0071
+    LDA #$0071
     JSL $8090CB
-    LDA.W #$0001
+    LDA #$0001
     JSL $80914D
 
     PLA : STA $05F5
@@ -229,7 +229,6 @@ endif
 +   RTS
 
 
-; These restored registers are game-specific and needs to be updated for different games
 register_restore_return:
     %a8()
     LDA $84 : STA $4200
@@ -246,8 +245,8 @@ save_state:
 
 save_dma_regs:
     LDA $4300,X : STA !SRAM_DMA_BANK,X
-    INX : INY
-    CPY #$000B : BNE save_dma_regs
+    INX
+    INY : CPY #$000B : BNE save_dma_regs
     CPX #$007B : BEQ save_dma_regs_done
     INX #5 : LDY #$0000
     BRA save_dma_regs
@@ -322,8 +321,7 @@ save_write_table:
     dw $0000, save_return
 
 save_return:
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     %ai16()
     LDA !ram_room_has_set_rng : STA !sram_save_has_set_rng
@@ -334,8 +332,7 @@ save_return:
 
 load_state:
     JSR pre_load_state
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     %a8()
     LDX #load_write_table
@@ -406,8 +403,7 @@ load_return:
     %ai16()
     LDA !SRAM_SAVED_SP : TCS
 
-    PEA $0000
-    PLB : PLB
+    PEA $0000 : PLB : PLB
 
     ; rewrite inputs so that holding load won't keep loading, as well as rewriting saving input to loading input
     LDA !SS_INPUT_CUR : EOR !SAVE_INPUTS : ORA !LOAD_INPUTS
@@ -419,8 +415,8 @@ load_return:
 load_dma_regs:
     LDA !SRAM_DMA_BANK,X
     STA $4300,X
-    INX : INY
-    CPY #$000B : BNE load_dma_regs
+    INX
+    INY : CPY #$000B : BNE load_dma_regs
     CPX #$007B : BEQ load_dma_regs_done
     INX #5 : LDY #$0000
     JMP load_dma_regs
@@ -441,28 +437,29 @@ vm:
     ; write instead of a word write.  If xxxx is $0000, end the VM.
     %ai16()
     ; Read address to write to
-    LDA.w $0000,X : BEQ vm_done
+    LDA.w $0000,X : BEQ .done
     TAY
     INX #2
     ; Check for byte mode
-    BIT.w #$1000 : BEQ vm_word_mode
+    BIT.w #$1000 : BEQ .word
     AND.w #$EFFF : TAY
     %a8()
-vm_word_mode:
+
+  .word
     ; Read value
     LDA.w $0000,X
-    INX #2
-vm_write:
+
     ; Check for read mode (high bit of address)
-    CPY.w #$8000 : BCS vm_read
+    INX #2 : CPY.w #$8000 : BCS .read
     STA $0000,Y
     BRA vm
-vm_read:
+
+  .read
     ; "Subtract" $8000 from Y by taking advantage of bank wrapping.
     LDA $8000,Y
     BRA vm
 
-vm_done:
+  .done
     ; A, X and Y are 16-bit at exit.
     ; Return to caller.  The word in the table after the terminator is the
     ; code address to return to.
@@ -624,23 +621,23 @@ ih_update_hud_code:
     PHB
     PHK : PLB
 
-    LDX #$0094
-
-    ; Divide time by 60 or 50 and draw seconds and frames
+    ; Divide time by 60 and draw seconds and frames
     LDA !ram_last_realtime_room : STA $4204
     %a8()
     LDA.b #$3C : STA $4206
     %a16()
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
-    LDA $4214 : JSR Draw3
+    LDA $4214
+    LDX #$0094 : JSR Draw3
     LDA $C1 : ASL : TAY
     LDA.w HexToNumberGFX1,Y : STA !HUD_TILEMAP+$02,X
     LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+$04,X
     LDA #!HUD_DECIMAL : STA !HUD_TILEMAP,X
 
     ; Lag
-    LDA !ram_last_room_lag : LDX #$00D4 : JSR Draw3
+    LDA !ram_last_room_lag
+    LDX #$00D4 : JSR Draw3
 
     ; Door lag / transition time
     LDA !ram_last_door_lag_frames
@@ -660,7 +657,8 @@ Draw2:
     LDA $4214 : STA $16
 
     ; Ones digit
-    LDA $4216 : ASL : TAY : LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$02,X
+    LDA $4216 : ASL : TAY
+    LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$02,X
 
     ; Tens digit
     LDA $16 : BEQ .blanktens
@@ -668,7 +666,6 @@ Draw2:
     LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
-    INX #4
     RTS
 
   .blanktens
@@ -695,19 +692,18 @@ Draw3:
     LDA #$0A : STA $4206 ; divide by 10
     %a16()
     PEA $0000 : PLA ; wait for CPU math
-    LDA $4214 : STA $14
+    LDA $4214 : STA $16
 
     ; Tens digit
     LDA $4216 : ASL : TAY
     LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$02,X
 
     ; Hundreds digit
-    LDA $14 : BEQ .blankhundreds
+    LDA $16 : BEQ .blankhundreds
     ASL : TAY
     LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
-    INX #6
     RTS
 
   .blanktens

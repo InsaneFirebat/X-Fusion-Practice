@@ -3,7 +3,7 @@
 
 ## Notes
 
-Designed for version 1.1 with standard controls. Not tested with GBA controls or version 1.0
+Designed for version 1.1 and 1.2 with standard controls. Not tested with GBA controls or version 1.0
 
 ## Which Download?
 

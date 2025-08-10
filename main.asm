@@ -14,6 +14,8 @@ lorom
 !RERANDOMIZE ?= 1 ; set to 0 to disable RNG randomization on loadstate
 !SAVE_INPUTS = #$6010 ; Select + Y + R
 !LOAD_INPUTS = #$6020 ; Select + Y + L
+; i use SL+Y+L+R to save and SL+B+L to load -mm2
+; 6030 A020
     ; Input Cheat Sheet
     ; $8000 = B
     ; $4000 = Y
@@ -183,11 +185,10 @@ pre_load_state:
 
     ; Rerandomize
 if !RERANDOMIZE
-    LDA !sram_save_has_set_rng : BNE +
     LDA $05E5 : STA $770080
     LDA $05B6 : STA $770082
 endif
-+   RTS
+    RTS
 
 post_load_state:
     ; If $05F5 is non-zero, the game won't clear the sounds
@@ -222,11 +223,10 @@ music_load_track:
 music_done:
     ; Rerandomize
 if !RERANDOMIZE
-    LDA !sram_save_has_set_rng : BNE +
     LDA $770080 : STA $05E5
     LDA $770082 : STA $05B6
 endif
-+   RTS
+    RTS
 
 
 register_restore_return:
@@ -466,46 +466,8 @@ vm:
     JMP ($0002,x)
 
 print pc, " save end"
-
-
-; -----------
-; RNG Seeders
-; -----------
-
-if !RERANDOMIZE
-pushpc
-
-; Don't rerandomize if enemy seeds RNG
-org $A3AB12
-    JSL hook_hopper_set_rng
-
-org $A2B588
-    JSL hook_lavarocks_set_rng
-    NOP #2
-
-org $A8B798
-    JSL hook_beetom_set_rng
-    NOP #2
-
-pullpc
-
-print pc, " rng start"
-hook_hopper_set_rng:
-    LDA #$0001 : STA !ram_room_has_set_rng
-    JML $808111
-
-hook_lavarocks_set_rng:
-    LDA #$0001 : STA !ram_room_has_set_rng
-    LDA #$0011 : STA $05E5
-    RTL
-
-hook_beetom_set_rng:
-    LDA #$0001 : STA !ram_room_has_set_rng
-    LDA #$0017 : STA $05E5
-    RTL
-print pc, " rng end"
 endif
-endif
+
 
 pushpc
 ; hijack, runs as game is starting, JSR to RAM initialization to avoid bad values

@@ -145,38 +145,6 @@ table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_color(title, addr, jsltarget)
-; Allows editing an 8-bit value in increments consistent with SNES color values
-  .dm_action
-    dw !ACTION_NUMFIELD_COLOR
-  .dm_addr
-    dl <addr> ; 24bit RAM address to display/manipulate
-  .dm_jsl
-    dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
-  .dm_text
-table ../resources/normal.tbl
-    db #$28, "<title>", #$FF
-endmacro
-
-macro cm_numfield_sound(title, addr, start, end, increment, heldincrement, jsltarget)
-; Allows editing an 8-bit value and playing a sound when pressing Y
-  .dm_action
-    dw !ACTION_NUMFIELD_SOUND
-  .dm_addr
-    dl <addr> ; 24bit RAM address to display/manipulate
-  .dm_minMax
-    db <start>, <end> ; minimum and maximum values allowed
-  .dm_inc
-    db <increment> ; inc/dec amount when pressed
-  .dm_heldinc
-    db <heldincrement> ; inc/dec amount when direction is held (scroll faster)
-  .dm_jsl
-    dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
-  .dm_text
-table ../resources/normal.tbl
-    db #$28, "<title>", #$FF
-endmacro
-
 macro cm_toggle(title, addr, value, jsltarget)
 ; toggle between zero (OFF) and value (ON)
   .dm_action
@@ -309,55 +277,6 @@ table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
-macro examplemenu()
-; inserts dummy menu objects
-    dw #mc_dummy_on
-    dw #mc_dummy_off
-    dw #mc_dummy_hexnum
-    dw #mc_dummy_num
-endmacro
-
-macro palettemenu(title, label, addr)
-; menu tables for customizing menu color palettes
-    %cm_submenu("<title>", <label>)
-
-<label>:
-    dw #custompalettes_hex_red
-    dw #custompalettes_hex_green
-    dw #custompalettes_hex_blue
-    dw #$FFFF
-    dw #custompalettes_dec_red
-    dw #custompalettes_dec_green
-    dw #custompalettes_dec_blue
-    dw #$FFFF
-    dw <label>_hex_word
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    dw #$FFFF
-    %examplemenu()
-    dw #$0000
-    %cm_header("<title>")
-    %cm_footer("THREE WAYS TO EDIT COLORS")
-
-<label>_hex_word:
-    %cm_numfield_hex_word("SNES 15-bit BGR", !ram_cm_custompalette, #$7FFF, .set)
-  .set
-    STA <addr>
-    JSL cm_colors
-    JML MixRGB
-}
-endmacro
-
-macro setupRGB(addr)
-; load SRAM address for cm_colors
-    LDA.b #<addr>>>16
-    LDX.w #<addr>
-    RTS
-endmacro
-
 macro cm_equipment_item(name, addr, bitmask, inverse)
 ; Allows three-way toggling of items:  ON/OFF/UNOBTAINED
   .dm_action
@@ -405,48 +324,6 @@ macro cm_equipment_beam(name, addr, bitmask, inverse, and)
     LDA <inverse> : STA !DP_Increment
     LDA <and> : STA !DP_Temp
     JMP equipment_toggle_beams
-endmacro
-
-macro SDE_add(label, value, mask, inverse)
-cm_SDE_add_<label>:
-; subroutine to add to a specific hex digit, used in cm_edit_digits
-    AND <mask> : CMP <mask> : BEQ .inc2zero
-    CLC : ADC <value> : BRA .store
-  .inc2zero
-    LDA #$0000
-  .store
-    STA !DP_DigitValue
-    ; return original value with edited digit masked away
-    LDA [!DP_DigitAddress] : AND <inverse>
-    RTS
-endmacro
-
-macro SDE_sub(label, value, mask, inverse)
-cm_SDE_sub_<label>:
-; subroutine to subtract from a specific hex digit, used in cm_edit_digits
-    AND <mask> : BEQ .set2max
-    SEC : SBC <value> : BRA .store
-  .set2max
-    LDA <mask>
-  .store
-    STA !DP_DigitValue
-    ; return original value with edited digit masked away
-    LDA [!DP_DigitAddress] : AND <inverse>
-    RTS
-endmacro
-
-macro SDE_dec(label, address)
-; increments or decrements an address based on controller input, used in cm_edit_decimal_digits
-    LDA !IH_CONTROLLER_PRI : BIT !IH_INPUT_UP : BNE .<label>_inc
-    ; dec
-    LDA <address> : DEC : BPL .store_<label>
-    LDA #$0009 : BRA .store_<label>
-  .<label>_inc
-    LDA <address> : INC
-    CMP #$000A : BMI .store_<label>
-    LDA #$0000
-  .store_<label>
-    STA <address>
 endmacro
 
 

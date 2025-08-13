@@ -630,8 +630,6 @@ ToggleBeamsMenu:
     dw tb_plasmabeam
     dw #$FFFF
     dw misc_hyperbeam
-    dw #$FFFF
-    dw tb_glitchedbeams
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 
@@ -696,42 +694,6 @@ equipment_toggle_beams:
 
   .done
     JML $90AC8D ; update beam gfx
-}
-
-
-; -------------------
-; Glitched Beams menu
-; -------------------
-
-GlitchedBeamsMenu:
-    dw #gb_murder
-    dw #gb_spacetime
-    dw #gb_chainsaw
-    dw #gb_unnamed
-    dw #$0000
-    %cm_header("GLITCHED BEAMS")
-    %cm_footer("BEWARE OF CRASHES")
-
-gb_murder:
-    %cm_jsl("Murder Beam", action_glitched_beam, #$100F)
-
-gb_spacetime:
-    %cm_jsl("Spacetime Beam", action_glitched_beam, #$100E)
-
-gb_chainsaw:
-    %cm_jsl("Chainsaw Beam", action_glitched_beam, #$100D)
-
-gb_unnamed:
-    %cm_jsl("Unnamed Glitched Beam", action_glitched_beam, #$100C)
-
-action_glitched_beam:
-{
-    TYA : STA !SAMUS_BEAMS_EQUIPPED
-    LDA !SAMUS_BEAMS_COLLECTED : ORA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
-    JSL setup_beams_ram
-    LDA #$0042 : JSL !SFX_LIB1 ; unlabled, song dependent sound
-    JSL $90AC8D ; update beam gfx
-    RTL
 }
 
 
@@ -1008,60 +970,6 @@ misc_gooslowdown:
 misc_healthbomb:
     %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)
 
-misc_magicpants:
-    dw !ACTION_CHOICE
-    dl #!ram_magic_pants_enabled
-    dw #$0000
-    db #$28, "Magic Pants", #$FF
-    db #$28, "        OFF", #$FF
-    db #$28, "      FLASH", #$FF
-    db #$28, "       LOUD", #$FF
-    db #$28, "       BOTH", #$FF
-    db #$FF
-
-misc_spacepants:
-    dw !ACTION_CHOICE
-    dl #!ram_space_pants_enabled
-    dw #$0000
-    db #$28, "Space Pants", #$FF
-    db #$28, "        OFF", #$FF
-    db #$28, "      FLASH", #$FF
-    db #$28, "       LOUD", #$FF
-    db #$28, "       BOTH", #$FF
-    db #$FF
-
-misc_metronome:
-    %cm_toggle("Metronome", !ram_metronome, #$0001, GameLoopExtras)
-
-misc_metronome_tickrate:
-    %cm_numfield("Metronome Tickrate", !sram_metronome_tickrate, 1, 255, 1, 8, #.routine)
-    .routine
-        LDA #$0000 : STA !ram_metronome_counter
-        RTL
-
-GameLoopExtras:
-{
-    LDA !ram_magic_pants_enabled : BNE .enabled
-    LDA !ram_space_pants_enabled : BNE .enabled
-    LDA !ram_metronome : BNE .enabled
-    LDA #$0000
-  .enabled
-    STA !ram_game_loop_extras
-    RTL
-}
-
-misc_metronome_sfx:
-    dw !ACTION_CHOICE
-    dl #!sram_metronome_sfx
-    dw #$0000
-    db #$28, "Metronome SFX", #$FF
-    db #$28, "    MISSILE", #$FF
-    db #$28, "      CLICK", #$FF
-    db #$28, "       BEEP", #$FF
-    db #$28, " POWER BEAM", #$FF
-    db #$28, "     SPAZER", #$FF
-    db #$FF
-
 misc_killenemies:
     %cm_jsl("Kill Enemies", .kill_loop, #0)
   .kill_loop
@@ -1252,15 +1160,6 @@ boss_draygon_statue:
 boss_ridley_statue:
     %cm_toggle_bit("Ridley Statue", #$7ED820, #$0080, #0)
 
-
-
-; Memory viewer?
-
-ih_ram_watch:
-    %cm_jsl("Customize RAM Watch", #ih_prepare_ram_watch_menu, #RAMWatchMenu)
-
-incsrc ramwatchmenu.asm
-
 print pc, " mainmenu InfoHUD end"
 ;warnpc $85F800 ; gamemode.asm
 
@@ -1277,14 +1176,13 @@ GameMenu:
     dw #game_alternatetext
     dw #game_moonwalk
     dw #game_iconcancel
-    dw #game_goto_controls
     dw #$FFFF
-    dw #game_cutscenes
-    dw #$FFFF
-    dw #game_goto_debug
-    dw #$FFFF
-    dw #game_minimap
-    dw #game_clear_minimap
+    dw #game_debugmode
+    dw #game_debugbrightness
+    dw #game_invincibility
+    dw #game_pacifist
+    dw #game_debugplms
+    dw #game_debugprojectiles
     dw #$0000
     %cm_header("GAME")
 
@@ -1297,34 +1195,6 @@ game_moonwalk:
 game_iconcancel:
     %cm_toggle("Icon Cancel", $7E09EA, #$0001, #0)
 
-game_goto_controls:
-    %cm_submenu("Controller Setting Mode", #ControllerSettingMenu)
-
-game_cutscenes:
-    %cm_submenu("Cutscenes Menu", #CutscenesMenu)
-
-game_minimap:
-    %cm_toggle("Minimap", !ram_minimap, #$0001, #0)
-
-game_clear_minimap:
-    %cm_jsl("Clear Minimap", .clear_minimap, #$0000)
-
-  .clear_minimap
-    LDA #$0000 : STA !ram_map_counter : STA $7E0789
-    STA $7ED908 : STA $7ED90A : STA $7ED90C : STA $7ED90E
-    LDX #$00FE
-  .clear_minimap_loop
-    STA $7ECD52,X : STA $7ECE52,X
-    STA $7ECF52,X : STA $7ED052,X
-    STA $7ED152,X : STA $7ED252,X
-    STA $7ED352,X : STA $7ED452,X
-    STA $7ED91C,X : STA $7EDA1C,X
-    STA $7EDB1C,X : STA $7EDC1C,X
-    STA $7EDD1C,X : STA $7E07F7,X
-    DEX : DEX : BPL .clear_minimap_loop
-    %sfxreset()
-    RTL
-
 game_goto_debug:
     %cm_submenu("Debug Settings", #DebugMenu)
 
@@ -1334,13 +1204,6 @@ game_goto_debug:
 ; ----------
 
 DebugMenu:
-    dw #game_debugmode
-    dw #game_debugbrightness
-    dw #game_invincibility
-    dw #game_pacifist
-    dw #game_debugplms
-    dw #game_debugprojectiles
-    dw #game_debugfixscrolloffsets
     dw #$0000
     %cm_header("DEBUG SETTINGS")
 
@@ -1362,348 +1225,6 @@ game_debugplms:
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
 
-game_debugfixscrolloffsets:
-    %cm_toggle_bit("Fix Scroll Offsets", !ram_fix_scroll_offsets, #$0001, #0)
-
-
-; ---------------
-; Cutscenes menu
-; ---------------
-
-CutscenesMenu:
-    dw #cutscenes_quickboot
-    dw #$FFFF
-    dw #cutscenes_fast_kraid
-    dw #cutscenes_fast_phantoon
-    dw #$0000
-    %cm_header("CUTSCENES")
-
-cutscenes_quickboot:
-    %cm_toggle_bit("Boot to Menu", !sram_cutscenes, !CUTSCENE_QUICKBOOT, #0)
-
-cutscenes_fast_kraid:
-    %cm_toggle_bit("Skip Kraid Intro", !sram_cutscenes, !CUTSCENE_FAST_KRAID, #0)
-
-cutscenes_fast_phantoon:
-    %cm_toggle_bit("Skip Phantoon Intro", !sram_cutscenes, !CUTSCENE_FAST_PHANTOON, #0)
-
-
-; -------------------
-; Controller Settings
-; -------------------
-
-ControllerSettingMenu:
-    dw #controls_common_layouts
-    dw #controls_save_to_file
-    dw #$FFFF
-    dw #controls_shot
-    dw #controls_jump
-    dw #controls_dash
-    dw #controls_item_select
-    dw #controls_item_cancel
-    dw #controls_angle_up
-    dw #controls_angle_down
-    dw #$0000
-    %cm_header("CONTROLLER SETTING MODE")
-
-controls_common_layouts:
-    %cm_submenu("Common Controller Layouts", #ControllerCommonMenu)
-
-controls_shot:
-    %cm_ctrl_input("        SHOT", !IH_INPUT_SHOT, action_submenu, #AssignControlsMenu)
-
-controls_jump:
-    %cm_ctrl_input("        JUMP", !IH_INPUT_JUMP, action_submenu, #AssignControlsMenu)
-
-controls_dash:
-    %cm_ctrl_input("        DASH", !IH_INPUT_RUN, action_submenu, #AssignControlsMenu)
-
-controls_item_select:
-    %cm_ctrl_input(" ITEM SELECT", !IH_INPUT_ITEM_SELECT, action_submenu, #AssignControlsMenu)
-
-controls_item_cancel:
-    %cm_ctrl_input(" ITEM CANCEL", !IH_INPUT_ITEM_CANCEL, action_submenu, #AssignControlsMenu)
-
-controls_angle_up:
-    %cm_ctrl_input("    ANGLE UP", !IH_INPUT_ANGLE_UP, action_submenu, #AssignAngleControlsMenu)
-
-controls_angle_down:
-    %cm_ctrl_input("  ANGLE DOWN", !IH_INPUT_ANGLE_DOWN, action_submenu, #AssignAngleControlsMenu)
-
-controls_save_to_file:
-    %cm_jsl("Save to File", .routine, #0)
-  .routine
-    LDA !GAMEMODE : CMP #$0002 : BEQ .fail
-    LDA !CURRENT_SAVE_FILE : BEQ .fileA
-    CMP #$0001 : BEQ .fileB
-    CMP #$0002 : BEQ .fileC
-
-  .fail
-    %sfxfail()
-    RTL
-
-  .fileA
-    LDX #$0020 : BRA .save
-
-  .fileB
-    LDX #$067C : BRA .save
-
-  .fileC
-    LDX #$0CD8
-
-  .save
-    LDA.w !IH_INPUT_SHOT : STA $700000,X : INX #2
-    LDA.w !IH_INPUT_JUMP : STA $700000,X : INX #2
-    LDA.w !IH_INPUT_RUN : STA $700000,X : INX #2
-    LDA.w !IH_INPUT_ITEM_CANCEL : STA $700000,X : INX #2
-    LDA.w !IH_INPUT_ITEM_SELECT : STA $700000,X : INX #2
-    LDA.w !IH_INPUT_ANGLE_UP : STA $700000,X : INX #2
-    LDA.w !IH_INPUT_ANGLE_DOWN : STA $700000,X
-    %sfxconfirm()
-    RTL
-
-AssignControlsMenu:
-    dw controls_assign_A
-    dw controls_assign_B
-    dw controls_assign_X
-    dw controls_assign_Y
-    dw controls_assign_Select
-    dw controls_assign_L
-    dw controls_assign_R
-    dw #$0000
-    %cm_header("ASSIGN AN INPUT")
-
-controls_assign_A:
-    %cm_jsl("A", action_assign_input, !CTRL_A)
-
-controls_assign_B:
-    %cm_jsl("B", action_assign_input, !CTRL_B)
-
-controls_assign_X:
-    %cm_jsl("X", action_assign_input, !CTRL_X)
-
-controls_assign_Y:
-    %cm_jsl("Y", action_assign_input, !CTRL_Y)
-
-controls_assign_Select:
-    %cm_jsl("Select", action_assign_input, !CTRL_SELECT)
-
-controls_assign_L:
-    %cm_jsl("L", action_assign_input, !CTRL_L)
-
-controls_assign_R:
-    %cm_jsl("R", action_assign_input, !CTRL_R)
-
-AssignAngleControlsMenu:
-    dw #controls_assign_L
-    dw #controls_assign_R
-    dw #$0000
-    %cm_header("ASSIGN AN INPUT")
-    %cm_footer("ONLY L OR R ALLOWED")
-
-action_assign_input:
-{
-    LDA !ram_cm_ctrl_assign : STA $C2 : TAX  ; input address in $C2 and X
-    LDA $7E0000,X : STA !ram_cm_ctrl_swap    ; save old input for later
-    TYA : STA $7E0000,X                      ; store new input
-    STY $C4                                  ; saved new input for later
-
-    JSL check_duplicate_inputs
-
-    ; determine which sfx to play
-    CMP #$FFFF : BEQ .undetected
-    %sfxconfirm()
-    BRA .done
-  .undetected
-    %sfxgoback()
-  .done
-    JML cm_previous_menu
-}
-
-check_duplicate_inputs:
-{
-    ; ram_cm_ctrl_assign = word address of input being assigned
-    ; ram_cm_ctrl_swap = previous input bitmask being moved
-    ; X / $C2 = word address of new input
-    ; Y / $C4 = new input bitmask
-
-    LDA #$09B2 : CMP $C2 : BEQ .check_jump      ; check if we just assigned shot
-    LDA $09B2 : BEQ .swap_shot                  ; check if shot is unassigned
-    CMP $C4 : BNE .check_jump                   ; skip to check_jump if not a duplicate assignment
-  .swap_shot
-    JMP .shot                                   ; swap with shot
-
-  .check_jump
-    LDA #$09B4 : CMP $C2 : BEQ .check_dash
-    LDA $09B4 : BEQ .swap_jump
-    CMP $C4 : BNE .check_dash
-  .swap_jump
-    JMP .jump
-
-  .check_dash
-    LDA #$09B6 : CMP $C2 : BEQ .check_cancel
-    LDA $09B6 : BEQ .swap_dash
-    CMP $C4 : BNE .check_cancel
-  .swap_dash
-    JMP .dash
-
-  .check_cancel
-    LDA #$09B8 : CMP $C2 : BEQ .check_select
-    LDA $09B8 : BEQ .swap_cancel
-    CMP $C4 : BNE .check_select
-  .swap_cancel
-    JMP .cancel
-
-  .check_select
-    LDA #$09BA : CMP $C2 : BEQ .check_up
-    LDA $09BA : BEQ .swap_select
-    CMP $C4 : BNE .check_up
-  .swap_select
-    JMP .select
-
-  .check_up
-    LDA #$09BE : CMP $C2 : BEQ .check_down
-    LDA $09BE : BEQ .swap_up
-    CMP $C4 : BNE .check_down
-  .swap_up
-    JMP .up
-
-  .check_down
-    LDA #$09BC : CMP $C2 : BEQ .not_detected
-    LDA $09BC : BEQ .swap_down
-    CMP $C4 : BNE .not_detected
-  .swap_down
-    JMP .down
-
-  .not_detected
-    %sfxfail()
-    LDA #$FFFF
-    JML cm_previous_menu
-
-  .shot
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .shot_safe  ; check if old input is L or R
-    LDA #$0000 : STA $09B2                               ; unassign input
-    RTL
-  .shot_safe
-    LDA !ram_cm_ctrl_swap : STA $09B2                    ; input is safe to be assigned
-    RTL
-
-  .jump
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .jump_safe
-    LDA #$0000 : STA $09B4
-    RTL
-  .jump_safe
-    LDA !ram_cm_ctrl_swap : STA $09B4
-    RTL
-
-  .dash
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .dash_safe
-    LDA #$0000 : STA $09B6
-    RTL
-  .dash_safe
-    LDA !ram_cm_ctrl_swap : STA $09B6
-    RTL
-
-  .cancel
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .cancel_safe
-    LDA #$0000 : STA $09B8
-    RTL
-  .cancel_safe
-    LDA !ram_cm_ctrl_swap : STA $09B8
-    RTL
-
-  .select
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .select_safe
-    LDA #$0000 : STA $09BA
-    RTL
-  .select_safe
-    LDA !ram_cm_ctrl_swap : STA $09BA
-    RTL
-
-  .up
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_up  ; check if input is L or R, unbind if not
-    LDA !ram_cm_ctrl_swap : STA $09BE                    ; safe to assign input
-    CMP $09BC : BEQ .swap_angle_down                     ; check if input matches angle down
-    RTL
-
-  .unbind_up
-    STA $09BE               ; unassign up
-    RTL
-
-  .swap_angle_down
-    CMP #$0020 : BNE .angle_down_l  ; check if angle up is assigned to L
-    LDA #$0010 : STA $09BC  ; assign R to angle down
-    RTL
-  .angle_down_l
-    LDA #$0020 : STA $09BC  ; assign L to angle down
-    RTL
-
-  .down
-    LDA !ram_cm_ctrl_swap : AND #$0030 : BEQ .unbind_down
-    LDA !ram_cm_ctrl_swap : STA $09BC
-    CMP $09BE : BEQ .swap_angle_up
-    RTL
-
-  .unbind_down
-    STA $09BC               ; unassign down
-    RTL
-
-  .swap_angle_up
-    CMP #$0020 : BNE .angle_up_l
-    LDA #$0010 : STA $09BE
-    RTL
-  .angle_up_l
-    LDA #$0020 : STA $09BE
-    RTL
-}
-
-ControllerCommonMenu:
-    dw #controls_common_default
-    dw #controls_common_d2
-    dw #controls_common_d3
-    dw #controls_common_d4
-    dw #controls_common_d5
-    dw #$0000
-    %cm_header("COMMON CONTROLLER LAYOUTS")
-    %cm_footer("WIKI.SUPERMETROID.RUN")
-
-controls_common_default:
-    %cm_jsl("Default (D1)", #action_set_common_controls, #$0000)
-
-controls_common_d2:
-    %cm_jsl("Select+Cancel Swap (D2)", #action_set_common_controls, #$000E)
-
-controls_common_d3:
-    %cm_jsl("D2 + Shot+Select Swap (D3)", #action_set_common_controls, #$001C)
-
-controls_common_d4:
-    %cm_jsl("MMX Style (D4)", #action_set_common_controls, #$002A)
-
-controls_common_d5:
-    %cm_jsl("SMW Style (D5)", #action_set_common_controls, #$0038)
-
-action_set_common_controls:
-{
-    TYX
-    LDA.l ControllerLayoutTable,X : STA.w !IH_INPUT_SHOT
-    LDA.l ControllerLayoutTable+2,X : STA.w !IH_INPUT_JUMP
-    LDA.l ControllerLayoutTable+4,X : STA.w !IH_INPUT_RUN
-    LDA.l ControllerLayoutTable+6,X : STA.w !IH_INPUT_ITEM_CANCEL
-    LDA.l ControllerLayoutTable+8,X : STA.w !IH_INPUT_ITEM_SELECT
-    LDA.l ControllerLayoutTable+10,X : STA.w !IH_INPUT_ANGLE_DOWN
-    LDA.l ControllerLayoutTable+12,X : STA.w !IH_INPUT_ANGLE_UP
-    %sfxconfirm()
-    JML cm_previous_menu
-
-ControllerLayoutTable:
-    ;  shot     jump     dash     cancel        select        down     up
-    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_Y,      !CTRL_SELECT, !CTRL_L, !CTRL_R ; Default (D1)
-    dw !CTRL_X, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_Y,      !CTRL_L, !CTRL_R ; Select+Cancel Swap (D2)
-    dw !CTRL_Y, !CTRL_A, !CTRL_B, !CTRL_SELECT, !CTRL_X,      !CTRL_L, !CTRL_R ; D2 + Shot+Select Swap (D3)
-    dw !CTRL_Y, !CTRL_B, !CTRL_A, !CTRL_SELECT, !CTRL_X,      !CTRL_L, !CTRL_R ; MMX Style (D4)
-    dw !CTRL_X, !CTRL_B, !CTRL_Y, !CTRL_SELECT, !CTRL_A,      !CTRL_L, !CTRL_R ; SMW Style (D5)
-}
-
 print pc, " mainmenu GameMenu end"
 pullpc
 
@@ -1714,22 +1235,12 @@ pullpc
 
 CtrlMenu:
     dw #ctrl_menu
-if !FEATURE_SD2SNES
+if !SAVESTATES
     dw #ctrl_save_state
     dw #ctrl_load_state
-    dw #ctrl_auto_save_state
 endif
-    dw #ctrl_load_last_preset
-    dw #ctrl_random_preset
-    dw #ctrl_save_custom_preset
-    dw #ctrl_load_custom_preset
-    dw #ctrl_inc_custom_preset
-    dw #ctrl_dec_custom_preset
-    dw #ctrl_reset_segment_timer
-    dw #ctrl_reset_segment_later
     dw #ctrl_full_equipment
     dw #ctrl_kill_enemies
-    dw #ctrl_toggle_tileviewer
     dw #ctrl_update_timers
     dw #$FFFF
     dw #ctrl_clear_shortcuts
@@ -1741,49 +1252,19 @@ endif
 ctrl_menu:
     %cm_ctrl_shortcut("Main menu", !sram_ctrl_menu)
 
-ctrl_load_last_preset:
-    %cm_ctrl_shortcut("Reload Preset", !sram_ctrl_load_last_preset)
-
-if !FEATURE_SD2SNES
+if !SAVESTATES
 ctrl_save_state:
     %cm_ctrl_shortcut("Save State", !sram_ctrl_save_state)
 
 ctrl_load_state:
     %cm_ctrl_shortcut("Load State", !sram_ctrl_load_state)
-
-ctrl_auto_save_state:
-    %cm_ctrl_shortcut("Auto Save State", !sram_ctrl_auto_save_state)
 endif
-
-ctrl_reset_segment_timer:
-    %cm_ctrl_shortcut("Reset Seg Timer", !sram_ctrl_reset_segment_timer)
-
-ctrl_reset_segment_later:
-    %cm_ctrl_shortcut("Reset Seg Later", !sram_ctrl_reset_segment_later)
 
 ctrl_full_equipment:
     %cm_ctrl_shortcut("Full Equipment", !sram_ctrl_full_equipment)
 
 ctrl_kill_enemies:
     %cm_ctrl_shortcut("Kill Enemies", !sram_ctrl_kill_enemies)
-
-ctrl_random_preset:
-    %cm_ctrl_shortcut("Random Preset", !sram_ctrl_random_preset)
-
-ctrl_save_custom_preset:
-    %cm_ctrl_shortcut("Save Cust Preset", !sram_ctrl_save_custom_preset)
-
-ctrl_load_custom_preset:
-    %cm_ctrl_shortcut("Load Cust Preset", !sram_ctrl_load_custom_preset)
-
-ctrl_inc_custom_preset:
-    %cm_ctrl_shortcut("Next Preset Slot", !sram_ctrl_inc_custom_preset)
-
-ctrl_dec_custom_preset:
-    %cm_ctrl_shortcut("Prev Preset Slot", !sram_ctrl_dec_custom_preset)
-
-ctrl_toggle_tileviewer:
-    %cm_ctrl_shortcut("Toggle OOB Tiles", !sram_ctrl_toggle_tileviewer)
 
 ctrl_update_timers:
     %cm_ctrl_shortcut("Update Timers", !sram_ctrl_update_timers)
@@ -1795,18 +1276,8 @@ ctrl_clear_shortcuts:
     STA !ram_game_mode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
-    STA !sram_ctrl_auto_save_state
-    STA !sram_ctrl_load_last_preset
     STA !sram_ctrl_full_equipment
     STA !sram_ctrl_kill_enemies
-    STA !sram_ctrl_random_preset
-    STA !sram_ctrl_save_custom_preset
-    STA !sram_ctrl_load_custom_preset
-    STA !sram_ctrl_inc_custom_preset
-    STA !sram_ctrl_dec_custom_preset
-    STA !sram_ctrl_reset_segment_timer
-    STA !sram_ctrl_reset_segment_later
-    STA !sram_ctrl_toggle_tileviewer
     STA !sram_ctrl_update_timers
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
@@ -1818,258 +1289,3 @@ ctrl_reset_defaults:
   .routine
     %sfxreset()
     JML init_sram_controller_shortcuts
-
-; ----------
-; Audio Menu
-; ----------
-
-AudioMenu:
-    dw #audio_music_toggle
-    dw #audio_fanfare_toggle
-    dw #audio_health_alarm
-    dw #$FFFF
-    dw #audio_goto_music
-    dw #$FFFF
-    dw #audio_sfx_lib1
-    dw #audio_sfx_lib2
-    dw #audio_sfx_lib3
-    dw #audio_sfx_silence
-    dw #$0000
-    %cm_header("AUDIO MENU")
-    %cm_footer("PRESS Y TO PLAY SOUNDS")
-
-audio_music_toggle:
-    dw !ACTION_CHOICE
-    dl #!sram_music_toggle
-    dw .routine
-    db #$28, "Music", #$FF
-    db #$28, "        OFF", #$FF
-    db #$28, "         ON", #$FF
-    db #$28, "   FAST OFF", #$FF
-    db #$28, " PRESET OFF", #$FF
-    db #$FF
-  .routine
-    ; Clear music queue
-    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
-    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
-    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
-    CMP #$0001 : BEQ .resume_music
-    STZ $2140
-    RTL
-  .resume_music
-    LDA !MUSIC_DATA : CLC : ADC #$FF00 : PHA : STZ !MUSIC_DATA : PLA : JSL !MUSIC_ROUTINE
-    LDA !MUSIC_TRACK : PHA : STZ !MUSIC_TRACK : PLA : JSL !MUSIC_ROUTINE
-    RTL
-
-audio_fanfare_toggle:
-    %cm_toggle_bit("Fanfare", !sram_fanfare_toggle, !FANFARE_TOGGLE, #0)
-
-audio_health_alarm:
-    dw !ACTION_CHOICE
-    dl #!sram_healthalarm
-    dw #$0000
-    db #$28, "Low Health Alar", #$FF
-    db #$28, "m     NEVER", #$FF
-    db #$28, "m   VANILLA", #$FF
-    db #$28, "m    PB FIX", #$FF
-    db #$28, "m  IMPROVED", #$FF
-    db #$FF
-
-audio_goto_music:
-    %cm_submenu("Music Selection", #MusicSelectMenu1)
-
-audio_sfx_lib1:
-    %cm_numfield_sound("Library One Sound", !ram_cm_sfxlib1, 1, 66, 1, 4, .routine)
-  .routine
-    LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_Y : BEQ .done
-    LDA !ram_cm_sfxlib1 : JML !SFX_LIB1
-  .done
-    RTL
-
-audio_sfx_lib2:
-    %cm_numfield_sound("Library Two Sound", !ram_cm_sfxlib2, 1, 127, 1, 4, .routine)
-  .routine
-    LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_Y : BEQ audio_sfx_lib1_done
-    LDA !ram_cm_sfxlib2 : JML !SFX_LIB2
-
-audio_sfx_lib3:
-    %cm_numfield_sound("Library Three Sound", !ram_cm_sfxlib3, 1, 47, 1, 4, .routine)
-  .routine
-    LDA !IH_CONTROLLER_PRI_NEW : BIT !CTRL_Y : BEQ audio_sfx_lib1_done
-    LDA !ram_cm_sfxlib3 : JML !SFX_LIB3
-
-audio_sfx_silence:
-    %cm_jsl("Silence Sound FX", .routine, #0)
-  .routine
-    JML stop_all_sounds
-
-MusicSelectMenu1:
-    dw #audio_music_title1
-    dw #audio_music_title2
-    dw #audio_music_intro
-    dw #audio_music_ceres
-    dw #audio_music_escape
-    dw #audio_music_rainstorm
-    dw #audio_music_spacepirate
-    dw #audio_music_samustheme
-    dw #audio_music_greenbrinstar
-    dw #audio_music_redbrinstar
-    dw #audio_music_uppernorfair
-    dw #audio_music_lowernorfair
-    dw #audio_music_easternmaridia
-    dw #audio_music_westernmaridia
-    dw #audio_music_wreckedshipoff
-    dw #audio_music_wreckedshipon
-    dw #audio_music_hallway
-    dw #audio_music_goldenstatue
-    dw #audio_music_tourian
-    dw #$FFFF
-    dw #audio_music_goto_2
-    dw #$0000
-    %cm_header("PLAY MUSIC - PAGE ONE")
-
-audio_music_title1:
-    %cm_jsl("Title Theme Part 1", #audio_playmusic, #$0305)
-
-audio_music_title2:
-    %cm_jsl("Title Theme Part 2", #audio_playmusic, #$0306)
-
-audio_music_intro:
-    %cm_jsl("Intro", #audio_playmusic, #$3605)
-
-audio_music_ceres:
-    %cm_jsl("Ceres Station", #audio_playmusic, #$2D06)
-
-audio_music_escape:
-    %cm_jsl("Escape Sequence", #audio_playmusic, #$2407)
-
-audio_music_rainstorm:
-    %cm_jsl("Zebes Rainstorm", #audio_playmusic, #$0605)
-
-audio_music_spacepirate:
-    %cm_jsl("Space Pirate Theme", #audio_playmusic, #$0905)
-
-audio_music_samustheme:
-    %cm_jsl("Samus Theme", #audio_playmusic, #$0C05)
-
-audio_music_greenbrinstar:
-    %cm_jsl("Green Brinstar", #audio_playmusic, #$0F05)
-
-audio_music_redbrinstar:
-    %cm_jsl("Red Brinstar", #audio_playmusic, #$1205)
-
-audio_music_uppernorfair:
-    %cm_jsl("Upper Norfair", #audio_playmusic, #$1505)
-
-audio_music_lowernorfair:
-    %cm_jsl("Lower Norfair", #audio_playmusic, #$1805)
-
-audio_music_easternmaridia:
-    %cm_jsl("Eastern Maridia", #audio_playmusic, #$1B05)
-
-audio_music_westernmaridia:
-    %cm_jsl("Western Maridia", #audio_playmusic, #$1B06)
-
-audio_music_wreckedshipoff:
-    %cm_jsl("Wrecked Ship Unpowered", #audio_playmusic, #$3005)
-
-audio_music_wreckedshipon:
-    %cm_jsl("Wrecked Ship", #audio_playmusic, #$3006)
-
-audio_music_hallway:
-    %cm_jsl("Hallway to Statue", #audio_playmusic, #$0004)
-
-audio_music_goldenstatue:
-    %cm_jsl("Golden Statue", #audio_playmusic, #$0906)
-
-audio_music_tourian:
-    %cm_jsl("Tourian", #audio_playmusic, #$1E05)
-
-audio_music_goto_2:
-    %cm_adjacent_submenu("GOTO PAGE TWO", #MusicSelectMenu2)
-
-MusicSelectMenu2:
-    dw #audio_music_preboss1
-    dw #audio_music_preboss2
-    dw #audio_music_miniboss
-    dw #audio_music_smallboss
-    dw #audio_music_bigboss
-    dw #audio_music_motherbrain
-    dw #audio_music_credits
-    dw #audio_music_itemroom
-    dw #audio_music_itemfanfare
-    dw #audio_music_spacecolony
-    dw #audio_music_zebesexplodes
-    dw #audio_music_loadsave
-    dw #audio_music_death
-    dw #audio_music_lastmetroid
-    dw #audio_music_galaxypeace
-    dw #$FFFF
-    dw #audio_music_goto_1
-    dw #$0000
-    %cm_header("PLAY MUSIC - PAGE TWO")
-
-audio_music_preboss1:
-    %cm_jsl("Chozo Statue Awakens", #audio_playmusic, #$2406)
-
-audio_music_preboss2:
-    %cm_jsl("Approaching Confrontation", #audio_playmusic, #$2706)
-
-audio_music_miniboss:
-    %cm_jsl("Miniboss Fight", #audio_playmusic, #$2A05)
-
-audio_music_smallboss:
-    %cm_jsl("Small Boss Confrontation", #audio_playmusic, #$2705)
-
-audio_music_bigboss:
-    %cm_jsl("Big Boss Confrontation", #audio_playmusic, #$2405)
-
-audio_music_motherbrain:
-    %cm_jsl("Mother Brain Fight", #audio_playmusic, #$2105)
-
-audio_music_credits:
-    %cm_jsl("Credits", #audio_playmusic, #$3C05)
-
-audio_music_itemroom:
-    %cm_jsl("Item - Elevator Room", #audio_playmusic, #$0003)
-
-audio_music_itemfanfare:
-    %cm_jsl("Item Fanfare", #audio_playmusic, #$0002)
-
-audio_music_spacecolony:
-    %cm_jsl("Arrival at Space Colony", #audio_playmusic, #$2D05)
-
-audio_music_zebesexplodes:
-    %cm_jsl("Zebes Explodes", #audio_playmusic, #$3305)
-
-audio_music_loadsave:
-    %cm_jsl("Samus Appears", #audio_playmusic, #$0001)
-
-audio_music_death:
-    %cm_jsl("Death", #audio_playmusic, #$3905)
-
-audio_music_lastmetroid:
-    %cm_jsl("Last Metroid in Captivity", #audio_playmusic, #$3F05)
-
-audio_music_galaxypeace:
-    %cm_jsl("The Galaxy is at Peace", #audio_playmusic, #$4205)
-
-audio_music_goto_1:
-    %cm_adjacent_submenu("GOTO PAGE TWO", #MusicSelectMenu1)
-
-audio_playmusic:
-{
-    PHY
-    ; always load silence first
-    LDA #$0000 : JSL !MUSIC_ROUTINE
-    PLY : TYA
-    STZ $C1 : %a8() : STA $C1
-    XBA : %a16()
-    STA !ROOM_MUSIC_DATA_INDEX
-    ; play from negative data index
-    ORA #$FF00 : JSL !MUSIC_ROUTINE
-    ; play from track index
-    LDA $C1 : JSL !MUSIC_ROUTINE
-    RTL
-}
-

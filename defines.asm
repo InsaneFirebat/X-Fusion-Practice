@@ -5,7 +5,7 @@
 
 !VERSION_MAJOR = 1
 !VERSION_MINOR = 0
-!VERSION_BUILD = 1
+!VERSION_BUILD = 3
 !VERSION_REV = 0
 
 
@@ -210,9 +210,7 @@ endif
 !IH_CONTROLLER_SEC_PREV = $99
 
 !MENU_CLEAR = #$000E
-!MENU_BLANK = #$281F
-!MENU_SLASH = #$287F
-!MENU_ARROW_RIGHT = #$3880
+!MENU_BLANK = #$286F
 !IH_BLANK = #$2C0F
 !IH_PERCENT = #$0C0A
 !IH_DECIMAL = #$0CCB
@@ -251,8 +249,6 @@ endif
 !IH_INPUT_LEFT = #$0200
 !IH_INPUT_RIGHT = #$0100
 !IH_INPUT_HELD = #$0001 ; used by menu
-
-incsrc HUDdefines.asm
 
 !CTRL_B = #$8000
 !CTRL_Y = #$4000
@@ -486,8 +482,7 @@ incsrc HUDdefines.asm
 !ACTION_NUMFIELD            = #$0008
 !ACTION_NUMFIELD_HEX        = #$000A
 !ACTION_NUMFIELD_WORD       = #$000C
-!ACTION_NUMFIELD_HEX_WORD   = #$000E
-!ACTION_CHOICE              = #$0010
-!ACTION_CTRL_SHORTCUT       = #$0012
-!ACTION_JSL                 = #$0014
-!ACTION_JSL_SUBMENU         = #$0016
+!ACTION_CHOICE              = #$000E
+!ACTION_CTRL_SHORTCUT       = #$0010
+!ACTION_JSL                 = #$0012
+!ACTION_JSL_SUBMENU         = #$0014

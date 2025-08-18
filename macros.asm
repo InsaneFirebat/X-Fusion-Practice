@@ -48,29 +48,29 @@ endmacro
 macro cm_header(title)
 ; outlined text to be drawn above the menu items
   .dm_header
-table ../resources/header.tbl
+table resources/header.tbl
     db #$28, "<title>", #$FF
-table ../resources/normal.tbl
+table resources/normal.tbl
 endmacro
 
 macro cm_footer(title)
 ; optional outlined text below the menu items
   .dm_footer
-table ../resources/header.tbl
+table resources/header.tbl
     dw #$F007 : db #$28, "<title>", #$FF
-table ../resources/normal.tbl
+table resources/normal.tbl
 endmacro
 
 macro cm_version_header(title)
 ; header text with automatic version number appended
   .dm_verHeader
-table ../resources/header.tbl
+table resources/header.tbl
 if !VERSION_REV
     db #$28, "<title> !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD.!VERSION_REV", #$FF
 else
     db #$28, "<title> !VERSION_MAJOR.!VERSION_MINOR.!VERSION_BUILD", #$FF
 endif
-table ../resources/normal.tbl
+table resources/normal.tbl
 endmacro
 
 macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
@@ -88,7 +88,7 @@ macro cm_numfield(title, addr, start, end, increment, heldincrement, jsltarget)
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -107,7 +107,7 @@ macro cm_numfield_word(title, addr, start, end, increment, heldincrement, jsltar
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -126,7 +126,7 @@ macro cm_numfield_hex(title, addr, start, end, increment, heldincrement, jsltarg
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -141,7 +141,7 @@ macro cm_numfield_hex_word(title, addr, bitmask, jsltarget)
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -156,7 +156,7 @@ macro cm_toggle(title, addr, value, jsltarget)
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -171,7 +171,7 @@ macro cm_toggle_inverted(title, addr, value, jsltarget)
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -186,7 +186,7 @@ macro cm_toggle_bit(title, addr, mask, jsltarget)
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -201,7 +201,7 @@ macro cm_toggle_bit_inverted(title, addr, mask, jsltarget)
   .dm_jsl
     dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -214,7 +214,7 @@ macro cm_jsl(title, routine, argument)
   .dm_arg
     dw <argument> ; value passed to routine in Y
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -227,7 +227,7 @@ macro cm_jsl_submenu(title, routine, argument)
   .dm_arg
     dw <argument> ; value passed to routine in Y
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -258,7 +258,7 @@ macro cm_ctrl_shortcut(title, addr)
   .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
@@ -273,7 +273,7 @@ macro cm_ctrl_input(title, addr, routine, argument)
   .dm_arg
     dw <argument> ; value passed to routine in Y
   .dm_text
-table ../resources/normal.tbl
+table resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 

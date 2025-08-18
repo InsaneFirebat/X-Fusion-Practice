@@ -3,35 +3,6 @@
 ; Menu Helpers
 ; ------------
 
-action_infohud_mainmenu:
-{
-    ; Validate top display mode in range
-    LDA !sram_top_display_mode : CMP #$0003 : BCC action_mainmenu
-    TDC : STA !sram_top_display_mode
-    BRA action_mainmenu
-}
-
-action_customize_mainmenu:
-{
-    ; Set fast button selection
-    LDA !sram_cm_fast_scroll_button : CMP !CTRL_X : BEQ .xSelected
-    CMP !CTRL_Y : BEQ .ySelected
-
-    ; None selected
-    TDC : STA !sram_cm_fast_scroll_button
-    LDA #$0002 : STA !ram_cm_fast_scroll_menu_selection
-    BRA action_mainmenu
-
-  .xSelected
-    TDC : STA !ram_cm_fast_scroll_menu_selection
-    BRA action_mainmenu
-
-  .ySelected
-    LDA #$0001 : STA !ram_cm_fast_scroll_menu_selection
-
-    ; continue into action_mainmenu
-}
-
 action_mainmenu:
 {
     ; Set bank of new menu
@@ -48,49 +19,13 @@ action_submenu:
     LDA !ram_cm_stack_index : INC #2 : STA !ram_cm_stack_index : TAX
     TYA : STA !ram_cm_menu_stack,X
 
-    BRA action_submenu_jump
-}
-
-action_presets_submenu:
-{
-
-    ; Increment stack pointer by 2
-    LDA !ram_cm_stack_index : INC #2 : STA !ram_cm_stack_index : TAX
-
-    ; Lookup preset menu pointer for current category
-    LDA !sram_preset_category : ASL : TAY
-    PHB : PHK : PLB
-    LDA.w preset_category_submenus,Y : STA !ram_cm_menu_stack,X
-    LDA.w preset_category_banks,Y : STA !ram_cm_menu_bank
-    PLB
-
-    ; continue into action_submenu_jump
-}
-
-action_submenu_jump:
-{
     ; Set cursor to top for new menus
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    %sfxmove()
+    ;%sfxmove()
     JSL cm_calculate_max
-if !FEATURE_CUSTOMIZE_MENU
-    JSL cm_colors
-endif
     JSL cm_draw
     RTL
-}
-
-preset_category_submenus:
-{
-    dw #PresetsMenuPrkd
-    dw #$0000
-}
-
-preset_category_banks:
-{
-    dw #PresetsMenuPrkd>>16
-    dw #$0000
 }
 
 
@@ -109,10 +44,6 @@ MainMenu:
     dw #mm_goto_misc
     dw #mm_goto_gamemenu
     dw #mm_goto_ctrlsmenu
-    dw #mm_goto_audiomenu
-if !FEATURE_CUSTOMIZE_MENU
-    dw #mm_goto_customize
-endif
     dw #$0000
     %cm_version_header("SM PRACTICE HACK")
 
@@ -123,10 +54,6 @@ MainMenuBanks:
     dw #MiscMenu>>16
     dw #GameMenu>>16
     dw #CtrlMenu>>16
-    dw #AudioMenu>>16
-if !FEATURE_CUSTOMIZE_MENU
-    dw #CustomizeMenu>>16
-endif
 
 mm_goto_equipment:
     %cm_mainmenu("Equipment", #EquipmentMenu)
@@ -145,14 +72,6 @@ mm_goto_gamemenu:
 
 mm_goto_ctrlsmenu:
     %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
-
-mm_goto_audiomenu:
-    %cm_mainmenu("Audio Menu", #AudioMenu)
-
-if !FEATURE_CUSTOMIZE_MENU
-mm_goto_customize:
-    %cm_jsl("Menu Customization", #action_customize_mainmenu, #CustomizeMenu)
-endif
 
 
 ; ----------------
@@ -253,7 +172,7 @@ eq_reservemode:
   .routine
     LDA !SAMUS_RESERVE_MAX : BNE .end
     STA !SAMUS_RESERVE_MODE
-    %sfxfail()
+    ;%sfxfail()
   .end
     RTL
 
@@ -342,14 +261,7 @@ action_category:
 
     LDA.l .table,X : STA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED : INX #2
 
-    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : TAY
-    AND #$000C : CMP #$000C : BEQ .murderBeam
-    TYA : STA !SAMUS_BEAMS_EQUIPPED : INX #2 : BRA .doneMurderBeam
-
-  .murderBeam
-    TYA : AND #$100B : STA !SAMUS_BEAMS_EQUIPPED : INX #2
-
-  .doneMurderBeam
+    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED : INX #2
     LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX : INX #2
@@ -357,22 +269,22 @@ action_category:
     LDA.l .table,X : STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY : INX #2
 
     JSL cm_set_etanks_and_reserve
-    %sfxconfirm()
+    ;%sfxconfirm()
     JML $90AC8D ; update beam gfx
 
   .table
-    ;  Items,  Beams,  Health, Miss,   Supers, PBs,    Reserv, Dummy
-    dw #$F32F, #$100F, #$05DB, #$00E6, #$0032, #$0032, #$0190, #$0000        ; 100%
-    dw #$3125, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% new
-    dw #$3325, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000, #$0000        ; any% old
-    dw #$1025, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% ice
-    dw #$3025, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000, #$0000        ; 14% speed
-    dw #$F33F, #$100F, #$02BC, #$0064, #$0014, #$0014, #$012C, #$0000        ; gt code
-    dw #$F33F, #$100F, #$0834, #$0145, #$0041, #$0041, #$02BC, #$0000        ; 135%
-    dw #$710C, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064, #$0000        ; rbo
-    dw #$9004, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000, #$0000        ; any% glitched
-    dw #$F32F, #$100F, #$0031, #$01A4, #$005A, #$0063, #$0000, #$0000        ; crystal flash
-    dw #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000, #$0000        ; nothing
+    ;  Items,  C Beam, E Beam, Health, Miss,   Supers, PBs,    Reserv
+    dw #$F32F, #$100F, #$100B, #$05DB, #$00E6, #$0032, #$0032, #$0190 ; 100%
+    dw #$3125, #$1007, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000 ; any% new
+    dw #$3325, #$100B, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000 ; any% old
+    dw #$1025, #$1002, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000 ; 14% ice
+    dw #$3025, #$1000, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000 ; 14% speed
+    dw #$F33F, #$100F, #$100B, #$02BC, #$0064, #$0014, #$0014, #$012C ; gt code
+    dw #$F33F, #$100F, #$100B, #$0834, #$0145, #$0041, #$0041, #$02BC ; 135%
+    dw #$710C, #$1001, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064 ; rbo
+    dw #$9004, #$0000, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000 ; any% glitched
+    dw #$F32F, #$100F, #$100B, #$0031, #$01A4, #$005A, #$0063, #$0000 ; crystal flash
+    dw #$0000, #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000 ; nothing
 }
 
 
@@ -648,9 +560,6 @@ tb_spazerbeam:
 tb_plasmabeam:
     %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
 
-tb_glitchedbeams:
-    %cm_submenu("Glitched Beams", #GlitchedBeamsMenu)
-
 equipment_toggle_beams:
 {
 ; DP values are passed in from the cm_equipment_beam macro that calls this routine
@@ -884,8 +793,14 @@ action_teleport:
     LDA #$001F : STA !SAMUS_HP
 
   .branch
-    JSL reset_all_counters
-    JSL stop_all_sounds
+;    JSL reset_all_counters
+;    JSL stop_all_sounds
+    LDA #$0002
+    JSL $809049
+    LDA #$0071
+    JSL $8090CB
+    LDA #$0001
+    JSL $80914D
 
     LDA #$0001 : STA !ram_cm_leave
 
@@ -909,15 +824,7 @@ MiscMenu:
     dw #misc_flashsuit
     dw #misc_hyperbeam
     dw #$FFFF
-    dw #misc_gooslowdown
     dw #misc_healthbomb
-    dw #$FFFF
-    dw #misc_magicpants
-    dw #misc_spacepants
-    dw #$FFFF
-    dw #misc_metronome
-    dw #misc_metronome_tickrate
-    dw #misc_metronome_sfx
     dw #$FFFF
     dw #misc_killenemies
     dw #misc_forcestand
@@ -964,9 +871,6 @@ misc_hyperbeam:
     JSL $90AC8D ; update beam gfx
     RTL
 
-misc_gooslowdown:
-    %cm_numfield("Goo Slowdown", $7E0A66, 0, 4, 1, 1, #0)
-
 misc_healthbomb:
     %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)
 
@@ -985,7 +889,7 @@ misc_forcestand:
     %cm_jsl("Force Samus to Stand Up", .routine, #0)
   .routine
     JSL $90E2D4
-    %sfxconfirm()
+    ;%sfxconfirm()
     RTL
 
 misc_clearliquid:
@@ -999,21 +903,21 @@ EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
     dw #events_resetitems
-    dw #$FFFF
-    dw #events_goto_bosses
-    dw #$FFFF
-    dw #events_zebesawake
-    dw #events_maridiatubebroken
-    dw #events_chozoacid
-    dw #events_shaktool
-    dw #events_tourian
-    dw #events_metroid1
-    dw #events_metroid2
-    dw #events_metroid3
-    dw #events_metroid4
-    dw #events_mb1glass
-    dw #events_zebesexploding
-    dw #events_animals
+;    dw #$FFFF
+;    dw #events_goto_bosses
+;    dw #$FFFF
+;    dw #events_zebesawake
+;    dw #events_maridiatubebroken
+;    dw #events_chozoacid
+;    dw #events_shaktool
+;    dw #events_tourian
+;    dw #events_metroid1
+;    dw #events_metroid2
+;    dw #events_metroid3
+;    dw #events_metroid4
+;    dw #events_mb1glass
+;    dw #events_zebesexploding
+;    dw #events_animals
     dw #$0000
     %cm_header("EVENTS")
 
@@ -1022,7 +926,7 @@ events_resetevents:
   .routine
     LDA #$0000
     STA $7ED820 : STA $7ED822
-    %sfxreset()
+    ;%sfxreset()
     RTL
 
 events_resetdoors:
@@ -1035,7 +939,7 @@ events_resetdoors:
     STA $7ED800,X
     INX : CPX #$D0 : BNE .loop
     PLP
-    %sfxreset()
+    ;%sfxreset()
     RTL
 
 events_resetitems:
@@ -1048,129 +952,122 @@ events_resetitems:
     STA $7ED800,X
     INX : CPX #$90 : BNE .loop
     PLP
-    %sfxreset()
+    ;%sfxreset()
     RTL
 
-events_goto_bosses:
-    %cm_submenu("Bosses", #BossesMenu)
-
-events_zebesawake:
-    %cm_toggle_bit("Zebes Awake", $7ED820, #$0001, #0)
-
-events_maridiatubebroken:
-    %cm_toggle_bit("Maridia Tube Broken", $7ED820, #$0800, #0)
-
-events_shaktool:
-    %cm_toggle_bit("Shaktool Done Digging", $7ED820, #$2000, #0)
-
-events_chozoacid:
-    %cm_toggle_bit("Chozo Lowered Acid", $7ED821, #$0010, #0)
-
-events_tourian:
-    %cm_toggle_bit("Tourian Open", $7ED820, #$0400, #0)
-
-events_metroid1:
-    %cm_toggle_bit("1st Metroids Cleared", $7ED822, #$0001, #0)
-
-events_metroid2:
-    %cm_toggle_bit("2nd Metroids Cleared", $7ED822, #$0002, #0)
-
-events_metroid3:
-    %cm_toggle_bit("3rd Metroids Cleared", $7ED822, #$0004, #0)
-
-events_metroid4:
-    %cm_toggle_bit("4th Metroids Cleared", $7ED822, #$0008, #0)
-
-events_mb1glass:
-    %cm_toggle_bit("MB1 Glass Broken", $7ED820, #$0004, #0)
-
-events_zebesexploding:
-    %cm_toggle_bit("Zebes Set Ablaze", $7ED820, #$4000, #0)
-
-events_animals:
-    %cm_toggle_bit("Animals Saved", $7ED820, #$8000, #0)
-
-
-; ------------
-; Bosses menu
-; ------------
-
-BossesMenu:
-    dw #boss_ceresridley
-    dw #boss_bombtorizo
-    dw #boss_spospo
-    dw #boss_kraid
-    dw #boss_phantoon
-    dw #boss_botwoon
-    dw #boss_draygon
-    dw #boss_crocomire
-    dw #boss_gt
-    dw #boss_ridley
-    dw #boss_mb
-    dw #$FFFF
-    dw #boss_kraid_statue
-    dw #boss_phantoon_statue
-    dw #boss_draygon_statue
-    dw #boss_ridley_statue
-    dw #$0000
-    %cm_header("BOSSES")
-
-boss_ceresridley:
-    %cm_toggle_bit("Ceres Ridley", #$7ED82E, #$0001, #0)
-
-boss_bombtorizo:
-    %cm_toggle_bit("Bomb Torizo", #$7ED828, #$0004, #0)
-
-boss_spospo:
-    %cm_toggle_bit("Spore Spawn", #$7ED828, #$0200, #0)
-
-boss_kraid:
-    %cm_toggle_bit("Kraid", #$7ED828, #$0100, #0)
-
-boss_phantoon:
-    %cm_toggle_bit("Phantoon", #$7ED82A, #$0100, #0)
-
-boss_botwoon:
-    %cm_toggle_bit("Botwoon", #$7ED82C, #$0002, #0)
-
-boss_draygon:
-    %cm_toggle_bit("Draygon", #$7ED82C, #$0001, #0)
-
-boss_crocomire:
-    %cm_toggle_bit("Crocomire", #$7ED82A, #$0002, #0)
-
-boss_gt:
-    %cm_toggle_bit("Golden Torizo", #$7ED82A, #$0004, #0)
-
-boss_ridley:
-    %cm_toggle_bit("Ridley", #$7ED82A, #$0001, #0)
-
-boss_mb:
-    %cm_toggle_bit("Mother Brain", #$7ED82C, #$0200, #0)
-
-boss_kraid_statue:
-    %cm_toggle_bit("Kraid Statue", #$7ED820, #$0200, #0)
-
-boss_phantoon_statue:
-    %cm_toggle_bit("Phantoon Statue", #$7ED820, #$0040, #0)
-
-boss_draygon_statue:
-    %cm_toggle_bit("Draygon Statue", #$7ED820, #$0100, #0)
-
-boss_ridley_statue:
-    %cm_toggle_bit("Ridley Statue", #$7ED820, #$0080, #0)
-
-print pc, " mainmenu InfoHUD end"
-;warnpc $85F800 ; gamemode.asm
+;events_goto_bosses:
+;    %cm_submenu("Bosses", #BossesMenu)
+;
+;events_zebesawake:
+;    %cm_toggle_bit("Zebes Awake", $7ED820, #$0001, #0)
+;
+;events_maridiatubebroken:
+;    %cm_toggle_bit("Maridia Tube Broken", $7ED820, #$0800, #0)
+;
+;events_shaktool:
+;    %cm_toggle_bit("Shaktool Done Digging", $7ED820, #$2000, #0)
+;
+;events_chozoacid:
+;    %cm_toggle_bit("Chozo Lowered Acid", $7ED821, #$0010, #0)
+;
+;events_tourian:
+;    %cm_toggle_bit("Tourian Open", $7ED820, #$0400, #0)
+;
+;events_metroid1:
+;    %cm_toggle_bit("1st Metroids Cleared", $7ED822, #$0001, #0)
+;
+;events_metroid2:
+;    %cm_toggle_bit("2nd Metroids Cleared", $7ED822, #$0002, #0)
+;
+;events_metroid3:
+;    %cm_toggle_bit("3rd Metroids Cleared", $7ED822, #$0004, #0)
+;
+;events_metroid4:
+;    %cm_toggle_bit("4th Metroids Cleared", $7ED822, #$0008, #0)
+;
+;events_mb1glass:
+;    %cm_toggle_bit("MB1 Glass Broken", $7ED820, #$0004, #0)
+;
+;events_zebesexploding:
+;    %cm_toggle_bit("Zebes Set Ablaze", $7ED820, #$4000, #0)
+;
+;events_animals:
+;    %cm_toggle_bit("Animals Saved", $7ED820, #$8000, #0)
+;
+;
+;; ------------
+;; Bosses menu
+;; ------------
+;
+;BossesMenu:
+;    dw #boss_ceresridley
+;    dw #boss_bombtorizo
+;    dw #boss_spospo
+;    dw #boss_kraid
+;    dw #boss_phantoon
+;    dw #boss_botwoon
+;    dw #boss_draygon
+;    dw #boss_crocomire
+;    dw #boss_gt
+;    dw #boss_ridley
+;    dw #boss_mb
+;    dw #$FFFF
+;    dw #boss_kraid_statue
+;    dw #boss_phantoon_statue
+;    dw #boss_draygon_statue
+;    dw #boss_ridley_statue
+;    dw #$0000
+;    %cm_header("BOSSES")
+;
+;boss_ceresridley:
+;    %cm_toggle_bit("Ceres Ridley", #$7ED82E, #$0001, #0)
+;
+;boss_bombtorizo:
+;    %cm_toggle_bit("Bomb Torizo", #$7ED828, #$0004, #0)
+;
+;boss_spospo:
+;    %cm_toggle_bit("Spore Spawn", #$7ED828, #$0200, #0)
+;
+;boss_kraid:
+;    %cm_toggle_bit("Kraid", #$7ED828, #$0100, #0)
+;
+;boss_phantoon:
+;    %cm_toggle_bit("Phantoon", #$7ED82A, #$0100, #0)
+;
+;boss_botwoon:
+;    %cm_toggle_bit("Botwoon", #$7ED82C, #$0002, #0)
+;
+;boss_draygon:
+;    %cm_toggle_bit("Draygon", #$7ED82C, #$0001, #0)
+;
+;boss_crocomire:
+;    %cm_toggle_bit("Crocomire", #$7ED82A, #$0002, #0)
+;
+;boss_gt:
+;    %cm_toggle_bit("Golden Torizo", #$7ED82A, #$0004, #0)
+;
+;boss_ridley:
+;    %cm_toggle_bit("Ridley", #$7ED82A, #$0001, #0)
+;
+;boss_mb:
+;    %cm_toggle_bit("Mother Brain", #$7ED82C, #$0200, #0)
+;
+;boss_kraid_statue:
+;    %cm_toggle_bit("Kraid Statue", #$7ED820, #$0200, #0)
+;
+;boss_phantoon_statue:
+;    %cm_toggle_bit("Phantoon Statue", #$7ED820, #$0040, #0)
+;
+;boss_draygon_statue:
+;    %cm_toggle_bit("Draygon Statue", #$7ED820, #$0100, #0)
+;
+;boss_ridley_statue:
+;    %cm_toggle_bit("Ridley Statue", #$7ED820, #$0080, #0)
 
 
 ; ----------
 ; Game menu
 ; ----------
-
-;org $B3F000
-org !ORG_MAINMENU_GAME
-print pc, " mainmenu GameMenu start"
 
 GameMenu:
     dw #game_alternatetext
@@ -1180,7 +1077,6 @@ GameMenu:
     dw #game_debugmode
     dw #game_debugbrightness
     dw #game_invincibility
-    dw #game_pacifist
     dw #game_debugplms
     dw #game_debugprojectiles
     dw #$0000
@@ -1216,17 +1112,11 @@ game_debugbrightness:
 game_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)
 
-game_pacifist:
-    %cm_toggle("Pacifist Mode", !ram_pacifist, #$0001, #0)
-
 game_debugplms:
     %cm_toggle_bit_inverted("Pseudo G-Mode", $7E1C23, #$8000, #0)
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
-
-print pc, " mainmenu GameMenu end"
-pullpc
 
 
 ; ----------
@@ -1273,7 +1163,6 @@ ctrl_clear_shortcuts:
     %cm_jsl("Clear All Shortcuts", .routine, #$0000)
   .routine
     TYA
-    STA !ram_game_mode_extras
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
     STA !sram_ctrl_full_equipment
@@ -1281,11 +1170,12 @@ ctrl_clear_shortcuts:
     STA !sram_ctrl_update_timers
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
-    %sfxconfirm()
+    ;%sfxconfirm()
     RTL
 
 ctrl_reset_defaults:
     %cm_jsl("Reset to Defaults", .routine, #$0000)
   .routine
-    %sfxreset()
-    JML init_sram_controller_shortcuts
+    ;%sfxreset()
+;    JML init_sram_controller_shortcuts
+    RTL

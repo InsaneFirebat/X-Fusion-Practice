@@ -121,19 +121,35 @@ gamemode_start:
     PHK : PLB
 
     ; check for new inputs
-    LDA !SS_INPUT_NEW : BNE +
+    LDA !IH_CONTROLLER_PRI_NEW : BNE +
     CLC : BRA .done
 
     ; check for savestate inputs
-+   LDA !SS_INPUT_CUR : CMP !SAVE_INPUTS : BNE +
-    AND !SS_INPUT_NEW : BEQ +
++   LDA !IH_CONTROLLER_PRI : CMP !SAVE_INPUTS : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JSL save_state
     SEC : BRA .done
 
     ; check for loadstate inputs
-+   LDA !SS_INPUT_CUR : CMP !LOAD_INPUTS : BNE +
-    AND !SS_INPUT_NEW : BEQ +
++   LDA !IH_CONTROLLER_PRI : CMP !LOAD_INPUTS : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JSL load_state
+    SEC : BRA .done
+
+    ; check for menu inputs
++   LDA !IH_CONTROLLER_PRI : CMP #$3000 : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+
+    ; Set IRQ vector
+    LDA $AB : PHA
+    LDA #$0000 : STA $AB
+
+    ; Enter MainMenu
+    JSL cm_start
+
+    ; Restore IRQ vector
+    PLA : STA $AB
+
     SEC : BRA .done
 
     ; exit carry clear to continue normal gameplay
@@ -141,7 +157,7 @@ gamemode_start:
 
   .done
     %ai16()
-    LDA $0998 : AND #$00FF
+    LDA !GAMEMODE : AND #$00FF
     PLB
     RTL
 }
@@ -532,7 +548,7 @@ if !SAVESTATES
 endif
     LDA #$0001 : STA !ram_transition_flag
 
-    JSR ih_update_hud_code
+    JSL ih_update_hud_code
 
   .done
     CLC
@@ -551,7 +567,7 @@ ih_after_room_transition:
     ; clear transition variables
     LDA #$0000 : STA !ram_transition_flag : STA !ram_lag_counter
 
-    JSR ih_update_hud_code
+    JSL ih_update_hud_code
 
     ; Reset realtime and gametime/transition timers
     LDA #$0000 : STA !ram_realtime_room : STA !ram_transition_counter
@@ -587,7 +603,7 @@ ih_update_hud_code:
     LDX #$00DC : JSR Draw2
 
     PLB
-    RTS
+    RTL
 }
 
 Draw2:
@@ -612,7 +628,7 @@ Draw2:
     RTS
 
   .blanktens
-    LDA #!IH_BLANK : STA !HUD_TILEMAP+$00,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X
     BRA .done
 }
 
@@ -650,11 +666,11 @@ Draw3:
     RTS
 
   .blanktens
-    LDA #!IH_BLANK : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$02,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X : STA !HUD_TILEMAP+$02,X
     BRA .done
 
   .blankhundreds
-    LDA #!IH_BLANK : STA !HUD_TILEMAP+$00,X
+    LDA !IH_BLANK : STA !HUD_TILEMAP+$00,X
     BRA .done
 }
 
@@ -694,31 +710,39 @@ org $80FFA0
 !ram_magic_pants_pal2 = !WRAM_START+$16
 !ram_magic_pants_pal3 = !WRAM_START+$18
 
+org $82C5DD
+hudgfx_bin:
+
+org $80FFD0
+transfer_cgram_long:
+    JSR $933A
+    RTL
+
 
 org $9BCC00
 incsrc menu.asm
 
-;MagicPants:
-;{
-;    LDA $0A96 : CMP #$0009 : BEQ .check
-;    LDA !ram_magic_pants_state : BEQ +
-;    LDA !ram_magic_pants_pal1 : STA $7EC188
-;    LDA !ram_magic_pants_pal2 : STA $7EC18A
-;    LDA !ram_magic_pants_pal3 : STA $7EC19E
-;    LDA #$0000 : STA !ram_magic_pants_state
-;+   RTL
-;
-;  .check
-;    LDA $0A1C : CMP #$0009 : BEQ .flash
-;    CMP #$000A : BEQ .flash
-;    RTL
-;
-;  .flash
-;    LDA !ram_magic_pants_state : BNE +
-;    LDA $7EC188 : STA !ram_magic_pants_pal1
-;    LDA $7EC18A : STA !ram_magic_pants_pal2
-;    LDA $7EC19E : STA !ram_magic_pants_pal3
-;+   LDA #$FFFF : STA $7EC19E : STA !ram_magic_pants_state
-;    RTL
-;}
+MagicPants:
+{
+    LDA $0A96 : CMP #$0009 : BEQ .check
+    LDA !ram_magic_pants_state : BEQ +
+    LDA !ram_magic_pants_pal1 : STA $7EC188
+    LDA !ram_magic_pants_pal2 : STA $7EC18A
+    LDA !ram_magic_pants_pal3 : STA $7EC19E
+    LDA #$0000 : STA !ram_magic_pants_state
++   RTL
+
+  .check
+    LDA $0A1C : CMP #$0009 : BEQ .flash
+    CMP #$000A : BEQ .flash
+    RTL
+
+  .flash
+    LDA !ram_magic_pants_state : BNE +
+    LDA $7EC188 : STA !ram_magic_pants_pal1
+    LDA $7EC18A : STA !ram_magic_pants_pal2
+    LDA $7EC19E : STA !ram_magic_pants_pal3
++   LDA #$FFFF : STA $7EC19E : STA !ram_magic_pants_state
+    RTL
+}
 

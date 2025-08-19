@@ -70,7 +70,7 @@ macro printfreespacebank(bank)
 org !FREESPACE_<bank>
 !FREESPACE_COUNTER_<bank> ?= 0
 if !FREESPACE_COUNTER_<bank>
-print "Bank $<bank> ended at $", pc, " with $", hex(!FREESPACE_<bank>-1-!START_FREESPACE_<bank>), " bytes used, $", hex(!END_FREESPACE_<bank>-!FREESPACE_<bank>-1), " bytes remaining"
+print "Bank $<bank> ended at $", pc, " with $", hex(!FREESPACE_<bank>-!START_FREESPACE_<bank>), " bytes used, $", hex(!END_FREESPACE_<bank>-!FREESPACE_<bank>-1), " bytes remaining"
 endif
 endmacro
 

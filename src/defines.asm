@@ -132,7 +132,8 @@ if read1($00FFD5) == $00 || read1($00FFD5) == $FF
 else
 assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
 endif
-!SRAM_VERSION = $0016
+!SRAM_VERSION = #$0016
+!SAFEWORD = #$5AFE
 
 !SRAM_START = $702200
 
@@ -179,7 +180,9 @@ endif
 !sram_seed_Y = !SRAM_START+$84
 !sram_cm_fast_scroll_button = !SRAM_START+$8A
 
-; ^ FREE SPACE ^ up to +$BA6
+; ^ FREE SPACE ^ up to +$BA4
+
+!sram_safeword = !SRAM_START+$BA6
 
 !sram_custom_header_normal = !SRAM_START+$BA8 ; $18 bytes
 !sram_custom_preset_safewords_normal = !SRAM_START+$BC0 ; $50 bytes

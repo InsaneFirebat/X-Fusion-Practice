@@ -1,72 +1,6 @@
 
-;org !ORG_MENU_BANK85
-print pc, " menu bank85 start"
 
-initialize_ppu_long:
-    PHP : %a16()
-    LDA $7E33EA : STA !ram_cgram_cache+$2E
-    %a8()
-    STZ $420C ; clear HDMA enable flags
-    LDA $85 : STA $7E33EA
-    LDA $5B : STA $7E33EB
-    LDA #$58 : STA $5B
-    LDA #$17 : STA $7A
-    STZ $6A : STZ $70 : STZ $73
-    LDA #$20 : STA $2132
-    LDA #$40 : STA $2132
-    LDA #$80 : STA $2132
-    STZ $2111 : STZ $2111
-    STZ $2112 : STZ $2112
-    %a16()
-    LDA #$5880 : STA $2116
-    LDA $2139
-    LDA #$3981 : STA $4310
-    LDA #$4100 : STA $4312
-    LDA #$007E : STA $4314
-    LDA #$0700 : STA $4315
-    STZ $4317 : STZ $4319
-    %a8()
-    LDA #$80 : STA $2115
-    LDA #$02 : STA $420B
-    PLP
-    RTL
-
-restore_ppu_long:
-    PHP : %a16()
-    LDA #$5880 : STA $2116
-    LDA #$1801 : STA $4310
-    LDA #$4100 : STA $4312
-    LDA #$007E : STA $4314
-    LDA #$0700 : STA $4315
-    STZ $4317 : STZ $4319
-    %a8()
-    LDA #$80 : STA $2115
-    LDA #$02 : STA $420B
-    LDA $7E33EA : STA $85 : STA $420C
-    LDA $7E33EB : STA $5B
-    LDA $69 : STA $6A
-    LDA $6E : STA $70
-    LDA $71 : STA $73
-    %a16()
-    LDA !ram_cgram_cache+$2E : STA $7E33EA
-    PLP
-    RTL
-
-play_music_long:
-    %ai8()
-    LDX #$02
--   JSR cm_wait_for_lag_frame
-    PHX
-    JSL $808F0C ; handle music queue
-    JSL $808644 ; handle sfx
-    PLX : DEX : BNE -
-    RTL
-
-print pc, " menu bank85 end"
-;warnpc $85FE00 ; fanfare.asm
-
-
-;org !ORG_MENU_BANK89
+%startfree(9B)
 print pc, " menu start"
 
 cm_start:
@@ -168,15 +102,7 @@ cm_init:
     LDA.w #MainMenu>>16 : STA !ram_cm_menu_bank
 
     JSL cm_calculate_max
-    JSL cm_set_etanks_and_reserve
     RTS
-}
-
-cm_set_etanks_and_reserve:
-{
-    LDA !SAMUS_HP_MAX : JSR cm_divide_100 : STA !ram_cm_etanks
-    LDA !SAMUS_RESERVE_MAX : JSR cm_divide_100 : STA !ram_cm_reserve
-    RTL
 }
 
 cm_wait_for_lag_frame:
@@ -189,6 +115,72 @@ cm_wait_for_lag_frame:
 
     PLP
     RTS
+}
+
+initialize_ppu_long:
+{
+    PHP : %a16()
+    LDA $7E33EA : STA !ram_cgram_cache+$2E
+    %a8()
+    STZ $420C ; clear HDMA enable flags
+    LDA $85 : STA $7E33EA
+    LDA $5B : STA $7E33EB
+    LDA #$58 : STA $5B
+    LDA #$17 : STA $7A
+    STZ $6A : STZ $70 : STZ $73
+    LDA #$20 : STA $2132
+    LDA #$40 : STA $2132
+    LDA #$80 : STA $2132
+    STZ $2111 : STZ $2111
+    STZ $2112 : STZ $2112
+    %a16()
+;    LDA #$5880 : STA $2116
+;    LDA $2139
+;    LDA #$3981 : STA $4310
+;    LDA #$4100 : STA $4312
+;    LDA #$007E : STA $4314
+;    LDA #$0700 : STA $4315
+;    STZ $4317 : STZ $4319
+;    %a8()
+;    LDA #$80 : STA $2115
+;    LDA #$02 : STA $420B
+    PLP
+    RTL
+}
+
+restore_ppu_long:
+{
+    PHP; : %a16()
+;    LDA #$5880 : STA $2116
+;    LDA #$1801 : STA $4310
+;    LDA #$4100 : STA $4312
+;    LDA #$007E : STA $4314
+;    LDA #$0700 : STA $4315
+;    STZ $4317 : STZ $4319
+    %a8()
+;    LDA #$80 : STA $2115
+;    LDA #$02 : STA $420B
+    LDA $7E33EA : STA $85 : STA $420C
+    LDA $7E33EB : STA $5B
+    LDA $69 : STA $6A
+    LDA $6E : STA $70
+    LDA $71 : STA $73
+    %a16()
+    LDA !ram_cgram_cache+$2E : STA $7E33EA
+    PLP
+    RTL
+}
+
+play_music_long:
+{
+    %ai8()
+    LDX #$02
+-   JSR cm_wait_for_lag_frame
+    PHX
+    JSL $808F0C ; handle music queue
+    JSL $808644 ; handle sfx
+    PLX : DEX : BNE -
+    RTL
 }
 
 
@@ -206,12 +198,17 @@ cm_transfer_custom_tileset:
     LDA #$04 : STA $210C ; BG3 starts at $4000 (8000 in vram)
     LDA #$80 : STA $2115 ; word-access, incr by 1
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
-    LDX.w #cm_hud_table : STX $4302 ; Source offset
-    LDA.b #cm_hud_table>>16 : STA $4304 ; Source bank
+    LDX.w #cm_hud_table1 : STX $4302 ; Source offset
+    LDA.b #cm_hud_table1>>16 : STA $4304 ; Source bank
     LDX #$0800 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
+
+    LDX.w #cm_hud_table2 : STX $4302 ; Source offset
+    LDA.b #cm_hud_table2>>16 : STA $4304 ; Source bank
+    LDX #$0800 : STX $4305 ; Size (0x10 = 1 tile)
+
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
     RTL
@@ -256,13 +253,13 @@ cm_transfer_custom_cgram:
     LDA $7EC016 : STA !ram_cgram_cache+$08
     LDA $7EC01A : STA !ram_cgram_cache+$0A
     LDA $7EC01C : STA !ram_cgram_cache+$0C
-    LDA $7EC01E : STA !ram_cgram_cache+$0E
+    LDA $7EC01E : STA !ram_cgram_cache+$0E ; not used?
     LDA $7EC032 : STA !ram_cgram_cache+$10
     LDA $7EC034 : STA !ram_cgram_cache+$12
     LDA $7EC036 : STA !ram_cgram_cache+$14
     LDA $7EC03A : STA !ram_cgram_cache+$16
     LDA $7EC03C : STA !ram_cgram_cache+$18
-    LDA $7EC03E : STA !ram_cgram_cache+$1A
+    LDA $7EC03E : STA !ram_cgram_cache+$1A ; not used?
 
     LDA #$7277 : STA $7EC00A                ; light pink
     LDA #$0000 : STA $7EC00E : STA $7EC016  ; black
@@ -291,13 +288,13 @@ cm_transfer_original_cgram:
     LDA !ram_cgram_cache+$08 : STA $7EC016
     LDA !ram_cgram_cache+$0A : STA $7EC01A
     LDA !ram_cgram_cache+$0C : STA $7EC01C
-    LDA !ram_cgram_cache+$0E : STA $7EC01E
+    LDA !ram_cgram_cache+$0E : STA $7EC01E ; not used?
     LDA !ram_cgram_cache+$10 : STA $7EC032
     LDA !ram_cgram_cache+$12 : STA $7EC034
     LDA !ram_cgram_cache+$14 : STA $7EC036
     LDA !ram_cgram_cache+$16 : STA $7EC03A
     LDA !ram_cgram_cache+$18 : STA $7EC03C
-    LDA !ram_cgram_cache+$1A : STA $7EC03E
+    LDA !ram_cgram_cache+$1A : STA $7EC03E ; not used?
 
     %i8()
     JSL transfer_cgram_long
@@ -677,7 +674,7 @@ draw_numfield:
     ; Set palette
     %a8()
     LDA #$24 : ORA !DP_Palette : STA !DP_Palette+1
-    LDA #$20 : STA !DP_Palette ; number tiles are 20-29
+    LDA #'0' : STA !DP_Palette ; number tiles are 20-29
 
     ; Draw numbers
     %a16()
@@ -721,12 +718,17 @@ draw_numfield_hex:
                       STA !ram_tilemap_buffer+2,X
 
     ; Draw numbers
+    %a8()
+    PHB
+    LDA.b #HexMenuGFXTable : PHA : PLB
+    %a16()
     ; (00X0)
     LDA !DP_DrawValue : AND #$00F0 : LSR #3 : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
     ; (000X)
     LDA !DP_DrawValue : AND #$000F : ASL : TAY
     LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
+    PLB
 
     ; overwrite palette bytes
     %a8()
@@ -993,7 +995,6 @@ cm_loop:
     JSL $808F0C ; Music queue
 ;    JSL $8289EF ; Sound fx queue
     JSL $808644 ; Sound fx queue
-    JSL MenuRNG
 
     LDA !ram_cm_leave : BEQ .check_ctrl_mode
     RTS ; Exit menu loop
@@ -1284,9 +1285,6 @@ cm_execute_action_table:
     dw execute_ctrl_shortcut
     dw execute_jsl
     dw execute_submenu
-
-execute_nop:
-    RTS
 
 execute_toggle:
 {
@@ -1721,66 +1719,34 @@ cm_hex2dec:
 
     RTS
 }
+print pc, " menu end"
+%endfree(9B)
 
-cm_divide_100:
-{
-    STA $4204
-    %a8()
-    ; divide by 100
-    LDA #$64 : STA $4206
-    %a16()
-    PEA $0000 : PLA ; wait for math
-    ; 16-bit result
-    LDA $4214
-    RTS
-}
-
-MenuRNG:
-; Generates new random number
-; 32-bit period (uses two 16-bit seeds)
-; Make sure ram_seed_X and ram_seed_Y is initialized to something other than zero
-{
-    LDA !ram_seed_X : ASL #5
-    EOR !ram_seed_X : STA $C1
-
-    LDA !ram_seed_Y : STA !ram_seed_X
-
-    LDA $C1 : LSR #3
-    EOR $C1 : STA $C1
-
-    LDA !ram_seed_Y : LSR
-    EOR !ram_seed_Y : EOR $C1
-    STA !ram_seed_Y
-
-    ; return y (in a)
-    RTL    
-}
-
-MenuRNG2:
-; 16-bit period xorshift (uses only ram_seed_X)
-; Make sure ram_seed_X is not zero
-{
-    LDA !ram_seed_X
-    STA $C1
-    ASL #2 : EOR $C1 : STA $C1
-    LSR #5 : EOR $C1 : STA $C1
-    ASL : EOR $C1
-    STA !ram_seed_X
-    RTL
-}
 
 ; ----------
 ; Resources
 ; ----------
 
-cm_hud_table:
-    incbin resources/cm_gfx.bin
+org $92D246
+print pc, " menu data1 start"
+cm_hud_table1:
+    incbin ../resources/cm_gfx1.bin
+warnpc $92D7D2
+print pc, " menu data1 end"
+
+org $92E768
+print pc, " menu data2 start"
+cm_hud_table2:
+    incbin ../resources/cm_gfx2.bin
 
 HexMenuGFXTable:
     dw $2C20, $2C21, $2C22, $2C23, $2C24, $2C25, $2C26, $2C27, $2C28, $2C29, $2C00, $2C01, $2C02, $2C03, $2C04, $2C05
-print pc, " menu end"
+warnpc $92ED23
+print pc, " menu data2 end"
 
 
+%startfree(92)
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
+%endfree(92)

@@ -4,8 +4,8 @@
 ; ---------------
 
 !VERSION_MAJOR = 1
-!VERSION_MINOR = 0
-!VERSION_BUILD = 3
+!VERSION_MINOR = 1
+!VERSION_BUILD = 1
 !VERSION_REV = 0
 
 
@@ -149,16 +149,19 @@
 !ram_cm_gravity = !WRAM_MENU_START+$82
 !ram_cm_morph = !WRAM_MENU_START+$84
 !ram_cm_bombs = !WRAM_MENU_START+$86
-!ram_cm_spring = !WRAM_MENU_START+$88
+!ram_cm_spikebreaker = !WRAM_MENU_START+$88
 !ram_cm_screw = !WRAM_MENU_START+$8A
-!ram_cm_hijump = !WRAM_MENU_START+$8C
+!ram_cm_superjump = !WRAM_MENU_START+$8C
 !ram_cm_space = !WRAM_MENU_START+$8E
 !ram_cm_speed = !WRAM_MENU_START+$90
-!ram_cm_charge = !WRAM_MENU_START+$92
-!ram_cm_ice = !WRAM_MENU_START+$94
-!ram_cm_wave = !WRAM_MENU_START+$96
-!ram_cm_spazer = !WRAM_MENU_START+$98
+!ram_cm_speed2 = !WRAM_MENU_START+$92
+!ram_cm_charge = !WRAM_MENU_START+$94
+!ram_cm_wide = !WRAM_MENU_START+$96
+!ram_cm_wave = !WRAM_MENU_START+$98
 !ram_cm_plasma = !WRAM_MENU_START+$9A
+!ram_cm_missile2 = !WRAM_MENU_START+$9C
+!ram_cm_missile3 = !WRAM_MENU_START+$9E
+!ram_cm_missile4 = !WRAM_MENU_START+$A0
 
 !ram_cm_custompalette_blue = !WRAM_MENU_START+$80
 !ram_cm_custompalette_green = !WRAM_MENU_START+$82
@@ -187,7 +190,7 @@ if read1($00FFD5) == $00 || read1($00FFD5) == $FF
 else
 assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
 endif
-!SRAM_VERSION = #$0016
+!SRAM_VERSION = #$0017
 !SAFEWORD = #$5AFE
 
 !SRAM_START = $702200
@@ -202,38 +205,13 @@ endif
 !sram_ctrl_load_state = !SRAM_START+$0C
 !sram_ctrl_save_state = !SRAM_START+$0E
 !sram_ctrl_update_timers = !SRAM_START+$1E
-!sram_ctrl_auto_save_state = !SRAM_START+$F0 ; note the change of order
 
 !sram_music_toggle = !SRAM_START+$2A
 
 ; FREE SPACE ^ up to +$5A
 
-; do not change order without updating custom palette profiles in customizemenu.asm
-!sram_palette_border = !SRAM_START+$5C
-!sram_palette_headeroutline = !SRAM_START+$5E
-!sram_palette_text = !SRAM_START+$60
-!sram_palette_numoutline = !SRAM_START+$62
-!sram_palette_numfill = !SRAM_START+$64
-!sram_palette_toggleon = !SRAM_START+$66
-!sram_palette_seltext = !SRAM_START+$68
-!sram_palette_seltextbg = !SRAM_START+$6A
-!sram_palette_background = !SRAM_START+$6C
-!sram_palette_numseloutline = !SRAM_START+$6E
-!sram_palette_numsel = !SRAM_START+$70
-
-!sram_custompalette_profile = !SRAM_START+$72
-!sram_menu_background = !SRAM_START+$74
-!sram_cm_scroll_delay = !SRAM_START+$76
-
-!sram_customsfx_move = !SRAM_START+$78
-!sram_customsfx_toggle = !SRAM_START+$7A
-!sram_customsfx_number = !SRAM_START+$7C
-!sram_customsfx_confirm = !SRAM_START+$7E
-!sram_customsfx_goback = !SRAM_START+$80
-
 !sram_seed_X = !SRAM_START+$82
 !sram_seed_Y = !SRAM_START+$84
-!sram_cm_fast_scroll_button = !SRAM_START+$8A
 
 ; ^ FREE SPACE ^ up to +$BA4
 

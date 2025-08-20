@@ -33,8 +33,20 @@ MagicPants:
 %endfree(8B)
 
 
+; label for HUD graphics
 org $82C5DD
 hudgfx_bin:
+
+
+; Skips the waiting time after teleporting
+org $90E877
+NoLoadAnimation:
+    LDA !MUSIC_TRACK
+    JSL $808FC1 ; queue room music track
+    BRA .skip
+
+org $90E898
+  .skip
 
 
 %startfree(80)
@@ -44,17 +56,17 @@ transfer_cgram_long:
 %endfree(80)
 
 
-org $92D246
-; Repoint escape timer tiles
-EscapeTimerTiles:
-incbin ../resources/EscapeTimerTiles.bin
-
-pushpc
-org $A7B423
-    LDA.w #(EscapeTimerTiles>>8)&$FF00 : STA $00D3,Y
-    LDA.w #EscapeTimerTiles : STA $00D2,Y
-warnpc $A7B42F
-pullpc
+;org $92D246
+;; Repoint escape timer tiles
+;EscapeTimerTiles:
+;incbin ../resources/EscapeTimerTiles.bin
+;
+;pushpc
+;org $A7B423
+;    LDA.w #(EscapeTimerTiles>>8)&$FF00 : STA $00D3,Y
+;    LDA.w #EscapeTimerTiles : STA $00D2,Y
+;warnpc $A7B42F
+;pullpc
 
 
 cleartable

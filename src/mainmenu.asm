@@ -297,92 +297,145 @@ eq_prepare_items_menu:
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$0001 : BEQ .noVaria
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0001 : BNE .equipVaria
     ; unequip
-    LDA #$0002 : STA !ram_cm_varia : BRA .doneVaria
+    LDA #$0002 : BRA .doneVaria
   .equipVaria
-    LDA #$0001 : STA !ram_cm_varia : BRA .doneVaria
+    LDA #$0001 : BRA .doneVaria
   .noVaria
-    LDA #$0000 : STA !ram_cm_varia
+    LDA #$0000
   .doneVaria
+    STA !ram_cm_varia
 
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$0020 : BEQ .noGravity
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0020 : BNE .equipGravity
     ; unequip
-    LDA #$0002 : STA !ram_cm_gravity : BRA .doneGravity
+    LDA #$0002 : BRA .doneGravity
   .equipGravity
-    LDA #$0001 : STA !ram_cm_gravity : BRA .doneGravity
+    LDA #$0001 : BRA .doneGravity
   .noGravity
-    LDA #$0000 : STA !ram_cm_gravity
+    LDA #$0000
   .doneGravity
+    STA !ram_cm_gravity
 
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$0004 : BEQ .noMorph
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0004 : BNE .equipMorph
     ; unequip
-    LDA #$0002 : STA !ram_cm_morph : BRA .doneMorph
+    LDA #$0002 : BRA .doneMorph
   .equipMorph
-    LDA #$0001 : STA !ram_cm_morph : BRA .doneMorph
+    LDA #$0001 : BRA .doneMorph
   .noMorph
-    LDA #$0000 : STA !ram_cm_morph
+    LDA #$0000
   .doneMorph
+    STA !ram_cm_morph
 
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$1000 : BEQ .noBombs
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$1000 : BNE .equipBombs
     ; unequip
-    LDA #$0002 : STA !ram_cm_bombs : BRA .doneBombs
+    LDA #$0002 : BRA .doneBombs
   .equipBombs
-    LDA #$0001 : STA !ram_cm_bombs : BRA .doneBombs
+    LDA #$0001 : BRA .doneBombs
   .noBombs
-    LDA #$0000 : STA !ram_cm_bombs
+    LDA #$0000
   .doneBombs
-
-    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0002 : BEQ .noSpring
-    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0002 : BNE .equipSpring
-    ; unequip
-    LDA #$0002 : STA !ram_cm_spring : BRA .doneSpring
-  .equipSpring
-    LDA #$0001 : STA !ram_cm_spring : BRA .doneSpring
-  .noSpring
-    LDA #$0000 : STA !ram_cm_spring
-  .doneSpring
+    STA !ram_cm_bombs
 
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$0008 : BEQ .noScrew
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0008 : BNE .equipScrew
     ; unequip
-    LDA #$0002 : STA !ram_cm_screw : BRA .doneScrew
+    LDA #$0002 : BRA .doneScrew
   .equipScrew
-    LDA #$0001 : STA !ram_cm_screw : BRA .doneScrew
+    LDA #$0001 : BRA .doneScrew
   .noScrew
-    LDA #$0000 : STA !ram_cm_screw
+    LDA #$0000
   .doneScrew
+    STA !ram_cm_screw
 
-    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0100 : BEQ .noHiJump
-    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .equipHiJump
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0100 : BEQ .noSuperJump
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0100 : BNE .equipSuperJump
     ; unequip
-    LDA #$0002 : STA !ram_cm_hijump : BRA .doneHiJump
-  .equipHiJump
-    LDA #$0001 : STA !ram_cm_hijump : BRA .doneHiJump
-  .noHiJump
-    LDA #$0000 : STA !ram_cm_hijump
-  .doneHiJump
+    LDA #$0002 : BRA .doneSuperJump
+  .equipSuperJump
+    LDA #$0001 : BRA .doneSuperJump
+  .noSuperJump
+    LDA #$0000
+  .doneSuperJump
+    STA !ram_cm_superjump
 
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$0200 : BEQ .noSpace
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0200 : BNE .equipSpace
     ; unequip
-    LDA #$0002 : STA !ram_cm_space : BRA .doneSpace
+    LDA #$0002 : BRA .doneSpace
   .equipSpace
-    LDA #$0001 : STA !ram_cm_space : BRA .doneSpace
+    LDA #$0001 : BRA .doneSpace
   .noSpace
-    LDA #$0000 : STA !ram_cm_space
+    LDA #$0000
   .doneSpace
+    STA !ram_cm_space
 
     LDA !SAMUS_ITEMS_COLLECTED : BIT #$2000 : BEQ .noSpeed
     LDA !SAMUS_ITEMS_EQUIPPED : BIT #$2000 : BNE .equipSpeed
     ; unequip
-    LDA #$0002 : STA !ram_cm_speed : BRA .doneSpeed
+    LDA #$0002 : BRA .doneSpeed
   .equipSpeed
-    LDA #$0001 : STA !ram_cm_speed : BRA .doneSpeed
+    LDA #$0001 : BRA .doneSpeed
   .noSpeed
-    LDA #$0000 : STA !ram_cm_speed
+    LDA #$0000
   .doneSpeed
+    STA !ram_cm_speed
+
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0010 : BEQ .noSpeed2
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0010 : BNE .equipSpeed2
+    ; unequip
+    LDA #$0002 : BRA .doneSpeed2
+  .equipSpeed2
+    LDA #$0001 : BRA .doneSpeed2
+  .noSpeed2
+    LDA #$0000
+  .doneSpeed2
+    STA !ram_cm_speed2
+
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0080 : BEQ .noSpikeBreaker
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0080 : BNE .equipSpikeBreaker
+    ; unequip
+    LDA #$0002 : BRA .doneSpikeBreaker
+  .equipSpikeBreaker
+    LDA #$0001 : BRA .doneSpikeBreaker
+  .noSpikeBreaker
+    LDA #$0000
+  .doneSpikeBreaker
+    STA !ram_cm_spikebreaker
+
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0002 : BEQ .noMissile2
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0002 : BNE .equipMissile2
+    ; unequip
+    LDA #$0002 : BRA .doneMissile2
+  .equipMissile2
+    LDA #$0001 : BRA .doneMissile2
+  .noMissile2
+    LDA #$0000
+  .doneMissile2
+    STA !ram_cm_missile2
+
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$8000 : BEQ .noMissile3
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$8000 : BNE .equipMissile3
+    ; unequip
+    LDA #$0002 : BRA .doneMissile3
+  .equipMissile3
+    LDA #$0001 : BRA .doneMissile3
+  .noMissile3
+    LDA #$0000
+  .doneMissile3
+    STA !ram_cm_missile3
+
+    LDA !SAMUS_ITEMS_COLLECTED : BIT #$0010 : BEQ .noMissile4
+    LDA !SAMUS_ITEMS_EQUIPPED : BIT #$0010 : BNE .equipMissile4
+    ; unequip
+    LDA #$0002 : BRA .doneMissile4
+  .equipMissile4
+    LDA #$0001 : BRA .doneMissile4
+  .noMissile4
+    LDA #$0000
+  .doneMissile4
+    STA !ram_cm_missile4
 
     %setmenubank()
     JML action_submenu
@@ -391,20 +444,38 @@ eq_prepare_items_menu:
 ToggleItemsMenu:
     dw #ti_variasuit
     dw #ti_gravitysuit
+    dw #ti_spikebreaker
+    dw #ti_screwattack
     dw #$FFFF
     dw #ti_morphball
     dw #ti_bomb
-    dw #ti_springball
-    dw #ti_screwattack
-    dw #$FFFF
-    dw #ti_hijumpboots
+    dw #ti_superjump
     dw #ti_spacejump
     dw #ti_speedbooster
+    dw #ti_speedbooster2
+    dw #$FFFF
+    dw #ti_missile2
+    dw #ti_missile3
+    dw #ti_missile4
     dw #$FFFF
     dw #ti_grapple
-    dw #ti_xray
     dw #$0000
     %cm_header("TOGGLE ITEMS")
+
+; 1: Varia Suit
+; 2: Lv.2 Missile
+; 4: Morphing Ball
+; 8: Screw Attack
+; 10h: Lv.4 Missile
+; 20h: Gravity Suit
+; 80h: Spike Breaker
+; 100h: Super Jump
+; 200h: Space Jump
+; 800h:  Lv.2 Speedbooster
+; 1000h: Bombs
+; 2000h: Speedbooster
+; 4000h: Grapple
+; 8000h: Lv.3 Missile
 
 ti_variasuit:
     %cm_equipment_item("Varia Suit", !ram_cm_varia, #$0001, #$FFFE)
@@ -412,37 +483,43 @@ ti_variasuit:
 ti_gravitysuit:
     %cm_equipment_item("Gravity Suit", !ram_cm_gravity, #$0020, #$FFDF)
 
-ti_morphball:
-    %cm_equipment_item("Morph Ball", !ram_cm_morph, #$0004, #$FFFB)
-
-ti_bomb:
-    %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
-
-ti_springball:
-    %cm_equipment_item("Spring Ball", !ram_cm_spring, #$0002, #$FFFD)
+ti_spikebreaker:
+    %cm_equipment_item("Spike Breaker", !ram_cm_spikebreaker, #$0080, #$FF7F)
 
 ti_screwattack:
     %cm_equipment_item("Screw Attack", !ram_cm_screw, #$0008, #$FFF7)
 
-ti_hijumpboots:
-    %cm_equipment_item("Hi Jump Boots", !ram_cm_hijump, #$0100, #$FEFF)
+ti_morphball:
+    %cm_equipment_item("Morphing Ball", !ram_cm_morph, #$0004, #$FFFB)
+
+ti_bomb:
+    %cm_equipment_item("Bombs", !ram_cm_bombs, #$1000, #$EFFF)
+
+ti_superjump:
+    %cm_equipment_item("Super Jump", !ram_cm_superjump, #$0100, #$FEFF)
 
 ti_spacejump:
     %cm_equipment_item("Space Jump", !ram_cm_space, #$0200, #$FDFF)
 
 ti_speedbooster:
-    %cm_equipment_item("Speed Booster", !ram_cm_speed, #$2000, #$DFFF)
+    %cm_equipment_item("Speedbooster", !ram_cm_speed, #$2000, #$DFFF)
+
+ti_speedbooster2:
+    %cm_equipment_item("Lv.2 Speedbooster", !ram_cm_speed2, #$0800, #$F7FF)
+
+ti_missile2:
+    %cm_equipment_item("Lv.2 Missile", !ram_cm_missile2, #$0002, #$FFFD)
+
+ti_missile3:
+    %cm_equipment_item("Lv.3 Missile", !ram_cm_missile3, #$8000, #$7FFF)
+
+ti_missile4:
+    %cm_equipment_item("Lv.4 Missile", !ram_cm_missile4, #$0010, #$FFEF)
 
 ti_grapple:
     %cm_toggle_bit("Grapple", !SAMUS_ITEMS_COLLECTED, #$4000, .routine)
   .routine
     LDA !SAMUS_ITEMS_EQUIPPED : EOR #$4000 : STA !SAMUS_ITEMS_EQUIPPED
-    RTL
-
-ti_xray:
-    %cm_toggle_bit("X-Ray", !SAMUS_ITEMS_COLLECTED, #$8000, .routine)
-  .routine
-    LDA !SAMUS_ITEMS_EQUIPPED : EOR #$8000 : STA !SAMUS_ITEMS_EQUIPPED
     RTL
 
 equipment_toggle_items:
@@ -484,81 +561,71 @@ setup_beams_ram:
     LDA !SAMUS_BEAMS_COLLECTED : BIT #$1000 : BEQ .noCharge
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$1000 : BNE .equipCharge
     ; unequip Charge
-    LDA #$0002 : STA !ram_cm_charge : BRA .doneCharge
+    LDA #$0002 : BRA .doneCharge
   .equipCharge
-    LDA #$0001 : STA !ram_cm_charge : BRA .doneCharge
+    LDA #$0001 : BRA .doneCharge
   .noCharge
-    LDA #$0000 : STA !ram_cm_charge
+    LDA #$0000
   .doneCharge
+    STA !ram_cm_charge
 
-    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0002 : BEQ .noIce
-    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0002 : BNE .equipIce
+    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noWide
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipWide
     ; unequip Ice
-    LDA #$0002 : STA !ram_cm_ice : BRA .doneIce
-  .equipIce
-    LDA #$0001 : STA !ram_cm_ice : BRA .doneIce
-  .noIce
-    LDA #$0000 : STA !ram_cm_ice
-  .doneIce
+    LDA #$0002 : BRA .doneWide
+  .equipWide
+    LDA #$0001 : BRA .doneWide
+  .noWide
+    LDA #$0000
+  .doneWide
+    STA !ram_cm_wide
 
     LDA !SAMUS_BEAMS_COLLECTED : BIT #$0001 : BEQ .noWave
     LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0001 : BNE .equipWave
     ; unequip Wave
-    LDA #$0002 : STA !ram_cm_wave : BRA .doneWave
+    LDA #$0002 : BRA .doneWave
   .equipWave
-    LDA #$0001 : STA !ram_cm_wave : BRA .doneWave
+    LDA #$0001 : BRA .doneWave
   .noWave
-    LDA #$0000 : STA !ram_cm_wave
+    LDA #$0000
   .doneWave
+    STA !ram_cm_wave
 
-    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noSpazer
-    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipSpazer
-    ; unequip Spazer
-    LDA #$0002 : STA !ram_cm_spazer : BRA .doneSpazer
-  .equipSpazer
-    LDA #$0001 : STA !ram_cm_spazer : BRA .doneSpazer
-  .noSpazer
-    LDA #$0000 : STA !ram_cm_spazer
-  .doneSpazer
-
-    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0008 : BEQ .noPlasma
-    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0008 : BNE .equipPlasma
+    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0002 : BEQ .noPlasma
+    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0002 : BNE .equipPlasma
     ; unequip Plasma
-    LDA #$0002 : STA !ram_cm_plasma : BRA .donePlasma
+    LDA #$0002 : BRA .donePlasma
   .equipPlasma
-    LDA #$0001 : STA !ram_cm_plasma : BRA .donePlasma
+    LDA #$0001 : BRA .donePlasma
   .noPlasma
-    LDA #$0000 : STA !ram_cm_plasma
+    LDA #$0000
   .donePlasma
+    STA !ram_cm_plasma
 
     RTL
 }
 
 ToggleBeamsMenu:
     dw tb_chargebeam
-    dw tb_icebeam
     dw tb_wavebeam
-    dw tb_spazerbeam
+    dw tb_widebeam
     dw tb_plasmabeam
-    dw #$FFFF
-    dw misc_hyperbeam
+;    dw #$FFFF
+;    dw misc_hyperbeam
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 
 tb_chargebeam:
     %cm_equipment_beam("Charge", !ram_cm_charge, #$1000, #$EFFF, #$100F)
 
-tb_icebeam:
-    %cm_equipment_beam("Ice", !ram_cm_ice, #$0002, #$FFFD, #$100F)
-
 tb_wavebeam:
     %cm_equipment_beam("Wave", !ram_cm_wave, #$0001, #$FFFE, #$100F)
 
-tb_spazerbeam:
-    %cm_equipment_beam("Spazer", !ram_cm_spazer, #$0004, #$FFFB, #$1007)
+tb_widebeam:
+    %cm_equipment_beam("Wide", !ram_cm_wide, #$0004, #$FFFB, #$100F)
 
 tb_plasmabeam:
-    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0008, #$FFF7, #$100B)
+    %cm_equipment_beam("Plasma", !ram_cm_plasma, #$0002, #$FFFD, #$100F)
 
 equipment_toggle_beams:
 {
@@ -569,39 +636,16 @@ equipment_toggle_beams:
     ; unquipped
     LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
-    BRA .checkSpazer
+    JML $90AC8D ; update beam gfx
 
   .equipped
     LDA !SAMUS_BEAMS_EQUIPPED : ORA !DP_ToggleValue : AND !DP_Temp : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : ORA !DP_ToggleValue : STA !SAMUS_BEAMS_COLLECTED
-    BRA .checkSpazer
+    JML $90AC8D ; update beam gfx
 
   .unobtained
     LDA !SAMUS_BEAMS_EQUIPPED : AND !DP_Increment : STA !SAMUS_BEAMS_EQUIPPED
     LDA !SAMUS_BEAMS_COLLECTED : AND !DP_Increment : STA !SAMUS_BEAMS_COLLECTED
-
-  .checkSpazer
-    ; Reinitialize Spazer and Plasma since they affect each other
-    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0004 : BEQ .noSpazer
-    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0004 : BNE .equipSpazer
-    ; unequip Spazer
-    LDA #$0002 : STA !ram_cm_spazer : BRA .checkPlasma
-  .equipSpazer
-    LDA #$0001 : STA !ram_cm_spazer : BRA .checkPlasma
-  .noSpazer
-    LDA #$0000 : STA !ram_cm_spazer
-
-  .checkPlasma
-    LDA !SAMUS_BEAMS_COLLECTED : BIT #$0008 : BEQ .noPlasma
-    LDA !SAMUS_BEAMS_EQUIPPED : BIT #$0008 : BNE .equipPlasma
-    ; unequip Plasma
-    LDA #$0002 : STA !ram_cm_plasma : BRA .done
-  .equipPlasma
-    LDA #$0001 : STA !ram_cm_plasma : BRA .done
-  .noPlasma
-    LDA #$0000 : STA !ram_cm_plasma
-
-  .done
     JML $90AC8D ; update beam gfx
 }
 
@@ -617,102 +661,106 @@ TeleportMenu:
     dw #tel_goto_ship
     dw #tel_goto_mari
     dw #tel_goto_tour
+    dw #tel_goto_ceres
     dw #tel_goto_debug
+    dw #tel_goto_debugtel
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
 tel_goto_crat:
-    %cm_submenu("Crateria", #TeleportCrateriaMenu)
+    %cm_submenu("Main Deck", #TeleportCrateriaMenu)
 
 tel_goto_brin:
-    %cm_submenu("Brinstar", #TeleportBrinstarMenu)
+    %cm_submenu("SECT-1-SRX", #TeleportBrinstarMenu)
 
 tel_goto_norf:
-    %cm_submenu("Norfair", #TeleportNorfairMenu)
+    %cm_submenu("SECT-2-TRO", #TeleportNorfairMenu)
 
 tel_goto_ship:
-    %cm_submenu("Wrecked Ship", #TeleportWreckedShipMenu)
+    %cm_submenu("SECT-3-PYR", #TeleportWreckedShipMenu)
 
 tel_goto_mari:
-    %cm_submenu("Maridia", #TeleportMaridiaMenu)
+    %cm_submenu("SECT-4-AQA", #TeleportMaridiaMenu)
 
 tel_goto_tour:
-    %cm_submenu("Tourian", #TeleportTourianMenu)
+    %cm_submenu("SECT-5-ARC", #TeleportTourianMenu)
+
+tel_goto_ceres:
+    %cm_submenu("SECT-6-NOC", #TeleportCeresMenu)
 
 tel_goto_debug:
+    %cm_submenu("SECT-X-DMX", #TeleportDebugMenu)
+
+tel_goto_debugtel:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
 
 TeleportCrateriaMenu:
     dw #tel_crateriaship
     dw #tel_crateriaparlor
+    dw #tel_crateria2
     dw #$0000
-    %cm_header("CRATERIA SAVE STATIONS")
+    %cm_header("MAIN DECK SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsl("Crateria Ship", #action_teleport, #$0000)
+    %cm_jsl("East Main Deck", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsl("Crateria Parlor", #action_teleport, #$0001)
+    %cm_jsl("West Main Deck", #action_teleport, #$0001)
+
+tel_crateria2:
+    %cm_jsl("Southeast Main Deck", #action_teleport, #$0002)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
-    dw #tel_brinstargreenshaft
-    dw #tel_brinstargreenetecoons
-    dw #tel_brinstarkraid
     dw #tel_brinstarredtower
+    dw #tel_brinstar5
+    dw #tel_brinstar6
     dw #$0000
-    %cm_header("BRINSTAR SAVE STATIONS")
+    %cm_header("SECT-1-SRX SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsl("Brinstar Pink Spospo", #action_teleport, #$0100)
-
-tel_brinstargreenshaft:
-    %cm_jsl("Brinstar Green Shaft", #action_teleport, #$0101)
-
-tel_brinstargreenetecoons:
-    %cm_jsl("Brinstar Green Etecoons", #action_teleport, #$0102)
-
-tel_brinstarkraid:
-    %cm_jsl("Brinstar Kraid", #action_teleport, #$0103)
+    %cm_jsl("Game Start", #action_teleport, #$0100)
 
 tel_brinstarredtower:
-    %cm_jsl("Brinstar Red Tower", #action_teleport, #$0104)
+    %cm_jsl("East SECT-1-SRX", #action_teleport, #$0104)
+
+tel_brinstar5:
+    %cm_jsl("Central SECT-1-SRX", #action_teleport, #$0105)
+
+tel_brinstar6:
+    %cm_jsl("Southeast SECT-1-SRX", #action_teleport, #$0106)
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
     dw #tel_norfairbubble
     dw #tel_norfairtunnel
-    dw #tel_norfaircrocomire
-    dw #tel_norfairlnelevator
-    dw #tel_norfairridley
     dw #$0000
-    %cm_header("NORFAIR SAVE STATIONS")
+    %cm_header("SECT-2-TRO SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsl("Norfair Grapple", #action_teleport, #$0200)
+    %cm_jsl("North SECT-2-TRO", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsl("Norfair Bubble Mountain", #action_teleport, #$0201)
+    %cm_jsl("East SECT-2-TRO", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsl("Norfair Tunnel", #action_teleport, #$0202)
-
-tel_norfaircrocomire:
-    %cm_jsl("Norfair Crocomire", #action_teleport, #$0203)
-
-tel_norfairlnelevator:
-    %cm_jsl("Norfair LN Elevator", #action_teleport, #$0204)
-
-tel_norfairridley:
-    %cm_jsl("Norfair Ridley", #action_teleport, #$0205)
+    %cm_jsl("South SECT-2-TRO", #action_teleport, #$0202)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
+    dw #tel_wreckedship1
+    dw #tel_wreckedship2
     dw #$0000
-    %cm_header("WRECKED SHIP SAVE STATIONS")
+    %cm_header("SECT-3-PYR SAVE STATIONS")
 
 tel_wreckedship:
-    %cm_jsl("Wrecked Ship", #action_teleport, #$0300)
+    %cm_jsl("East SECT-3-PYR", #action_teleport, #$0300)
+
+tel_wreckedship1:
+    %cm_jsl("North SECT-3-PYR", #action_teleport, #$0301)
+
+tel_wreckedship2:
+    %cm_jsl("Southeast SECT-3-PYR", #action_teleport, #$0302)
 
 TeleportMaridiaMenu:
     dw #tel_maridiatube
@@ -720,31 +768,97 @@ TeleportMaridiaMenu:
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
     dw #$0000
-    %cm_header("MARIDIA SAVE STATIONS")
+    %cm_header("SECT-4-AQA SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsl("Maridia Tube", #action_teleport, #$0400)
+    %cm_jsl("Northeast SECT-4-AQA", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsl("Maridia Elevator", #action_teleport, #$0401)
+    %cm_jsl("North SECT-4-AQA", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsl("Maridia Aqueduct", #action_teleport, #$0402)
+    %cm_jsl("Northwest SECT-4-AQA", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsl("Maridia Draygon", #action_teleport, #$0403)
+    %cm_jsl("Southeast SECT-4-AQA", #action_teleport, #$0403)
 
 TeleportTourianMenu:
-    dw #tel_tourianentrance
     dw #tel_tourianmb
+    dw #tel_tourianentrance
     dw #$0000
-    %cm_header("TOURIAN SAVE STATIONS")
-
-tel_tourianentrance:
-    %cm_jsl("Tourian Entrance", #action_teleport, #$0501)
+    %cm_header("SECT-5-ARC SAVE STATIONS")
 
 tel_tourianmb:
-    %cm_jsl("Tourian MB", #action_teleport, #$0500)
+    %cm_jsl("North SECT-5-ARC", #action_teleport, #$0500)
+
+tel_tourianentrance:
+    %cm_jsl("Central SECT-5-ARC", #action_teleport, #$0501)
+
+tel_tourian2:
+    %cm_jsl("South SECT-5-ARC", #action_teleport, #$0502)
+
+tel_tourian3:
+    %cm_jsl("Southeast SECT-5-ARC", #action_teleport, #$0503)
+
+TeleportCeresMenu:
+    dw #tel_ceres0
+    dw #tel_ceres1
+    dw #tel_ceres2
+    dw #tel_ceres3
+    dw #$0000
+    %cm_header("SECT-6-NOC SAVE STATIONS")
+
+tel_ceres0:
+    %cm_jsl("Northwest SECT-6-NOC", #action_teleport, #$0600)
+
+tel_ceres1:
+    %cm_jsl("Northeast SECT-6-NOC", #action_teleport, #$0601)
+
+tel_ceres2:
+    %cm_jsl("Central SECT-6-NOC", #action_teleport, #$0602)
+
+tel_ceres3:
+    %cm_jsl("South SECT-6-NOC", #action_teleport, #$0603)
+
+TeleportDebugMenu:
+    dw #tel_debug0
+    dw #tel_debug1
+    dw #tel_debug2
+    dw #tel_debug3
+    dw #tel_debug4
+    dw #tel_debug5
+    dw #tel_debug6
+    dw #tel_debug7
+    dw #tel_debug8
+    dw #$0000
+    %cm_header("SECT-X-DMX SAVE STATIONS")
+
+tel_debug0:
+    %cm_jsl("Central SECT-6-NOC", #action_teleport, #$0700)
+
+tel_debug1:
+    %cm_jsl("Southwest SECT-6-NOC", #action_teleport, #$0701)
+
+tel_debug2:
+    %cm_jsl("Southwest SECT-6-NOC", #action_teleport, #$0702)
+
+tel_debug3:
+    %cm_jsl("West SECT-6-NOC", #action_teleport, #$0703)
+
+tel_debug4:
+    %cm_jsl("Northeast SECT-6-NOC", #action_teleport, #$0704)
+
+tel_debug5:
+    %cm_jsl("North SECT-6-NOC", #action_teleport, #$0705)
+
+tel_debug6:
+    %cm_jsl("Northwest SECT-6-NOC", #action_teleport, #$0706)
+
+tel_debug7:
+    %cm_jsl("West SECT-6-NOC", #action_teleport, #$0707)
+
+tel_debug8:
+    %cm_jsl("Metroid SECT-6-NOC", #action_teleport, #$0708)
 
 DebugTeleportMenu:
     dw #tel_debug_area
@@ -758,16 +872,18 @@ tel_debug_area:
     dl #!ram_tel_debug_area
     dw #$0000
     db #$28, "Select Area", #$FF
-        db #$28, "   CRATERIA", #$FF
-        db #$28, "   BRINSTAR", #$FF
-        db #$28, "    NORFAIR", #$FF
-        db #$28, "  REQT SHIP", #$FF
-        db #$28, "    MARIDIA", #$FF
-        db #$28, "    TOURIAN", #$FF
+        db #$28, "  MAIN DECK", #$FF
+        db #$28, " SECT-1-SRX", #$FF
+        db #$28, " SECT-2-TRO", #$FF
+        db #$28, " SECT-3-PYR", #$FF
+        db #$28, " SECT-4-AQA", #$FF
+        db #$28, " SECT-5-ARC", #$FF
+        db #$28, " SECT-6-NOC", #$FF
+        db #$28, " SECT-X-DMX", #$FF
     db #$FF
 
 tel_debug_station:
-    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 22, 1, 4, #0)
+    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, $16, 1, 4, #0)
 
 tel_debug_execute:
     %cm_jsl("TELEPORT", #action_debug_teleport, #$0000)
@@ -822,7 +938,7 @@ action_debug_teleport:
 MiscMenu:
     dw #misc_bluesuit
     dw #misc_flashsuit
-    dw #misc_hyperbeam
+;    dw #misc_hyperbeam
     dw #$FFFF
     dw #misc_healthbomb
     dw #$FFFF
@@ -838,38 +954,43 @@ misc_bluesuit:
 misc_flashsuit:
     %cm_toggle("Flash Suit", !SAMUS_SHINE_TIMER, #$0001, #0)
 
-misc_hyperbeam:
-    %cm_toggle_bit("Hyper Beam", $7E0A76, #$8000, #.routine)
-  .routine
-    AND #$8000 : BEQ .off
-    LDA #$0003
-    JSL $91E4AD ; setup Samus for Hyper Beam
-    RTL
-
-  .off
-    ; check for Spazer+Plasma
-    LDA !SAMUS_BEAMS_COLLECTED : AND #$000C : CMP #$000C : BEQ .disableMurder
-    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED
-    BRA .FXobjects
-
-  .disableMurder
-    LDA !SAMUS_BEAMS_COLLECTED : AND #$000B : STA !SAMUS_BEAMS_EQUIPPED
-
-  .FXobjects
-    LDX #$000E
-
-  .loopFXobjects
-    LDA $1E7D,X : CMP #$E1F0 : BEQ .found
-    DEX #2 : BPL .loopFXobjects
-
-  .found
-    ; clear Hyper Beam palette FX object
-    STZ $1E7D,X ; this is probably the only one that matters
-    STZ $1E8D,X : STZ $1E9D,X : STZ $1EAD,X
-    STZ $1EBD,X : STZ $1ECD,X : STZ $1EDD,X
-
-    JSL $90AC8D ; update beam gfx
-    RTL
+;misc_hyperbeam:
+;    %cm_toggle_bit("Disruptor Beam", $7E0A76, #$8000, #.routine)
+;  .routine
+;    AND #$8000 : BEQ .off
+;    LDA #$0003
+;;    JSL $91E4AD ; setup Samus for Hyper Beam
+;    LDA #$1009 : STA !SAMUS_BEAMS_EQUIPPED
+;    JSL $90AC8D
+;    LDA #$8000 : STA $0A76
+;    STZ $0DC0
+;
+;    RTL
+;
+;  .off
+;    ; check for Spazer+Plasma
+;    LDA !SAMUS_BEAMS_COLLECTED : AND #$000C : CMP #$000C : BEQ .disableMurder
+;    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED
+;    BRA .FXobjects
+;
+;  .disableMurder
+;    LDA !SAMUS_BEAMS_COLLECTED : AND #$000B : STA !SAMUS_BEAMS_EQUIPPED
+;
+;  .FXobjects
+;    LDX #$000E
+;
+;  .loopFXobjects
+;    LDA $1E7D,X : CMP #$E1F0 : BEQ .found
+;    DEX #2 : BPL .loopFXobjects
+;
+;  .found
+;    ; clear Hyper Beam palette FX object
+;    STZ $1E7D,X ; this is probably the only one that matters
+;    STZ $1E8D,X : STZ $1E9D,X : STZ $1EAD,X
+;    STZ $1EBD,X : STZ $1ECD,X : STZ $1EDD,X
+;
+;    JSL $90AC8D ; update beam gfx
+;    RTL
 
 misc_healthbomb:
     %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)
@@ -1177,5 +1298,5 @@ ctrl_reset_defaults:
     %cm_jsl("Reset to Defaults", .routine, #$0000)
   .routine
     ;%sfxreset()
-;    JML init_sram_controller_shortcuts
+    JML init_sram_controller_shortcuts
     RTL

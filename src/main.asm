@@ -6,11 +6,12 @@
 ; SD2SNES Savestate code originally by acmlm, total, Myria
 
 lorom
-
+table ../resources/normal.tbl
 
 incsrc defines.asm
 incsrc macros.asm
 incsrc freespace.asm
+incsrc init.asm
 incsrc gamemode.asm
 incsrc timer.asm
 incsrc save.asm

@@ -6,6 +6,7 @@ org $808455
 %startfree(8B)
 print pc, " init start"
 init_code:
+{
     %ai16()
     PHA
     LDA #$0000
@@ -17,32 +18,42 @@ endif
     STA !ram_last_realtime_room : STA !ram_last_realtime_door
     STA !ram_last_door_lag_frames : STA !ram_lag_counter
 
-    ; SRAM
-    LDA !sram_safeword : CMP !SAFEWORD : BNE .initSRAM
-    LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .done
-
-  .initSRAM
-    LDA #$3000 : STA !sram_ctrl_menu ; Select + Start
-    LDA #$6010 : STA !sram_ctrl_save_state ; Select + Y + R
-    LDA #$6020 : STA !sram_ctrl_load_state ; Select + Y + L
-; i use SL+Y+L+R to save and SL+B+L to load -mm2
-; 6030 A020
-    ; Input Cheat Sheet
-    ; $8000 = B
-    ; $4000 = Y
-    ; $2000 = Select
-    ; $1000 = Start
-    ; $0800 = Up
-    ; $0400 = Down
-    ; $0200 = Left
-    ; $0100 = Right
-    ; $0080 = A
-    ; $0040 = X
-    ; $0020 = L
-    ; $0010 = R
+    JSL init_sram
 
   .done
     PLA
     JML $9585F4 ; overwritten code
+}
+
+init_sram:
+{
+    ; SRAM
+    LDA !sram_safeword : CMP !SAFEWORD : BNE .controller_shortcuts
+    LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .done
+
+  .controller_shortcuts
+    LDA #$3000 : STA !sram_ctrl_menu ; Select + Start
+    LDA #$6010 : STA !sram_ctrl_save_state ; Select + Y + R
+    LDA #$6020 : STA !sram_ctrl_load_state ; Select + Y + L
+    LDA #$0000 : STA !sram_ctrl_full_equipment
+    LDA #$0000 : STA !sram_ctrl_kill_enemies
+    LDA #$0000 : STA !sram_ctrl_update_timers
+; Input Cheat Sheet
+; $8000 = B
+; $4000 = Y
+; $2000 = Select
+; $1000 = Start
+; $0800 = Up
+; $0400 = Down
+; $0200 = Left
+; $0100 = Right
+; $0080 = A
+; $0040 = X
+; $0020 = L
+; $0010 = R
+
+  .done
+    RTL
+}
 print pc, " init end"
 %endfree(8B)

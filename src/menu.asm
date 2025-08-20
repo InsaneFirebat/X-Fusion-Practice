@@ -200,14 +200,15 @@ cm_transfer_custom_tileset:
     LDX #$4000 : STX $2116 ; VRAM address (8000 in vram)
     LDX.w #cm_hud_table1 : STX $4302 ; Source offset
     LDA.b #cm_hud_table1>>16 : STA $4304 ; Source bank
-    LDX #$0800 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0400 : STX $4305 ; Size (0x10 = 1 tile)
     LDA #$01 : STA $4300 ; word, normal increment (DMA MODE)
     LDA #$18 : STA $4301 ; destination (VRAM write)
     LDA #$01 : STA $420B ; initiate DMA (channel 1)
 
     LDX.w #cm_hud_table2 : STX $4302 ; Source offset
     LDA.b #cm_hud_table2>>16 : STA $4304 ; Source bank
-    LDX #$0800 : STX $4305 ; Size (0x10 = 1 tile)
+    LDX #$0400 : STX $4305 ; Size (0x10 = 1 tile)
+    LDA #$01 : STA $420B ; initiate DMA (channel 1)
 
     LDA #$0F : STA $0F2100 ; disable forced blanking
     PLP
@@ -674,7 +675,7 @@ draw_numfield:
     ; Set palette
     %a8()
     LDA #$24 : ORA !DP_Palette : STA !DP_Palette+1
-    LDA #'0' : STA !DP_Palette ; number tiles are 20-29
+    LDA #'0' : STA !DP_Palette
 
     ; Draw numbers
     %a16()
@@ -720,7 +721,7 @@ draw_numfield_hex:
     ; Draw numbers
     %a8()
     PHB
-    LDA.b #HexMenuGFXTable : PHA : PLB
+    LDA.b #HexMenuGFXTable>>16 : PHA : PLB
     %a16()
     ; (00X0)
     LDA !DP_DrawValue : AND #$00F0 : LSR #3 : TAY
@@ -771,7 +772,7 @@ draw_numfield_word:
     ; Set palette
     %a8()
     LDA #$24 : ORA !DP_Palette : STA !DP_Palette+1
-    LDA #$20 : STA !DP_Palette ; number tiles are 20-29
+    LDA #'0' : STA !DP_Palette
 
     ; Draw numbers
     %a16()
@@ -952,7 +953,7 @@ menu_ctrl_input_display:
     PHA
     BIT #$0001 : BEQ .no_draw
 
-    TYA : CLC : ADC #$0080
+    TYA : CLC : ADC #$0070
     XBA : ORA !DP_Palette : XBA
     STA !ram_tilemap_buffer,X : INX #2
 
@@ -1175,8 +1176,6 @@ cm_calculate_max:
 
 cm_get_inputs:
 {
-    !input_held_delay = #$000C
-
     ; Make sure we don't read joysticks twice in the same frame
     LDA !FRAME_COUNTER : CMP !ram_cm_input_counter
     PHP : STA !ram_cm_input_counter : PLP : BNE .input_read
@@ -1186,16 +1185,9 @@ cm_get_inputs:
   .input_read
     LDA !IH_CONTROLLER_PRI_NEW : BEQ .check_holding
 
-    LDA !input_held_delay : STA !ram_cm_input_timer
+    ; Initial delay of $0E frames
+    LDA #$000E : STA !ram_cm_input_timer
 
-    ; Check if fast scroll button is held
-    LDA !IH_CONTROLLER_PRI : AND !sram_cm_fast_scroll_button : BEQ .return_input
-
-    ; Reduce delay to double the scroll delay
-    LDA !sram_cm_scroll_delay : ASL : CMP !input_held_delay : BPL .return_input
-    STA !ram_cm_input_timer
-
-  .return_input
     ; Return the new input
     LDA !IH_CONTROLLER_PRI_NEW
     RTS
@@ -1208,7 +1200,7 @@ cm_get_inputs:
     LDA !ram_cm_input_timer : DEC : STA !ram_cm_input_timer : BNE .noinput
 
     ; Set new delay, default is 2
-    LDA !sram_cm_scroll_delay : STA !ram_cm_input_timer
+    LDA #$0002 : STA !ram_cm_input_timer
 
     ; Return held input
     LDA !IH_CONTROLLER_PRI : AND #$0F00 : ORA !IH_INPUT_HELD
@@ -1369,26 +1361,11 @@ execute_numfield:
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : STA !DP_Minimum
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : AND #$00FF : INC : STA !DP_Maximum ; INC for convenience
 
-    ; check if fast scroll button pressed to skip inc/dec
-    LDA !ram_cm_controller : AND !sram_cm_fast_scroll_button : BNE .skip_inc
-
-    ; check if fast scroll button is held
-    LDA !IH_CONTROLLER_PRI : AND !sram_cm_fast_scroll_button : BEQ .check_held
-    ; grab normal increment multiplied by four and skip past both
-    LDA [!DP_CurrentMenu] : ASL : ASL : INC !DP_CurrentMenu : INC !DP_CurrentMenu
-    BRA .store_increment
-
-  .check_held
     ; check for held inputs
     LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
     ; grab normal increment and skip past both
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu
     BRA .store_increment
-
-  .skip_inc
-    ; skipping inc/dec and just playing sfx
-    INC !DP_CurrentMenu : INC !DP_CurrentMenu
-    BRA .jsl
 
   .input_held
     ; grab faster increment and skip past both
@@ -1447,16 +1424,6 @@ execute_numfield_word:
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_DigitMinimum
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC : STA !DP_DigitMaximum ; INC for convenience
 
-    ; check if fast scroll button pressed to skip inc/dec
-    LDA !ram_cm_controller : AND !sram_cm_fast_scroll_button : BNE .skip_inc
-
-    ; check if fast scroll button is held
-    LDA !IH_CONTROLLER_PRI : AND !sram_cm_fast_scroll_button : BEQ .check_held
-    ; grab normal increment multiplied by four and skip past both
-    LDA [!DP_CurrentMenu] : ASL : ASL : INC !DP_CurrentMenu : INC !DP_CurrentMenu
-    INC !DP_CurrentMenu : INC !DP_CurrentMenu
-    BRA .store_increment
-
   .check_held
     ; check for held inputs
     LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
@@ -1464,12 +1431,6 @@ execute_numfield_word:
     LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu
     INC !DP_CurrentMenu : INC !DP_CurrentMenu
     BRA .store_increment
-
-  .skip_inc
-    ; skipping inc/dec and just playing sfx
-    INC !DP_CurrentMenu : INC !DP_CurrentMenu
-    INC !DP_CurrentMenu : INC !DP_CurrentMenu
-    BRA .jsl
 
   .input_held
     ; grab faster increment and skip past both

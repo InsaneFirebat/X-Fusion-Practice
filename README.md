@@ -1,35 +1,33 @@
-# Super Metroid X-Fusion Practice Hack
+# X-Fusion Practice Hack
 
-This is a very minimal practice hack due to the extreme lack of freespace in the hack. Only savestates and a timer are available.
+# About
 
-This patch was adapted from the Super Metroid Practice Hack. Find the original (and more updated version) at https://github.com/tewtal/sm_practice_hack
+This is a very minimal practice hack due to the extreme lack of free space in the hack. Only savestates and a timer are available. This patch was adapted from the [Super Metroid Practice Hack](https://github.com/tewtal/sm_practice_hack).
 
+# Savestate Feature
 
-## Using the pre-made patch
+By default, the inputs to create a savestate are `Select`+`Y`+`R`. Once a savestate has been created, you can press `Select`+`Y`+`L` by default to load the savestate. **Savestates cannot be created or loaded during door scrolling, music change, or when message boxes are active.**
 
-A pre-made IPS patch is included in the \build\ directory. You will need an IPS patcher utility, such as Lunar IPS or Floating IPS, to apply the patch to your SM romhack. Always use an unheadered (UH) version of the romhack when applying the Savestate patch.
+# Patching
 
+## Pre-Made Patches
 
-## Using the savestate feature:
+A pre-made IPS patch is included in the `\build\` directory of [releases](https://github.com/InsaneFirebat/X-Fusion-Practice/tree/main/releases). You will need a patching utility such as [Floating IPS](https://github.com/Alcaro/Flips) to apply patches to X-Fusion. **Always use an unheadered ROM when applying the patches.**
 
-By default, the inputs to create a savestate are "Select+Y+R". Once a savestate has been created, you can press "Select+Y+L" (by default) to load the savestate. Savestates cannot be created or loaded during door scrolling, music change, or when message boxes are active.
+## Build Patches
 
+1. Download and install [Python 3](https://python.org).
+_\*Windows users will need to set the `PATH` environment variable for the Python installation._
+2. Run `build_ips.bat` to create an IPS patch files
+4. Patches will output to `\build\`
 
-## Two ways to build from source:
+## Patching Script
 
-### Build IPS patch:
-1. Download and install Python 3 from https://python.org. Windows users will need to set the PATH environmental variable to point to their Python installation folder.
-2. Run build_IPS.bat to create an IPS patch file
-4. Locate the patch in \build\
-
-### Patch your rom:
-
-1. Place a copy of `X-Fusion.sfc`in the ` \build\` directory
+1. Place a copy of `X-Fusion.sfc`in the `\build\` directory
 2. Run `build_rom.bat`
 3. Alternatively, drag-and-drop an X-Fusion ROM onto the script directly
-4. Output roms for both practice hacks will output to the same directory as the input ROM
+4. Output ROMs will output to the same directory as the input ROM
 
+## Known Issues
 
-## Known Issues:
-
-* Making a savestate on a music change can cause a crash when loading the savestate
+- Making a savestate on a music change can cause a crash when loading the savestate

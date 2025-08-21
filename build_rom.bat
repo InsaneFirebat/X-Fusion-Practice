@@ -15,7 +15,7 @@ if not exist "%~dp0asar\asar.exe" (
     exit /b 0
 ) else if not exist "%~dp0src\main.asm" (
     echo.
-    echo main.asm not found.
+    echo main.asm not found in ~\src\.
     pause
     exit /b 0
 ) else if not exist "%~dp0build\X-Fusion Practice Hack.sym" (

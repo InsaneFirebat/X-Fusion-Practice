@@ -12,7 +12,7 @@ By default, the inputs to create a savestate are `Select`+`Y`+`R`. Once a savest
 
 ## Pre-Made Patches
 
-A pre-made IPS patch is included in the `\build\` directory of [releases](https://github.com/InsaneFirebat/X-Fusion-Practice/tree/main/releases). You will need a patching utility such as [Floating IPS](https://github.com/Alcaro/Flips) to apply patches to X-Fusion. **Always use an unheadered ROM when applying the patches.**
+Pre-made IPS patches are included in the [`\releases\`](https://github.com/InsaneFirebat/X-Fusion-Practice/tree/main/releases) directory. You will need a patching utility such as [Floating IPS](https://github.com/Alcaro/Flips) to apply patches to X-Fusion. **Always use an unheadered ROM when applying the patches.**
 
 ## Build Patches
 

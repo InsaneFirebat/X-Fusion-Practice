@@ -49,6 +49,25 @@ org $90E898
   .skip
 
 
+; Critical energy alarm
+org $90EA7F
+    JMP CriticalEnergyAlarm
+CriticalEnergyAlarm_return:
+
+%startfree(90)
+CriticalEnergyAlarm:
+{
+    LDA !sram_energyalarm : BNE .noBeep
+    LDA !MUSIC_BANK ; overwritten code
+    JMP .return
+
+  .noBeep
+;    LDA !SAMUS_HP : CMP #$001F : BMI
+    RTS
+}
+%endfree(90)
+
+
 %startfree(80)
 transfer_cgram_long:
     JSR $933A

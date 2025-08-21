@@ -941,6 +941,7 @@ MiscMenu:
 ;    dw #misc_hyperbeam
     dw #$FFFF
     dw #misc_healthbomb
+    dw #misc_energyalarm
     dw #$FFFF
     dw #misc_killenemies
     dw #misc_forcestand
@@ -994,6 +995,9 @@ misc_flashsuit:
 
 misc_healthbomb:
     %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)
+
+misc_energyalarm:
+    %cm_toggle("Critical Energy Alarm", !sram_energyalarm, #$0001, #0)
 
 misc_killenemies:
     %cm_jsl("Kill Enemies", .kill_loop, #0)

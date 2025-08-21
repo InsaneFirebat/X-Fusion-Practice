@@ -34,7 +34,7 @@ MagicPants:
 
 
 ; label for HUD graphics
-org $82C60C
+org $82C5DD
 hudgfx_bin:
 
 

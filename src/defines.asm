@@ -53,6 +53,11 @@
 !ram_last_door_lag_frames = !WRAM_START+$0C
 !ram_lag_counter = !WRAM_START+$0E
 !ram_room_has_set_rng = !WRAM_START+$10
+!ram_magic_pants_enabled = !WRAM_START+$12
+!ram_magic_pants_state = !WRAM_START+$14
+!ram_magic_pants_pal1 = !WRAM_START+$16
+!ram_magic_pants_pal2 = !WRAM_START+$18
+!ram_magic_pants_pal3 = !WRAM_START+$1a
 
 !WRAM_MENU_START = $7EFE00
 

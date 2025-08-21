@@ -911,6 +911,8 @@ MiscMenu:
     dw #misc_flashsuit
 ;    dw #misc_hyperbeam
     dw #$FFFF
+    dw #misc_magicpants
+    dw #$FFFF
     dw #misc_healthbomb
     dw #misc_energyalarm
     dw #$FFFF
@@ -964,11 +966,14 @@ misc_flashsuit:
 ;    JSL $90AC8D ; update beam gfx
 ;    RTL
 
+misc_magicpants:
+    %cm_toggle("Magic Pants", !ram_magic_pants_enabled, #$0001, #0)
+
 misc_healthbomb:
     %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)
 
 misc_energyalarm:
-    %cm_toggle("Critical Energy Alarm", !sram_energyalarm, #$0001, #0)
+    %cm_toggle_inverted("Critical Energy Alarm", !sram_energyalarm, #$0001, #0)
 
 misc_killenemies:
     %cm_jsl("Kill Enemies", .kill_loop, #0)

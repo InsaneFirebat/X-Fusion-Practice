@@ -98,7 +98,7 @@ ih_update_hud_code:
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
     LDA $4214
-    LDX #$0098 : JSR Draw2
+    LDX #$0096 : JSR Draw3
     LDA $C1 : ASL : TAY
     LDA.w HexToNumberGFX1,Y : STA !HUD_TILEMAP+$00,X
     LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+$02,X

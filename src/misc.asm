@@ -70,7 +70,9 @@ CriticalEnergyAlarm:
 
 %startfree(80)
 transfer_cgram_long:
+    LDX #$80 : STX $2100
     JSR $933A
+    LDX #$0F : STX $2100
     RTL
 %endfree(80)
 

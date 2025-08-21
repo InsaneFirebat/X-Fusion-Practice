@@ -705,13 +705,13 @@ TeleportCrateriaMenu:
     %cm_header("MAIN DECK SAVE STATIONS")
 
 tel_crateriaship:
-    %cm_jsl("East Main Deck", #action_teleport, #$0000)
+    %cm_jsl("Crew Quarters", #action_teleport, #$0000)
 
 tel_crateriaparlor:
-    %cm_jsl("West Main Deck", #action_teleport, #$0001)
+    %cm_jsl("Central Nexus", #action_teleport, #$0001)
 
 tel_crateria2:
-    %cm_jsl("Southeast Main Deck", #action_teleport, #$0002)
+    %cm_jsl("Yakuza Arena", #action_teleport, #$0002)
 
 TeleportBrinstarMenu:
     dw #tel_brinstarpink
@@ -722,16 +722,16 @@ TeleportBrinstarMenu:
     %cm_header("SECT-1-SRX SAVE STATIONS")
 
 tel_brinstarpink:
-    %cm_jsl("Game Start", #action_teleport, #$0100)
+    %cm_jsl("Revival Room", #action_teleport, #$0100)
 
 tel_brinstarredtower:
-    %cm_jsl("East SECT-1-SRX", #action_teleport, #$0104)
+    %cm_jsl("Twin Junctions West", #action_teleport, #$0104)
 
 tel_brinstar5:
-    %cm_jsl("Central SECT-1-SRX", #action_teleport, #$0105)
+    %cm_jsl("Twin Junctions East", #action_teleport, #$0105)
 
 tel_brinstar6:
-    %cm_jsl("Southeast SECT-1-SRX", #action_teleport, #$0106)
+    %cm_jsl("East Spike Tower", #action_teleport, #$0106)
 
 TeleportNorfairMenu:
     dw #tel_norfairgrapple
@@ -741,13 +741,13 @@ TeleportNorfairMenu:
     %cm_header("SECT-2-TRO SAVE STATIONS")
 
 tel_norfairgrapple:
-    %cm_jsl("North SECT-2-TRO", #action_teleport, #$0200)
+    %cm_jsl("Cloister", #action_teleport, #$0200)
 
 tel_norfairbubble:
-    %cm_jsl("East SECT-2-TRO", #action_teleport, #$0201)
+    %cm_jsl("Cultivation Station", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsl("South SECT-2-TRO", #action_teleport, #$0202)
+    %cm_jsl("Crum Ball Tower", #action_teleport, #$0202)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
@@ -757,13 +757,13 @@ TeleportWreckedShipMenu:
     %cm_header("SECT-3-PYR SAVE STATIONS")
 
 tel_wreckedship:
-    %cm_jsl("East SECT-3-PYR", #action_teleport, #$0300)
+    %cm_jsl("Entrance Lobby", #action_teleport, #$0300)
 
 tel_wreckedship1:
-    %cm_jsl("North SECT-3-PYR", #action_teleport, #$0301)
+    %cm_jsl("Big Red", #action_teleport, #$0301)
 
 tel_wreckedship2:
-    %cm_jsl("Southeast SECT-3-PYR", #action_teleport, #$0302)
+    %cm_jsl("Bubble Heights", #action_teleport, #$0302)
 
 TeleportMaridiaMenu:
     dw #tel_maridiatube
@@ -774,34 +774,36 @@ TeleportMaridiaMenu:
     %cm_header("SECT-4-AQA SAVE STATIONS")
 
 tel_maridiatube:
-    %cm_jsl("Northeast SECT-4-AQA", #action_teleport, #$0400)
+    %cm_jsl("Reservoir Vault", #action_teleport, #$0400)
 
 tel_maridiaelevator:
-    %cm_jsl("North SECT-4-AQA", #action_teleport, #$0401)
+    %cm_jsl("Sciser Shaft", #action_teleport, #$0401)
 
 tel_maridiaaqueduct:
-    %cm_jsl("Northwest SECT-4-AQA", #action_teleport, #$0402)
+    %cm_jsl("Buoyant Bridge", #action_teleport, #$0402)
 
 tel_maridiadraygon:
-    %cm_jsl("Southeast SECT-4-AQA", #action_teleport, #$0403)
+    %cm_jsl("Neo-Draygon Access", #action_teleport, #$0403)
 
 TeleportTourianMenu:
     dw #tel_tourianmb
     dw #tel_tourianentrance
+    dw #tel_tourian2
+    dw #tel_tourian3
     dw #$0000
     %cm_header("SECT-5-ARC SAVE STATIONS")
 
 tel_tourianmb:
-    %cm_jsl("North SECT-5-ARC", #action_teleport, #$0500)
+    %cm_jsl("North Blue Tower", #action_teleport, #$0500)
 
 tel_tourianentrance:
-    %cm_jsl("Central SECT-5-ARC", #action_teleport, #$0501)
+    %cm_jsl("South Blue Tower", #action_teleport, #$0501)
 
 tel_tourian2:
-    %cm_jsl("South SECT-5-ARC", #action_teleport, #$0502)
+    %cm_jsl("Cellar", #action_teleport, #$0502)
 
 tel_tourian3:
-    %cm_jsl("Southeast SECT-5-ARC", #action_teleport, #$0503)
+    %cm_jsl("Freezer", #action_teleport, #$0503)
 
 TeleportCeresMenu:
     dw #tel_ceres0
@@ -812,16 +814,16 @@ TeleportCeresMenu:
     %cm_header("SECT-6-NOC SAVE STATIONS")
 
 tel_ceres0:
-    %cm_jsl("Northwest SECT-6-NOC", #action_teleport, #$0600)
+    %cm_jsl("Entrance Lobby", #action_teleport, #$0600)
 
 tel_ceres1:
-    %cm_jsl("Northeast SECT-6-NOC", #action_teleport, #$0601)
+    %cm_jsl("East Turbo Tube Access", #action_teleport, #$0601)
 
 tel_ceres2:
-    %cm_jsl("Central SECT-6-NOC", #action_teleport, #$0602)
+    %cm_jsl("Warehouse", #action_teleport, #$0602)
 
 tel_ceres3:
-    %cm_jsl("South SECT-6-NOC", #action_teleport, #$0603)
+    %cm_jsl("Catacombs", #action_teleport, #$0603)
 
 TeleportDebugMenu:
     dw #tel_debug0
@@ -837,31 +839,31 @@ TeleportDebugMenu:
     %cm_header("SECT-X-DMX SAVE STATIONS")
 
 tel_debug0:
-    %cm_jsl("Central SECT-6-NOC", #action_teleport, #$0700)
+    %cm_jsl("Xenometroid Birthplace", #action_teleport, #$0700)
 
 tel_debug1:
-    %cm_jsl("Southwest SECT-6-NOC", #action_teleport, #$0701)
+    %cm_jsl("Serpentine Break", #action_teleport, #$0701)
 
 tel_debug2:
-    %cm_jsl("Southwest SECT-6-NOC", #action_teleport, #$0702)
+    %cm_jsl("Metroid Chase with Dev Exit", #action_teleport, #$0702)
 
 tel_debug3:
-    %cm_jsl("West SECT-6-NOC", #action_teleport, #$0703)
+    %cm_jsl("SA-X Hallway of Death", #action_teleport, #$0703)
 
 tel_debug4:
-    %cm_jsl("Northeast SECT-6-NOC", #action_teleport, #$0704)
+    %cm_jsl("DMX Elevator Top", #action_teleport, #$0704)
 
 tel_debug5:
-    %cm_jsl("North SECT-6-NOC", #action_teleport, #$0705)
+    %cm_jsl("Winding SA-X Chase", #action_teleport, #$0705)
 
 tel_debug6:
-    %cm_jsl("Northwest SECT-6-NOC", #action_teleport, #$0706)
+    %cm_jsl("Golden Four Containment", #action_teleport, #$0706)
 
 tel_debug7:
-    %cm_jsl("West SECT-6-NOC", #action_teleport, #$0707)
+    %cm_jsl("Ventilation B", #action_teleport, #$0707)
 
 tel_debug8:
-    %cm_jsl("Metroid SECT-6-NOC", #action_teleport, #$0708)
+    %cm_jsl("Omega Queen", #action_teleport, #$0708)
 
 DebugTeleportMenu:
     dw #tel_debug_area

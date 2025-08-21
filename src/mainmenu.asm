@@ -90,15 +90,12 @@ EquipmentMenu:
     dw #eq_currentenergy
     dw #eq_setetanks
     dw #$FFFF
-    dw #eq_currentreserves
-    dw #eq_setreserves
-    dw #eq_reservemode
+    dw #eq_energyreserves
+    dw #eq_ammoreserves
+    dw #eq_maxreserves
     dw #$FFFF
     dw #eq_currentmissiles
     dw #eq_setmissiles
-    dw #$FFFF
-    dw #eq_currentsupers
-    dw #eq_setsupers
     dw #$FFFF
     dw #eq_currentpbs
     dw #eq_setpbs
@@ -110,9 +107,9 @@ eq_refill:
   .refill
     LDA !SAMUS_HP_MAX : STA !SAMUS_HP
     LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
-    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
+;    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
     LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
-    LDA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY
+    LDA $09D4 : STA $09EC : STA $09EE
     LDA #$0002 : JSL !SFX_LIB2 ; big energy pickup
     RTL
 
@@ -126,10 +123,10 @@ eq_goto_togglebeams:
     %cm_jsl("Toggle Beams", #eq_prepare_beams_menu, #ToggleBeamsMenu)
 
 eq_currentenergy:
-    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 2100, 1, 20, #0)
+    %cm_numfield_word("Current Energy", !SAMUS_HP, 0, 1499, 1, 20, #0)
 
 eq_setetanks:
-    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 21, 1, 1, .routine)
+    %cm_numfield("Energy Tanks", !ram_cm_etanks, 0, 14, 1, 1, .routine)
   .routine
     TAX : BEQ .zero
     LDA #$0000
@@ -145,39 +142,14 @@ eq_setetanks:
     STA !SAMUS_HP_MAX : STA !SAMUS_HP
     RTL
 
-eq_currentreserves:
-    %cm_numfield_word("Current Reserves", !SAMUS_RESERVE_ENERGY, 0, 700, 1, 20, #0)
+eq_energyreserves:
+    %cm_numfield("Energy Reserves", $09EC, 0, 7, 1, 1, #0)
 
-eq_setreserves:
-    %cm_numfield("Reserve Tanks", !ram_cm_reserve, 0, 7, 1, 1, .routine)
-  .routine
-    TAX : BEQ .zero
-    LDA #$0000
-  .loop
-    DEX : BMI .endloop
-    CLC : ADC #$0064
-    BRA .loop
-  .zero
-    STA !SAMUS_RESERVE_MODE
-  .endloop
-    STA !SAMUS_RESERVE_ENERGY : STA !SAMUS_RESERVE_MAX
-    RTL
+eq_ammoreserves:
+    %cm_numfield("Ammo Reserves", $09EE, 0, 7, 1, 1, #0)
 
-eq_reservemode:
-    dw !ACTION_CHOICE
-    dl #!SAMUS_RESERVE_MODE
-    dw #.routine
-    db #$28, "Reserve Mode", #$FF
-    db #$28, " UNOBTAINED", #$FF
-    db #$28, "       AUTO", #$FF
-    db #$28, "     MANUAL", #$FF
-    db #$FF
-  .routine
-    LDA !SAMUS_RESERVE_MAX : BNE .end
-    STA !SAMUS_RESERVE_MODE
-    ;%sfxfail()
-  .end
-    RTL
+eq_maxreserves:
+    %cm_numfield("Max Reserves", $09D4, 0, 7, 1, 1, #0)
 
 eq_currentmissiles:
     %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 230, 1, 20, #0)
@@ -186,15 +158,6 @@ eq_setmissiles:
     %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 230, 5, 20, .routine)
   .routine
     LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
-    RTL
-
-eq_currentsupers:
-    %cm_numfield("Current Super Missiles", !SAMUS_SUPERS, 0, 50, 1, 5, #0)
-
-eq_setsupers:
-    %cm_numfield("Super Missiles", !SAMUS_SUPERS_MAX, 0, 50, 5, 5, .routine)
-  .routine
-    LDA !SAMUS_SUPERS_MAX : STA !SAMUS_SUPERS
     RTL
 
 eq_currentpbs:
@@ -206,21 +169,22 @@ eq_setpbs:
     LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
     RTL
 
+
 ; ---------------------
 ; Toggle Category menu
 ; ---------------------
 
 ToggleCategoryMenu:
     dw #cat_100
-    dw #cat_any_new
-    dw #cat_any_old
-    dw #cat_14ice
-    dw #cat_14speed
-    dw #cat_gt_code
-    dw #cat_gt_max
-    dw #cat_rbo
-    dw #cat_any_glitched
-    dw #cat_inf_cf
+;    dw #cat_any_new
+;    dw #cat_any_old
+;    dw #cat_14ice
+;    dw #cat_14speed
+;    dw #cat_gt_code
+;    dw #cat_gt_max
+;    dw #cat_rbo
+;    dw #cat_any_glitched
+;    dw #cat_inf_cf
     dw #cat_nothing
     dw #$0000
     %cm_header("TOGGLE CATEGORY")
@@ -228,32 +192,32 @@ ToggleCategoryMenu:
 cat_100:
     %cm_jsl("100%", action_category, #$0000)
 
-cat_any_new:
-    %cm_jsl("Any% PRKD", action_category, #$0001)
-
-cat_any_old:
-    %cm_jsl("Any% KPDR", action_category, #$0002)
-
-cat_14ice:
-    %cm_jsl("14% Ice", action_category, #$0003)
-
-cat_14speed:
-    %cm_jsl("14% Speed", action_category, #$0004)
-
-cat_gt_code:
-    %cm_jsl("GT Code", action_category, #$0005)
-
-cat_gt_max:
-    %cm_jsl("GT Max%", action_category, #$0006)
-
-cat_rbo:
-    %cm_jsl("RBO", action_category, #$0007)
-
-cat_any_glitched:
-    %cm_jsl("Any% Glitched", action_category, #$0008)
-
-cat_inf_cf:
-    %cm_jsl("Infinite Crystal Flashes", action_category, #$0009)
+;cat_any_new:
+;    %cm_jsl("Any% PRKD", action_category, #$0001)
+;
+;cat_any_old:
+;    %cm_jsl("Any% KPDR", action_category, #$0002)
+;
+;cat_14ice:
+;    %cm_jsl("14% Ice", action_category, #$0003)
+;
+;cat_14speed:
+;    %cm_jsl("14% Speed", action_category, #$0004)
+;
+;cat_gt_code:
+;    %cm_jsl("GT Code", action_category, #$0005)
+;
+;cat_gt_max:
+;    %cm_jsl("GT Max%", action_category, #$0006)
+;
+;cat_rbo:
+;    %cm_jsl("RBO", action_category, #$0007)
+;
+;cat_any_glitched:
+;    %cm_jsl("Any% Glitched", action_category, #$0008)
+;
+;cat_inf_cf:
+;    %cm_jsl("Infinite Crystal Flashes", action_category, #$0009)
 
 cat_nothing:
     %cm_jsl("Nothing", action_category, #$000A)
@@ -264,12 +228,14 @@ action_category:
 
     LDA.l .table,X : STA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED : INX #2
 
-    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED : INX #2
+    LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : INX #2
+    LDA.l .table,X : STA !SAMUS_BEAMS_EQUIPPED 
     LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX : INX #2
-    LDA.l .table,X : STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX : INX #2
+;    LDA.l .table,X : STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX : INX #2
+    INX #2
     LDA.l .table,X : STA !SAMUS_PBS : STA !SAMUS_PBS_MAX : INX #2
-    LDA.l .table,X : STA !SAMUS_RESERVE_MAX : STA !SAMUS_RESERVE_ENERGY : INX #2
+    LDA.l .table,X : STA $09D4 : STA $09EC : STA $09EE : INX #2
 
 ;    JSL cm_set_etanks_and_reserve
     ;%sfxconfirm()
@@ -277,17 +243,17 @@ action_category:
 
   .table
     ;  Items,  C Beam, E Beam, Health, Miss,   Supers, PBs,    Reserv
-    dw #$F32F, #$100F, #$100B, #$05DB, #$00E6, #$0032, #$0032, #$0190 ; 100%
-    dw #$3125, #$1007, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000 ; any% new
-    dw #$3325, #$100B, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000 ; any% old
-    dw #$1025, #$1002, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000 ; 14% ice
-    dw #$3025, #$1000, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000 ; 14% speed
-    dw #$F33F, #$100F, #$100B, #$02BC, #$0064, #$0014, #$0014, #$012C ; gt code
-    dw #$F33F, #$100F, #$100B, #$0834, #$0145, #$0041, #$0041, #$02BC ; 135%
-    dw #$710C, #$1001, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064 ; rbo
-    dw #$9004, #$0000, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000 ; any% glitched
-    dw #$F32F, #$100F, #$100B, #$0031, #$01A4, #$005A, #$0063, #$0000 ; crystal flash
-    dw #$0000, #$0000, #$0000, #$0063, #$0000, #$0000, #$0000, #$0000 ; nothing
+    dw #$FBBF, #$1007, #$1007, #$05DB, #$0063, #$0032, #$0032, #$0190 ; 100%
+;    dw #$3125, #$1007, #$1007, #$018F, #$000F, #$000A, #$0005, #$0000 ; any% new
+;    dw #$3325, #$100B, #$100B, #$018F, #$000F, #$000A, #$0005, #$0000 ; any% old
+;    dw #$1025, #$1002, #$1002, #$018F, #$000A, #$000A, #$0005, #$0000 ; 14% ice
+;    dw #$3025, #$1000, #$1000, #$018F, #$000A, #$000A, #$0005, #$0000 ; 14% speed
+;    dw #$F33F, #$100F, #$100B, #$02BC, #$0064, #$0014, #$0014, #$012C ; gt code
+;    dw #$F33F, #$100F, #$100B, #$0834, #$0145, #$0041, #$0041, #$02BC ; 135%
+;    dw #$710C, #$1001, #$1001, #$031F, #$001E, #$0019, #$0014, #$0064 ; rbo
+;    dw #$9004, #$0000, #$0000, #$00C7, #$0005, #$0005, #$0005, #$0000 ; any% glitched
+;    dw #$F32F, #$100F, #$100B, #$0031, #$01A4, #$005A, #$0063, #$0000 ; crystal flash
+    dw #$0000, #$0000, #$0000, #$0063, #$0005, #$0000, #$0000, #$0000 ; nothing
 }
 
 

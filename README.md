@@ -12,14 +12,15 @@ By default, the inputs to create a savestate are `Select`+`Y`+`R`. Once a savest
 
 ## Pre-Made Patches
 
-A pre-made IPS patch is included in the `\build\` directory of [releases](https://github.com/InsaneFirebat/X-Fusion-Practice/tree/main/releases). You will need a patching utility such as [Floating IPS](https://github.com/Alcaro/Flips) to apply patches to X-Fusion. **Always use an unheadered ROM when applying the patches.**
+Pre-made IPS patches are included in the [`\releases\`](https://github.com/InsaneFirebat/X-Fusion-Practice/tree/main/releases) directory. You will need a patching utility such as [Floating IPS](https://github.com/Alcaro/Flips) to apply patches to X-Fusion. **Always use an unheadered ROM when applying the patches.**
 
 ## Build Patches
 
-1. Download and install [Python 3](https://python.org).
-_\*Windows users will need to set the `PATH` environment variable for the Python installation._
-2. Run `build_ips.bat` to create an IPS patch files
+1. Download and install [Python 3](https://python.org). \*
+2. Run `build_ips.bat` to build the IPS patch files
 4. Patches will output to `\build\`
+
+_\*Windows users will need to set the `PATH` environment variable for the Python installation._
 
 ## Patching Script
 

@@ -18,21 +18,21 @@ if not exist "%~dp0asar\asar.exe" (
     echo main.asm not found.
     pause
     exit /b 0
-) else if not exist "%~dp0X-Fusion_Symbols.sym" (
+) else if not exist "%~dp0build\X-Fusion Practice Hack.sym" (
     echo.
     echo Generating practice hack symbols...
     echo.
     python "%~dp0create_dummies.py" ".\build\00.sfc" ".\build\ff.sfc"
-    "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0X-Fusion_Symbols.sym" -DSAVESTATES=0 "%~dp0main.asm" "%~dp0build\00.sfc"
+    "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack.sym" -DSAVESTATES=0 "%~dp0main.asm" "%~dp0build\00.sfc"
     "%~dp0asar\asar.exe" --no-title-check -DSAVESTATES=0 "%~dp0main.asm" "%~dp0build\ff.sfc"
     del "%~dp0build\00.sfc" "%~dp0build\ff.sfc" /s /q > nul
 )
-if not exist "%~dp0X-Fusion_Savestate_Symbols.sym" (
+if not exist "%~dp0build\X-Fusion Practice Hack (Savestates).sym" (
     echo.
     echo Generating savestate practice hack symbols...
     echo.
     python "%~dp0create_dummies.py" ".\build\00.sfc" ".\build\ff.sfc"
-    "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0X-Fusion_Savestate_Symbols.sym" "%~dp0main.asm" "%~dp0build\00.sfc"
+    "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack (Savestates).sym" "%~dp0main.asm" "%~dp0build\00.sfc"
     "%~dp0asar\asar.exe" --no-title-check "%~dp0main.asm" "%~dp0build\ff.sfc"
     del "%~dp0build\00.sfc" "%~dp0build\ff.sfc" /s /q > nul
     pause
@@ -77,14 +77,14 @@ if exist "%~1" (
         echo Patching practice hack ROM...
         echo.
         copy "!rom!" "!outdir!!outrom! Practice Hack.sfc" > nul
-        "%~dp0asar\asar.exe" --no-title-check -DSAVESTATES=0 --symbols=wla --symbols-path="%~dp0X-Fusion_Symbols.sym" "%~dp0main.asm" "!outdir!!outrom! Practice Hack.sfc"
+        "%~dp0asar\asar.exe" --no-title-check -DSAVESTATES=0 --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack.sym" "%~dp0main.asm" "!outdir!!outrom! Practice Hack.sfc"
     ) else if "!choice!" == "2" (
         cls
         echo.
         echo Patching savestate practice hack ROM...
         echo.
         copy "!rom!" "!outdir!!outrom! Practice Hack (Savestates).sfc" > nul
-        "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0X-Fusion_Savestate_Symbols.sym" "%~dp0main.asm" "!outdir!!outrom! Practice Hack (Savestates).sfc"
+        "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack (Savestates).sym" "%~dp0main.asm" "!outdir!!outrom! Practice Hack (Savestates).sfc"
     ) else (
         echo.
         echo You must enter a menu option to proceed.

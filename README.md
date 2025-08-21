@@ -24,10 +24,10 @@ By default, the inputs to create a savestate are "Select+Y+R". Once a savestate 
 
 ### Patch your rom:
 
-1. Place your unheadered romhack in the \build\ directory
-2. Rename the romhack to `X-Fusion.sfc`
-3. Run `build_rom.bat` to create a copy of your romhack with the Savestate patch applied
-4. Locate the patched rom in \build\
+1. Place a copy of `X-Fusion.sfc`in the ` \build\` directory
+2. Run `build_rom.bat`
+3. Alternatively, drag-and-drop an X-Fusion ROM onto the script directly
+4. Output roms for both practice hacks will output to the same directory as the input ROM
 
 
 ## Known Issues:

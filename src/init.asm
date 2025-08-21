@@ -28,10 +28,15 @@ endif
 init_sram:
 {
     ; SRAM
-    LDA !sram_safeword : CMP !SAFEWORD : BNE .controller_shortcuts
+    LDA !sram_safeword : CMP !SAFEWORD : BNE .init
     LDA !sram_initialized : CMP !SRAM_VERSION : BEQ .done
 
-  .controller_shortcuts
+  .init
+    LDA !SAFEWORD : STA !sram_safeword
+    LDA !SRAM_VERSION : STA !sram_initialized
+    LDA #$0000 : STA !sram_energyalarm
+
+  .controller_shortcuts ; called by ctrl_reset_defaults in mainmenu.asm
     LDA #$3000 : STA !sram_ctrl_menu ; Select + Start
 if !SAVESTATES
     LDA #$6010 : STA !sram_ctrl_save_state ; Select + Y + R

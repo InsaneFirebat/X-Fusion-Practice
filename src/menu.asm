@@ -1440,12 +1440,9 @@ execute_numfield_word:
   .store_increment
     STA !DP_Increment
 
-    ; left/right = increment, A/X/Y = SDE mode
-    LDA !ram_cm_controller : BIT !IH_INPUT_LEFTRIGHT : BEQ .singleDigitEditing
-
-    ; check direction held
-    BIT #$0200 : BNE .pressed_left
-    ; pressed right, inc
+    ; left/right = increment
+    LDA !ram_cm_controller : BIT !IH_INPUT_LEFT : BNE .pressed_left
+    ; pressed right (or A/X/Y), inc
     LDA [!DP_DigitAddress] : CLC : ADC !DP_Increment
     CMP !DP_DigitMaximum : BCS .set_to_min
     STA [!DP_DigitAddress] : BRA .jsl
@@ -1476,17 +1473,6 @@ execute_numfield_word:
     ; addr in A
     LDA [!DP_Address] : LDX #$0000
     JML.w [!DP_JSLTarget]
-
-  .singleDigitEditing
-    ; check if maximum requires 3 digits or 4
-    LDA !DP_DigitMinimum : CMP #1000 : BPL .set_ctrl_mode
-    LDA !ram_cm_horizontal_cursor : CMP #$0003 : BNE .set_ctrl_mode
-    LDA #$0002 : STA !ram_cm_horizontal_cursor
-
-  .set_ctrl_mode
-    LDA [!DP_CurrentMenu] : STA !DP_JSLTarget
-    LDA [!DP_DigitAddress] : STA !DP_DigitValue
-    LDA #$8001 : STA !ram_cm_ctrl_mode
 
   .end
     %ai16()

@@ -8,29 +8,13 @@
 !VERSION_BUILD = 1
 !VERSION_REV = 0
 
+!SAVESTATES ?= 1
+!RERANDOMIZE ?= 1 ; set to 0 to disable RNG randomization on loadstate
+
 
 ; ---------------
 ; Savestate code variables
 ; ---------------
-
-!SAVESTATES ?= 1
-!RERANDOMIZE ?= 1 ; set to 0 to disable RNG randomization on loadstate
-
-!WRAM_START = $7EFFC0
-!WRAM_BANK = $7E
-
-!ram_realtime_room = !WRAM_START+$00
-!ram_transition_flag = !WRAM_START+$02
-!ram_transition_counter = !WRAM_START+$04
-!ram_last_room_lag = !WRAM_START+$06
-!ram_last_realtime_room = !WRAM_START+$08
-!ram_last_realtime_door = !WRAM_START+$0A
-!ram_last_door_lag_frames = !WRAM_START+$0C
-!ram_lag_counter = !WRAM_START+$0E
-
-!SS_INPUT_CUR = $8B
-!SS_INPUT_NEW = $8F
-!SS_INPUT_PREV = $97
 
 !SRAM_DMA_BANK = $770000
 !SRAM_SAVED_SP = $774004
@@ -40,43 +24,8 @@
 !MUSIC_BANK = $07F3
 !MUSIC_TRACK = $07F5
 !MUSIC_ROUTINE = $808FC1
-!ram_room_has_set_rng = !WRAM_START+$10
 !sram_save_has_set_rng = $702A00
 !sram_savestate_safeword = $774006
-
-!HUD_TILEMAP = $7EC5C8
-!IH_BLANK = $000F
-!HUD_0 = $0010
-!HUD_1 = $0011
-!HUD_2 = $0012
-!HUD_3 = $0013
-!HUD_4 = $0014
-!HUD_5 = $0015
-!HUD_6 = $0016
-!HUD_7 = $0017
-!HUD_8 = $0018
-!HUD_9 = $0019
-!HUD_0l = $0810
-!HUD_1l = $0811
-!HUD_2l = $0812
-!HUD_3l = $0813
-!HUD_4l = $0814
-!HUD_5l = $0815
-!HUD_6l = $0816
-!HUD_7l = $0817
-!HUD_8l = $0818
-!HUD_9l = $0819
-!HUD_0r = $0800
-!HUD_1r = $0801
-!HUD_2r = $0802
-!HUD_3r = $0803
-!HUD_4r = $0804
-!HUD_5r = $0805
-!HUD_6r = $0806
-!HUD_7r = $0807
-!HUD_8r = $0808
-!HUD_9r = $0809
-!HUD_DECIMAL = $004D
 
 
 ; ---------
@@ -90,6 +39,19 @@
 ; ---------
 ; RAM Menu
 ; ---------
+
+!WRAM_START = $7EFFC0
+!WRAM_BANK = $7E
+
+!ram_realtime_room = !WRAM_START+$00
+!ram_transition_flag = !WRAM_START+$02
+!ram_transition_counter = !WRAM_START+$04
+!ram_last_room_lag = !WRAM_START+$06
+!ram_last_realtime_room = !WRAM_START+$08
+!ram_last_realtime_door = !WRAM_START+$0A
+!ram_last_door_lag_frames = !WRAM_START+$0C
+!ram_lag_counter = !WRAM_START+$0E
+!ram_room_has_set_rng = !WRAM_START+$10
 
 !WRAM_MENU_START = $7EFE00
 
@@ -200,8 +162,6 @@ if read1($00FFD5) == $00 || read1($00FFD5) == $FF
 else
 assert read1($00FFD8) <= $03,"Hack uses extra SRAM!"
 endif
-!SRAM_VERSION = #$0017
-!SAFEWORD = #$5AFE
 
 !SRAM_START = $702200
 
@@ -216,7 +176,7 @@ endif
 !sram_ctrl_save_state = !SRAM_START+$0E
 !sram_ctrl_update_timers = !SRAM_START+$1E
 
-!sram_music_toggle = !SRAM_START+$2A
+!sram_energyalarm = !SRAM_START+$2A
 
 ; FREE SPACE ^ up to +$5A
 
@@ -255,54 +215,7 @@ endif
 !IH_CONTROLLER_SEC_NEW = $91
 !IH_CONTROLLER_SEC_PREV = $99
 
-!MENU_CLEAR = #$000E
-!MENU_BLANK = #$286F
-!IH_BLANK = #$2C0F
-!IH_PERCENT = #$0C0A
-!IH_DECIMAL = #$0CCB
-!IH_HYPHEN = #$0C55
-!IH_RESERVE_AUTO = #$0C0C
-!IH_RESERVE_EMPTY = #$0C0D
-!IH_HEALTHBOMB = #$085A
-!IH_LETTER_A = #$0C64
-!IH_LETTER_B = #$0C65
-!IH_LETTER_C = #$0C58
-!IH_LETTER_D = #$0C59
-!IH_LETTER_E = #$0C5A
-!IH_LETTER_F = #$0C5B
-!IH_LETTER_H = #$0C6C
-!IH_LETTER_L = #$0C68
-!IH_LETTER_N = #$0C56
-!IH_LETTER_R = #$0C69
-!IH_LETTER_X = #$0C66
-!IH_LETTER_Y = #$0C67
-!IH_NUMBER_ZERO = #$0C09
-!IH_ELEVATOR = #$1C0B
-!IH_SHINETIMER = #$0032
-
-!IH_PAUSE = #$0100 ; right
-!IH_SLOWDOWN = #$0400 ; down
-!IH_SPEEDUP = #$0800 ; up
-!IH_RESET = #$0200 ; left
-!IH_STATUS_R = #$0010 ; r
-!IH_STATUS_L = #$0020 ; l
-
-!IH_INPUT_START = #$1000
-!IH_INPUT_UPDOWN = #$0C00
-!IH_INPUT_UP = #$0800
-!IH_INPUT_DOWN = #$0400
-!IH_INPUT_LEFTRIGHT = #$0300
-!IH_INPUT_LEFT = #$0200
-!IH_INPUT_RIGHT = #$0100
-!IH_INPUT_HELD = #$0001 ; used by menu
-
-!CTRL_B = #$8000
-!CTRL_Y = #$4000
-!CTRL_SELECT = #$2000
-!CTRL_A = #$0080
-!CTRL_X = #$0040
-!CTRL_L = #$0020
-!CTRL_R = #$0010
+!HUD_TILEMAP = $7EC5C8
 
 !INPUT_BIND_UP = $7E09AA
 !INPUT_BIND_DOWN = $7E09AC
@@ -491,6 +404,91 @@ endif
 ; Aliases and Bitmasks
 ; --------------------
 
+!SRAM_VERSION = #$0017
+!SAFEWORD = #$5AFE
+
+!IH_BLANK = $000F
+!HUD_0 = $0010
+!HUD_1 = $0011
+!HUD_2 = $0012
+!HUD_3 = $0013
+!HUD_4 = $0014
+!HUD_5 = $0015
+!HUD_6 = $0016
+!HUD_7 = $0017
+!HUD_8 = $0018
+!HUD_9 = $0019
+!HUD_0l = $0810
+!HUD_1l = $0811
+!HUD_2l = $0812
+!HUD_3l = $0813
+!HUD_4l = $0814
+!HUD_5l = $0815
+!HUD_6l = $0816
+!HUD_7l = $0817
+!HUD_8l = $0818
+!HUD_9l = $0819
+!HUD_0r = $0800
+!HUD_1r = $0801
+!HUD_2r = $0802
+!HUD_3r = $0803
+!HUD_4r = $0804
+!HUD_5r = $0805
+!HUD_6r = $0806
+!HUD_7r = $0807
+!HUD_8r = $0808
+!HUD_9r = $0809
+!HUD_DECIMAL = $004D
+
+!MENU_CLEAR = #$000E
+!MENU_BLANK = #$286F
+!IH_BLANK = #$2C0F
+!IH_PERCENT = #$0C0A
+!IH_DECIMAL = #$0CCB
+!IH_HYPHEN = #$0C55
+!IH_RESERVE_AUTO = #$0C0C
+!IH_RESERVE_EMPTY = #$0C0D
+!IH_HEALTHBOMB = #$085A
+!IH_LETTER_A = #$0C64
+!IH_LETTER_B = #$0C65
+!IH_LETTER_C = #$0C58
+!IH_LETTER_D = #$0C59
+!IH_LETTER_E = #$0C5A
+!IH_LETTER_F = #$0C5B
+!IH_LETTER_H = #$0C6C
+!IH_LETTER_L = #$0C68
+!IH_LETTER_N = #$0C56
+!IH_LETTER_R = #$0C69
+!IH_LETTER_X = #$0C66
+!IH_LETTER_Y = #$0C67
+!IH_NUMBER_ZERO = #$0C09
+!IH_ELEVATOR = #$1C0B
+!IH_SHINETIMER = #$0032
+
+!IH_PAUSE = #$0100 ; right
+!IH_SLOWDOWN = #$0400 ; down
+!IH_SPEEDUP = #$0800 ; up
+!IH_RESET = #$0200 ; left
+!IH_STATUS_R = #$0010 ; r
+!IH_STATUS_L = #$0020 ; l
+
+!IH_INPUT_START = #$1000
+!IH_INPUT_UPDOWN = #$0C00
+!IH_INPUT_UP = #$0800
+!IH_INPUT_DOWN = #$0400
+!IH_INPUT_LEFTRIGHT = #$0300
+!IH_INPUT_LEFT = #$0200
+!IH_INPUT_RIGHT = #$0100
+!IH_INPUT_HELD = #$0001 ; used by menu
+
+!CTRL_B = #$8000
+!CTRL_Y = #$4000
+!CTRL_SELECT = #$2000
+!CTRL_A = #$0080
+!CTRL_X = #$0040
+!CTRL_L = #$0020
+!CTRL_R = #$0010
+
 !FRAMERATE = #$003C
 
 !DP_MenuIndices = $00 ; 0x4
@@ -509,10 +507,6 @@ endif
 !DP_FirstDigit = $1A
 !DP_SecondDigit = $1C
 !DP_ThirdDigit = $1E
-!DP_KB_Index = $18
-!DP_KB_Row = $1A
-!DP_KB_Control = $1C
-!DP_KB_Shift = $1E
 ; v single digit editing v
 !DP_DigitAddress = $20 ; 0x4
 !DP_DigitValue = $24

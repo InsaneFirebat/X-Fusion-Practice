@@ -22,14 +22,14 @@ gamemode_start:
 
     ; check for new inputs
     LDA !IH_CONTROLLER_PRI_NEW : BNE +
-    CLC : BRA .done
+    CLC : JMP .done
 
 if !SAVESTATES
     ; check for savestate inputs
 +   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_save_state : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JSL save_state
-    SEC : BRA .done
+    SEC : JMP .done
 
     ; check for loadstate inputs
 +   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_load_state : BNE +
@@ -40,12 +40,28 @@ if !SAVESTATES
 endif
 
 if !DEV
-+   ; test code
-    LDA !IH_CONTROLLER_PRI : CMP #$8470 : BNE +
+    ; test code
++   LDA !IH_CONTROLLER_PRI : CMP #$8470 : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
     JSR TestCode
     CLC : BRA .done
 endif
+
++   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_full_equipment : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JSL eq_refill_refill
+    CLC : BRA .done
+
++   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_kill_enemies : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JSL misc_killenemies_kill_loop
+    CLC : BRA .done
+
++   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_update_timers : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    LDA #$0000 : STA !ram_transition_flag
+    JSL ih_update_timers_early
+    CLC : BRA .done
 
     ; check for menu inputs
 +   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_menu : BNE +

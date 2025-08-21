@@ -65,6 +65,24 @@ endif
     RTL
 }
 
+ih_update_timers_early:
+{
+    ; Check if we've already run on this frame
+    LDA !ram_transition_flag : BNE .done
+
+    ; Lag
+    LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
+
+    ; Room timers
+    LDA !ram_realtime_room : STA !ram_last_realtime_room
+
+    JSL ih_update_hud_code
+
+  .done
+    CLC
+    RTL
+}
+
 ih_after_room_transition:
 {
     ; overwritten code

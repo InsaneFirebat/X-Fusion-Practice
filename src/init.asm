@@ -35,6 +35,11 @@ init_sram:
     LDA !SAFEWORD : STA !sram_safeword
     LDA !SRAM_VERSION : STA !sram_initialized
     LDA #$0000 : STA !sram_energyalarm
+    LDA #$0037 : STA !sram_customsfx_move
+    LDA #$002F : STA !sram_customsfx_toggle
+    LDA #$0036 : STA !sram_customsfx_number
+    LDA #$0028 : STA !sram_customsfx_confirm
+    LDA #$0007 : STA !sram_customsfx_goback
 
   .controller_shortcuts ; called by ctrl_reset_defaults in mainmenu.asm
     LDA #$3000 : STA !sram_ctrl_menu ; Select + Start

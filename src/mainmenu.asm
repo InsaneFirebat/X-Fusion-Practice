@@ -22,7 +22,7 @@ action_submenu:
     ; Set cursor to top for new menus
     LDA #$0000 : STA !ram_cm_cursor_stack,X
 
-    ;%sfxmove()
+    %sfxmove()
     JSL cm_calculate_max
     JSL cm_draw
     RTL
@@ -238,7 +238,7 @@ action_category:
     LDA.l .table,X : STA $09D4 : STA $09EC : STA $09EE : INX #2
 
 ;    JSL cm_set_etanks_and_reserve
-    ;%sfxconfirm()
+    %sfxconfirm()
     JML $90AC8D ; update beam gfx
 
   .table
@@ -985,7 +985,7 @@ misc_forcestand:
     %cm_jsl("Force Samus to Stand Up", .routine, #0)
   .routine
     JSL $90E2D4
-    ;%sfxconfirm()
+    %sfxconfirm()
     RTL
 
 misc_clearliquid:
@@ -1022,7 +1022,7 @@ events_resetevents:
   .routine
     LDA #$0000
     STA $7ED820 : STA $7ED822
-    ;%sfxreset()
+    %sfxreset()
     RTL
 
 events_resetdoors:
@@ -1035,7 +1035,7 @@ events_resetdoors:
     STA $7ED800,X
     INX : CPX #$D0 : BNE .loop
     PLP
-    ;%sfxreset()
+    %sfxreset()
     RTL
 
 events_resetitems:
@@ -1048,7 +1048,7 @@ events_resetitems:
     STA $7ED800,X
     INX : CPX #$90 : BNE .loop
     PLP
-    ;%sfxreset()
+    %sfxreset()
     RTL
 
 ;events_goto_bosses:
@@ -1268,12 +1268,12 @@ endif
     STA !sram_ctrl_update_timers
     ; menu to default, Start + Select
     LDA #$3000 : STA !sram_ctrl_menu
-    ;%sfxconfirm()
+    %sfxconfirm()
     RTL
 
 ctrl_reset_defaults:
     %cm_jsl("Reset to Defaults", .routine, #$0000)
   .routine
-    ;%sfxreset()
+    %sfxreset()
     JML init_sram_controller_shortcuts
     RTL

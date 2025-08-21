@@ -1040,14 +1040,14 @@ cm_loop:
     ; jump to top menu item
     LDX !ram_cm_stack_index
     LDA #$0000 : STA !ram_cm_cursor_stack,X
-    ;%sfxmove()
+    %sfxmove()
     BRA .redraw
 
   .pressedR
     ; jump to bottom menu item
     LDX !ram_cm_stack_index
     LDA !ram_cm_cursor_max : DEC #2 : STA !ram_cm_cursor_stack,X
-    ;%sfxmove()
+    %sfxmove()
     BRA .redraw
 
   .pressedA
@@ -1088,7 +1088,7 @@ cm_ctrl_mode:
     ; disallow inputs that match the menu shortcut
     LDA !DP_CtrlInput : CMP.w #!sram_ctrl_menu : BEQ .store
     LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_menu : BNE .store
-    ;%sfxfail()
+    %sfxfail()
     ; set cursor position to 0 (menu shortcut)
     LDX !ram_cm_stack_index
     LDA #$0000 : STA !ram_cm_cursor_stack,X
@@ -1097,7 +1097,7 @@ cm_ctrl_mode:
   .store
     ; Store controller input to SRAM
     LDA !IH_CONTROLLER_PRI : STA [!DP_CtrlInput]
-    ;%sfxconfirm()
+    %sfxconfirm()
     BRA .exit
 
   .clear_and_draw
@@ -1151,7 +1151,7 @@ cm_go_back:
     LDA.w #MainMenu>>16 : STA !ram_cm_menu_bank
 
   .end
-    ;%sfxgoback()
+    %sfxgoback()
     RTL
 }
 
@@ -1232,7 +1232,7 @@ cm_move:
     LDA !DP_Temp : BRA cm_move
 
   .end
-    ;%sfxmove()
+    %sfxmove()
     RTS
 }
 
@@ -1314,7 +1314,7 @@ execute_toggle:
 
   .end
     %ai16()
-    ;%sfxtoggle()
+    %sfxtoggle()
     RTS
 }
 
@@ -1346,7 +1346,7 @@ execute_toggle_bit:
 
  .end
     %ai16()
-    ;%sfxtoggle()
+    %sfxtoggle()
     RTS
 }
 
@@ -1410,7 +1410,7 @@ execute_numfield:
 
   .end
     %ai16()
-    ;%sfxnumber()
+    %sfxnumber()
     RTS
 }
 
@@ -1476,7 +1476,7 @@ execute_numfield_word:
 
   .end
     %ai16()
-    ;%sfxnumber()
+    %sfxnumber()
     RTS
 }
 
@@ -1545,7 +1545,7 @@ execute_choice:
 
   .end
     %ai16()
-    ;%sfxtoggle()
+    %sfxtoggle()
     RTS
 }
 
@@ -1569,7 +1569,7 @@ execute_ctrl_shortcut:
 
   .reset_shortcut
     LDA.w #!sram_ctrl_menu : CMP !DP_CtrlInput : BEQ .end
-    ;%sfxconfirm()
+    %sfxconfirm()
 
     LDA #$0000 : STA [!DP_CtrlInput]
 

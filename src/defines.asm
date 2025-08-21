@@ -5,7 +5,7 @@
 
 !VERSION_MAJOR = 1
 !VERSION_MINOR = 1
-!VERSION_BUILD = 1
+!VERSION_BUILD = 2
 !VERSION_REV = 0
 
 !SAVESTATES ?= 1
@@ -178,6 +178,11 @@ endif
 !sram_ctrl_update_timers = !SRAM_START+$1E
 
 !sram_energyalarm = !SRAM_START+$2A
+!sram_customsfx_move = !SRAM_START+$2C
+!sram_customsfx_toggle = !SRAM_START+$2E
+!sram_customsfx_number = !SRAM_START+$30
+!sram_customsfx_confirm = !SRAM_START+$32
+!sram_customsfx_goback = !SRAM_START+$34
 
 ; FREE SPACE ^ up to +$5A
 

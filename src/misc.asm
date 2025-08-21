@@ -1,15 +1,12 @@
 
-!SAMUS_MOVEMENT_TYPE = $0A1F
-!SAMUS_ANIMATION_FRAME = $0A96
-!ram_magic_pants_state = !WRAM_START+$12
-!ram_magic_pants_pal1 = !WRAM_START+$14
-!ram_magic_pants_pal2 = !WRAM_START+$16
-!ram_magic_pants_pal3 = !WRAM_START+$18
 
 %startfree(8B)
 MagicPants:
 {
-    LDA $0A96 : CMP #$0009 : BEQ .check
+    LDA !ram_magic_pants_enabled : BNE +
+    RTL
+
++   LDA $0A96 : CMP #$0009 : BEQ .check
     LDA !ram_magic_pants_state : BEQ +
     LDA !ram_magic_pants_pal1 : STA $7EC188
     LDA !ram_magic_pants_pal2 : STA $7EC18A
@@ -62,7 +59,12 @@ CriticalEnergyAlarm:
     JMP .return
 
   .noBeep
-;    LDA !SAMUS_HP : CMP #$001F : BMI
+    LDA !SAMUS_HP : CMP #$001F : BMI ..enable
+    STZ $0A6A
+    RTS
+
+  ..enable
+    LDA #$0001 : STA $0A6A
     RTS
 }
 %endfree(90)

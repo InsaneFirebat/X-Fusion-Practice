@@ -39,6 +39,12 @@ if !SAVESTATES
     SEC : BRA .done
 endif
 
++   ; test code
+    LDA !IH_CONTROLLER_PRI : CMP #$8470 : BNE +
+    AND !IH_CONTROLLER_PRI_NEW : BEQ +
+    JSR TestCode
+    CLC : BRA .done
+
     ; check for menu inputs
 +   LDA !IH_CONTROLLER_PRI : CMP !sram_ctrl_menu : BNE +
     AND !IH_CONTROLLER_PRI_NEW : BEQ +
@@ -63,6 +69,13 @@ endif
     LDA !GAMEMODE : AND #$00FF
     PLB
     RTL
+}
+
+TestCode:
+{
+    RTS
+    NOP #50
+    RTS
 }
 print pc, " gamemode end"
 %endfree(8B)

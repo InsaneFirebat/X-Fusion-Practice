@@ -56,16 +56,26 @@
 !HUD_7 = $0017
 !HUD_8 = $0018
 !HUD_9 = $0019
-!HUD_0r = $0000 ; shifted right by 1 pixel, looks nice so I'll use it
-!HUD_1r = $0001
-!HUD_2r = $0002
-!HUD_3r = $0003
-!HUD_4r = $0004
-!HUD_5r = $0005
-!HUD_6r = $0006
-!HUD_7r = $0007
-!HUD_8r = $0008
-!HUD_9r = $0009
+!HUD_0l = $0810
+!HUD_1l = $0811
+!HUD_2l = $0812
+!HUD_3l = $0813
+!HUD_4l = $0814
+!HUD_5l = $0815
+!HUD_6l = $0816
+!HUD_7l = $0817
+!HUD_8l = $0818
+!HUD_9l = $0819
+!HUD_0r = $0800
+!HUD_1r = $0801
+!HUD_2r = $0802
+!HUD_3r = $0803
+!HUD_4r = $0804
+!HUD_5r = $0805
+!HUD_6r = $0806
+!HUD_7r = $0807
+!HUD_8r = $0808
+!HUD_9r = $0809
 !HUD_DECIMAL = $004D
 
 
@@ -475,8 +485,6 @@ endif
 !DEMO_CURRENT_SCENE = $1F57
 
 !PLM_DELETE = $AAE3
-
-!HUD_TILEMAP = $7EC600
 
 
 ; --------------------

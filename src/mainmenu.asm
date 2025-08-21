@@ -1284,8 +1284,10 @@ ctrl_clear_shortcuts:
     %cm_jsl("Clear All Shortcuts", .routine, #$0000)
   .routine
     TYA
+if !SAVESTATES
     STA !sram_ctrl_save_state
     STA !sram_ctrl_load_state
+endif
     STA !sram_ctrl_full_equipment
     STA !sram_ctrl_kill_enemies
     STA !sram_ctrl_update_timers

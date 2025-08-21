@@ -368,6 +368,6 @@ macro sfxbeep() ; Minimap Movement Beep
 endmacro
 
 macro sfxfail() ; Grapple End
-    LDA #$0007 : JSL !SFX_LIB1
+    LDA #$0020 : JSL !SFX_LIB1
 endmacro
 

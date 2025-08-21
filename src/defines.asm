@@ -10,6 +10,7 @@
 
 !SAVESTATES ?= 1
 !RERANDOMIZE ?= 1 ; set to 0 to disable RNG randomization on loadstate
+!DEV ?= 0
 
 
 ; ---------------

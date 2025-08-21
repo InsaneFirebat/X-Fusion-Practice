@@ -46,6 +46,9 @@ MainMenu:
     dw #mm_goto_ctrlsmenu
     dw #$0000
     %cm_version_header("SM PRACTICE HACK")
+if !DEV
+    %cm_footer("DEVELOPMENT BUILD")
+endif
 
 MainMenuBanks:
     dw #EquipmentMenu>>16

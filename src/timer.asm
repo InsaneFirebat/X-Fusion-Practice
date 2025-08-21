@@ -98,11 +98,11 @@ ih_update_hud_code:
     PEA $0000 : PLA ; wait for CPU math
     LDA $4216 : STA $C1
     LDA $4214
-    LDX #$0094 : JSR Draw3
+    LDX #$0098 : JSR Draw2
     LDA $C1 : ASL : TAY
-    LDA.w HexToNumberGFX1,Y : STA !HUD_TILEMAP+$02,X
-    LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+$04,X
-    LDA #!HUD_DECIMAL : STA !HUD_TILEMAP,X
+    LDA.w HexToNumberGFX1,Y : STA !HUD_TILEMAP+$00,X
+    LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+$02,X
+;    LDA #!HUD_DECIMAL : STA !HUD_TILEMAP,X
 
     ; Lag
     LDA !ram_last_room_lag
@@ -135,6 +135,7 @@ Draw2:
     LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
+    INX #4
     RTS
 
   .blanktens
@@ -173,6 +174,7 @@ Draw3:
     LDA.w NumberGFXTable,Y : STA !HUD_TILEMAP+$00,X
 
   .done
+    TXA : CLC : ADC #$0006 : TAX
     RTS
 
   .blanktens
@@ -196,11 +198,11 @@ HexToNumberGFX1:
     dw !HUD_5r, !HUD_5r, !HUD_5r, !HUD_5r, !HUD_5r, !HUD_5r, !HUD_5r, !HUD_5r, !HUD_5r, !HUD_5r
 
 HexToNumberGFX2:
-    dw !HUD_0, !HUD_1, !HUD_2, !HUD_3, !HUD_4, !HUD_5, !HUD_6, !HUD_7, !HUD_8, !HUD_9
-    dw !HUD_0, !HUD_1, !HUD_2, !HUD_3, !HUD_4, !HUD_5, !HUD_6, !HUD_7, !HUD_8, !HUD_9
-    dw !HUD_0, !HUD_1, !HUD_2, !HUD_3, !HUD_4, !HUD_5, !HUD_6, !HUD_7, !HUD_8, !HUD_9
-    dw !HUD_0, !HUD_1, !HUD_2, !HUD_3, !HUD_4, !HUD_5, !HUD_6, !HUD_7, !HUD_8, !HUD_9
-    dw !HUD_0, !HUD_1, !HUD_2, !HUD_3, !HUD_4, !HUD_5, !HUD_6, !HUD_7, !HUD_8, !HUD_9
-    dw !HUD_0, !HUD_1, !HUD_2, !HUD_3, !HUD_4, !HUD_5, !HUD_6, !HUD_7, !HUD_8, !HUD_9
+    dw !HUD_0l, !HUD_1l, !HUD_2l, !HUD_3l, !HUD_4l, !HUD_5l, !HUD_6l, !HUD_7l, !HUD_8l, !HUD_9l
+    dw !HUD_0l, !HUD_1l, !HUD_2l, !HUD_3l, !HUD_4l, !HUD_5l, !HUD_6l, !HUD_7l, !HUD_8l, !HUD_9l
+    dw !HUD_0l, !HUD_1l, !HUD_2l, !HUD_3l, !HUD_4l, !HUD_5l, !HUD_6l, !HUD_7l, !HUD_8l, !HUD_9l
+    dw !HUD_0l, !HUD_1l, !HUD_2l, !HUD_3l, !HUD_4l, !HUD_5l, !HUD_6l, !HUD_7l, !HUD_8l, !HUD_9l
+    dw !HUD_0l, !HUD_1l, !HUD_2l, !HUD_3l, !HUD_4l, !HUD_5l, !HUD_6l, !HUD_7l, !HUD_8l, !HUD_9l
+    dw !HUD_0l, !HUD_1l, !HUD_2l, !HUD_3l, !HUD_4l, !HUD_5l, !HUD_6l, !HUD_7l, !HUD_8l, !HUD_9l
 print pc, " timer end"
 %endfree(8B)

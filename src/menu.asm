@@ -38,6 +38,7 @@ cm_start:
     JSL cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
+    JSL $80A211 ; Queue clearing of FX tilemap
 ;    JSL $809A79 ; Initialize HUD
     JSL $809A99 ; Initialize HUD
 ;    JSL $809B44 ; Handle HUD tilemap
@@ -59,7 +60,6 @@ cm_start:
 ;    JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
 
     %ai16()
-    JSL $80A211 ; Queue clearing of FX tilemap
     JSR cm_wait_for_lag_frame
 ;    JSL $82BE17 ; Cancel sound effects
     LDA #$0002

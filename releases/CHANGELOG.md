@@ -1,6 +1,11 @@
 
 # Change Log
 
+## v2.0.2
+
+ Added two missing save stations
+ Fixed reserves in 100% equipment category
+
 ## v2.0.1
 
  Fixed a crash with equipment categories

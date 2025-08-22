@@ -192,6 +192,9 @@ ToggleCategoryMenu:
 cat_100:
     %cm_jsl("100%", action_category, #$0000)
 
+cat_nothing:
+    %cm_jsl("Nothing", action_category, #$0001)
+
 ;cat_any_new:
 ;    %cm_jsl("Any% PRKD", action_category, #$0001)
 ;
@@ -219,9 +222,6 @@ cat_100:
 ;cat_inf_cf:
 ;    %cm_jsl("Infinite Crystal Flashes", action_category, #$0009)
 
-cat_nothing:
-    %cm_jsl("Nothing", action_category, #$000A)
-
 action_category:
 {
     TYA : ASL #4 : TAX
@@ -229,7 +229,7 @@ action_category:
     LDA.l .table,X : STA !SAMUS_ITEMS_COLLECTED : STA !SAMUS_ITEMS_EQUIPPED : INX #2
 
     LDA.l .table,X : STA !SAMUS_BEAMS_COLLECTED : INX #2
-    LDA.l .table,X : STA !SAMUS_BEAMS_EQUIPPED 
+    LDA.l .table,X : STA !SAMUS_BEAMS_EQUIPPED : INX #2
     LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX : INX #2
 ;    LDA.l .table,X : STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX : INX #2

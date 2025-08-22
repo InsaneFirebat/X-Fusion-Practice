@@ -793,7 +793,7 @@ TeleportCeresMenu:
     %cm_header("SECT-6-NOC SAVE STATIONS")
 
 tel_ceres0:
-    %cm_jsl("Entrance Lobby", #action_teleport, #$0600)
+    %cm_jsl("Entrance Lobby North", #action_teleport, #$0600)
 
 tel_ceres1:
     %cm_jsl("East Turbo Tube Access", #action_teleport, #$0601)

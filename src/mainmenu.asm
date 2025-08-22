@@ -1026,7 +1026,7 @@ events_resetevents:
     %cm_jsl("Reset All Events", .routine, #$0000)
   .routine
     LDA #$0000
-    STA $7ED820 : STA $7ED822
+    STA $7ED820 : STA $7ED822 : STA $7ED824 : STA $7ED826
     %sfxreset()
     RTL
 
@@ -1038,7 +1038,7 @@ events_resetdoors:
     LDA #$00
   .loop
     STA $7ED800,X
-    INX : CPX #$D0 : BNE .loop
+    INX : CPX #$F0 : BNE .loop
     PLP
     %sfxreset()
     RTL
@@ -1051,7 +1051,7 @@ events_resetitems:
     LDA #$00
   .loop
     STA $7ED800,X
-    INX : CPX #$90 : BNE .loop
+    INX : CPX #$B0 : BNE .loop
     PLP
     %sfxreset()
     RTL

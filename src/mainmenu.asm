@@ -632,7 +632,10 @@ TeleportMenu:
     dw #tel_goto_tour
     dw #tel_goto_ceres
     dw #tel_goto_debug
+if !DEV
+    dw #$FFFF
     dw #tel_goto_debugtel
+endif
     dw #$0000
     %cm_header("TELEPORT TO SAVE STATION")
 
@@ -660,8 +663,10 @@ tel_goto_ceres:
 tel_goto_debug:
     %cm_submenu("SECT-X-DMX", #TeleportDebugMenu)
 
+if !DEV
 tel_goto_debugtel:
     %cm_submenu("Debug Teleports", #DebugTeleportMenu)
+endif
 
 TeleportCrateriaMenu:
     dw #tel_crateriaship
@@ -831,6 +836,7 @@ tel_debug7:
 tel_debug8:
     %cm_jsl("Omega Queen", #action_teleport, #$0708)
 
+if !DEV
 DebugTeleportMenu:
     dw #tel_debug_area
     dw #tel_debug_station
@@ -858,6 +864,7 @@ tel_debug_station:
 
 tel_debug_execute:
     %cm_jsl("TELEPORT", #action_debug_teleport, #$0000)
+endif
 
 action_teleport:
 {
@@ -1171,44 +1178,32 @@ events_resetitems:
 ; ----------
 
 GameMenu:
-    dw #game_alternatetext
+;    dw #game_alternatetext
     dw #game_moonwalk
-    dw #game_iconcancel
+;    dw #game_iconcancel
     dw #$FFFF
     dw #game_debugmode
-    dw #game_debugbrightness
+;    dw #game_debugbrightness
     dw #game_invincibility
     dw #game_debugplms
     dw #game_debugprojectiles
     dw #$0000
     %cm_header("GAME")
 
-game_alternatetext:
-    %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
+;game_alternatetext:
+;    %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
 
 game_moonwalk:
-    %cm_toggle("Moon Walk", $7E09E4, #$0001, #0)
+    %cm_toggle("Moon Walk", $7E09E4, #$FFFF, #0)
 
-game_iconcancel:
-    %cm_toggle("Icon Cancel", $7E09EA, #$0001, #0)
-
-game_goto_debug:
-    %cm_submenu("Debug Settings", #DebugMenu)
-
-
-; ----------
-; Debug Menu
-; ----------
-
-DebugMenu:
-    dw #$0000
-    %cm_header("DEBUG SETTINGS")
+;game_iconcancel:
+;    %cm_toggle("Icon Cancel", $7E09EA, #$0001, #0)
 
 game_debugmode:
     %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
 
-game_debugbrightness:
-    %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
+;game_debugbrightness:
+;    %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
 
 game_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)

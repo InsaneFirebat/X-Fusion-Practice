@@ -152,10 +152,10 @@ eq_maxreserves:
     %cm_numfield("Max Reserves", $09D4, 0, 7, 1, 1, #0)
 
 eq_currentmissiles:
-    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 0, 230, 1, 20, #0)
+    %cm_numfield_word("Current Missiles", !SAMUS_MISSILES, 5, 99, 1, 4, #0)
 
 eq_setmissiles:
-    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 0, 230, 5, 20, .routine)
+    %cm_numfield_word("Missiles", !SAMUS_MISSILES_MAX, 5, 99, 1, 4, .routine)
   .routine
     LDA !SAMUS_MISSILES_MAX : STA !SAMUS_MISSILES
     RTL
@@ -164,7 +164,7 @@ eq_currentpbs:
     %cm_numfield("Current Power Bombs", !SAMUS_PBS, 0, 50, 1, 5, #0)
 
 eq_setpbs:
-    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 50, 5, 5, .routine)
+    %cm_numfield("Power Bombs", !SAMUS_PBS_MAX, 0, 50, 1, 5, .routine)
   .routine
     LDA !SAMUS_PBS_MAX : STA !SAMUS_PBS
     RTL
@@ -176,6 +176,7 @@ eq_setpbs:
 
 ToggleCategoryMenu:
     dw #cat_100
+    dw #cat_nothing
 ;    dw #cat_any_new
 ;    dw #cat_any_old
 ;    dw #cat_14ice
@@ -185,7 +186,6 @@ ToggleCategoryMenu:
 ;    dw #cat_rbo
 ;    dw #cat_any_glitched
 ;    dw #cat_inf_cf
-    dw #cat_nothing
     dw #$0000
     %cm_header("TOGGLE CATEGORY")
 
@@ -233,7 +233,7 @@ action_category:
     LDA.l .table,X : STA !SAMUS_HP : STA !SAMUS_HP_MAX : INX #2
     LDA.l .table,X : STA !SAMUS_MISSILES : STA !SAMUS_MISSILES_MAX : INX #2
 ;    LDA.l .table,X : STA !SAMUS_SUPERS : STA !SAMUS_SUPERS_MAX : INX #2
-    INX #2
+    INX #2 ; Supers unused
     LDA.l .table,X : STA !SAMUS_PBS : STA !SAMUS_PBS_MAX : INX #2
     LDA.l .table,X : STA $09D4 : STA $09EC : STA $09EE : INX #2
 

@@ -1,6 +1,10 @@
 
 # Change Log
 
+## v2.0.3
+
+ Fixed layer3/FX corruption on menu exit
+
 ## v2.0.2
 
  Added two missing save stations

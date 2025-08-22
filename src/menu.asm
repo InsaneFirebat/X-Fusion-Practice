@@ -38,7 +38,12 @@ cm_start:
     JSL cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
+    LDA $1964 : BNE .setupFX
     JSL $80A211 ; Queue clearing of FX tilemap
+    BRA .initHUD
+  .setupFX
+    JSL $83FE80 ; Setup FX tilemap?
+  .initHUD
 ;    JSL $809A79 ; Initialize HUD
     JSL $809A99 ; Initialize HUD
 ;    JSL $809B44 ; Handle HUD tilemap

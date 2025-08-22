@@ -724,6 +724,7 @@ TeleportWreckedShipMenu:
     dw #tel_wreckedship
     dw #tel_wreckedship1
     dw #tel_wreckedship2
+    dw #tel_wreckedship3
     dw #$0000
     %cm_header("SECT-3-PYR SAVE STATIONS")
 
@@ -736,11 +737,15 @@ tel_wreckedship1:
 tel_wreckedship2:
     %cm_jsl("Bubble Heights", #action_teleport, #$0302)
 
+tel_wreckedship3:
+    %cm_jsl("Neo-Ridley Gauntlet Access", #action_teleport, #$0303)
+
 TeleportMaridiaMenu:
     dw #tel_maridiatube
     dw #tel_maridiaelevator
     dw #tel_maridiaaqueduct
     dw #tel_maridiadraygon
+    dw #tel_maridia4
     dw #$0000
     %cm_header("SECT-4-AQA SAVE STATIONS")
 
@@ -755,6 +760,9 @@ tel_maridiaaqueduct:
 
 tel_maridiadraygon:
     %cm_jsl("Neo-Draygon Access", #action_teleport, #$0403)
+
+tel_maridia4:
+    %cm_jsl("Glass Tube", #action_teleport, #$0404)
 
 TeleportTourianMenu:
     dw #tel_tourianmb

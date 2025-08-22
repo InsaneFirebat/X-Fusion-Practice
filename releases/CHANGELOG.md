@@ -1,6 +1,14 @@
 
 # Change Log
 
+## v2.0.1
+
+ Fixed a crash with equipment categories
+ Adjusted equipment numbers
+ Fixed event bit resets
+ Fixed moonwalk toggle
+ Removed some unneeded/unusable menu options
+
 ## v2.0.0
 
  Added a practice menu that can be accessed with Start+Select by default

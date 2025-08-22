@@ -34,10 +34,10 @@ if exist "%~1" (
     :main
     for /f "delims=" %%a in (
         "!rom!"
-    ) do set "outdir=%%~dpa"
-    for /f "delims=" %%b in (
-        "!rom!"
-    ) do set "outrom=%%~nb"
+    ) do (
+        set "outdir=%%~dpa"
+        set "outrom=%%~na"
+    )
     cls
     echo.
     echo Standard ........... 1

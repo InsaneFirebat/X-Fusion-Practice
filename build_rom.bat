@@ -32,6 +32,7 @@ if exist "%~1" (
 ) else (
     set "rom=build\X-Fusion.sfc"
     :main
+    set "choice="
     for /f "delims=" %%a in (
         "!rom!"
     ) do (

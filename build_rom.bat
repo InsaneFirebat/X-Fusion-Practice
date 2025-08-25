@@ -18,24 +18,6 @@ if not exist "%~dp0asar\asar.exe" (
     echo main.asm not found in ~\src\.
     pause
     exit /b 0
-) else if not exist "%~dp0build\X-Fusion Practice Hack.sym" (
-    echo.
-    echo Generating practice hack symbols...
-    echo.
-    python "%~dp0create_dummies.py" ".\build\00.sfc" ".\build\ff.sfc"
-    "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack.sym" -DSAVESTATES=0 "%~dp0src\main.asm" "%~dp0build\00.sfc"
-    "%~dp0asar\asar.exe" --no-title-check -DSAVESTATES=0 "%~dp0src\main.asm" "%~dp0build\ff.sfc"
-    del "%~dp0build\00.sfc" "%~dp0build\ff.sfc" /s /q > nul
-)
-if not exist "%~dp0build\X-Fusion Practice Hack (Savestates).sym" (
-    echo.
-    echo Generating savestate practice hack symbols...
-    echo.
-    python "%~dp0create_dummies.py" ".\build\00.sfc" ".\build\ff.sfc"
-    "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack (Savestates).sym" "%~dp0src\main.asm" "%~dp0build\00.sfc"
-    "%~dp0asar\asar.exe" --no-title-check "%~dp0src\main.asm" "%~dp0build\ff.sfc"
-    del "%~dp0build\00.sfc" "%~dp0build\ff.sfc" /s /q > nul
-    pause
 )
 if exist "%~1" (
     set "rom=%~1"
@@ -50,12 +32,13 @@ if exist "%~1" (
 ) else (
     set "rom=build\X-Fusion.sfc"
     :main
+    set "choice="
     for /f "delims=" %%a in (
         "!rom!"
-    ) do set "outdir=%%~dpa"
-    for /f "delims=" %%b in (
-        "!rom!"
-    ) do set "outrom=%%~nb"
+    ) do (
+        set "outdir=%%~dpa"
+        set "outrom=%%~na"
+    )
     cls
     echo.
     echo Standard ........... 1
@@ -74,17 +57,31 @@ if exist "%~1" (
     ) else if "!choice!" == "1" (
         cls
         echo.
+        echo Generating practice hack symbols...
+        echo.
+        python "%~dp0create_dummies.py" ".\build\00.sfc" ".\build\ff.sfc"
+        "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="!outdir!!outrom! Practice Hack.sym" -DSAVESTATES=0 "%~dp0src\main.asm" "%~dp0build\00.sfc"
+        "%~dp0asar\asar.exe" --no-title-check -DSAVESTATES=0 "%~dp0src\main.asm" "%~dp0build\ff.sfc"
+        del "%~dp0build\00.sfc" "%~dp0build\ff.sfc" /s /q > nul
+        echo.
         echo Patching practice hack ROM...
         echo.
         copy "!rom!" "!outdir!!outrom! Practice Hack.sfc" > nul
-        "%~dp0asar\asar.exe" --no-title-check -DSAVESTATES=0 --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack.sym" "%~dp0src\main.asm" "!outdir!!outrom! Practice Hack.sfc"
+        "%~dp0asar\asar.exe" --no-title-check -DSAVESTATES=0 --symbols=wla --symbols-path="!outdir!!outrom! Practice Hack.sym" "%~dp0src\main.asm" "!outdir!!outrom! Practice Hack.sfc"
     ) else if "!choice!" == "2" (
         cls
+        echo.
+        echo Generating savestate practice hack symbols...
+        echo.
+        python "%~dp0create_dummies.py" ".\build\00.sfc" ".\build\ff.sfc"
+        "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="!outdir!!outrom! Practice Hack (Savestates).sym" "%~dp0src\main.asm" "%~dp0build\00.sfc"
+        "%~dp0asar\asar.exe" --no-title-check "%~dp0src\main.asm" "%~dp0build\ff.sfc"
+        del "%~dp0build\00.sfc" "%~dp0build\ff.sfc" /s /q > nul
         echo.
         echo Patching savestate practice hack ROM...
         echo.
         copy "!rom!" "!outdir!!outrom! Practice Hack (Savestates).sfc" > nul
-        "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="%~dp0build\X-Fusion Practice Hack (Savestates).sym" "%~dp0src\main.asm" "!outdir!!outrom! Practice Hack (Savestates).sfc"
+        "%~dp0asar\asar.exe" --no-title-check --symbols=wla --symbols-path="!outdir!!outrom! Practice Hack (Savestates).sym" "%~dp0src\main.asm" "!outdir!!outrom! Practice Hack (Savestates).sfc"
     ) else (
         echo.
         echo You must enter a menu option to proceed.

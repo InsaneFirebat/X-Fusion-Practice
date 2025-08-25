@@ -1,6 +1,11 @@
 
 # Change Log
 
+## v2.0.4
+
+ Fixed menu close deleting acid/lava FX
+ Fixed pause screen corruption from menu
+
 ## v2.0.3
 
  Fixed layer3/FX corruption on menu exit

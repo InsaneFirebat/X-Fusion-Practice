@@ -57,7 +57,8 @@
 !ram_magic_pants_state = !WRAM_START+$14
 !ram_magic_pants_pal1 = !WRAM_START+$16
 !ram_magic_pants_pal2 = !WRAM_START+$18
-!ram_magic_pants_pal3 = !WRAM_START+$1a
+!ram_magic_pants_pal3 = !WRAM_START+$1A
+!ram_magic_pants_sfx = !WRAM_START+$1C
 
 !WRAM_MENU_START = $7EFE00
 

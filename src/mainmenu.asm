@@ -927,6 +927,7 @@ MiscMenu:
 ;    dw #misc_hyperbeam
     dw #$FFFF
     dw #misc_magicpants
+    dw #misc_loudpants
     dw #$FFFF
     dw #misc_healthbomb
     dw #misc_energyalarm
@@ -982,7 +983,18 @@ misc_flashsuit:
 ;    RTL
 
 misc_magicpants:
-    %cm_toggle("Magic Pants", !ram_magic_pants_enabled, #$0001, #0)
+    %cm_toggle("Magic Pants", !ram_magic_pants_enabled, #$0001, #.routine)
+  .routine
+    CMP #$0000 : BNE +
+    STA !ram_magic_pants_sfx
++   RTL
+
+misc_loudpants:
+    %cm_toggle("Loud Pants", !ram_magic_pants_sfx, #$0001, #.routine)
+  .routine
+    CMP #$0000 : BEQ +
+    STA !ram_magic_pants_enabled
++   RTL
 
 misc_healthbomb:
     %cm_toggle("Health Bomb Flag", !SAMUS_HEALTH_WARNING, #$0001, #0)

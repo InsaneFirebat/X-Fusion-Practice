@@ -24,6 +24,8 @@ MagicPants:
     LDA $7EC188 : STA !ram_magic_pants_pal1
     LDA $7EC18A : STA !ram_magic_pants_pal2
     LDA $7EC19E : STA !ram_magic_pants_pal3
+    LDA !ram_magic_pants_sfx : BEQ +
+    %sfxbeep()
 +   LDA #$FFFF : STA $7EC19E : STA !ram_magic_pants_state
     RTL
 }

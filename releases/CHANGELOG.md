@@ -1,6 +1,10 @@
 
 # Change Log
 
+## v2.0.5
+
+ Added Loud Pants to be used with Magic Pants
+
 ## v2.0.4
 
  Fixed menu close deleting acid/lava FX

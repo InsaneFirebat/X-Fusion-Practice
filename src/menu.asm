@@ -38,11 +38,17 @@ cm_start:
     JSL cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
+    LDA !GAMEMODE : CMP #$000E : BEQ .clearFX
     LDA $1964 : BNE .setupFX
+  .clearFX
     JSL $80A211 ; Queue clearing of FX tilemap
     BRA .initHUD
   .setupFX
-    JSL $83FE80 ; Setup FX tilemap?
+    LDA $196E : CMP #$0004 : BEQ .clearFXTop
+    CMP #$0002 : BNE +
+  .clearFXTop
+    JSR ClearTopOfFXTilemap
++   JSL $83FE80 ; Setup FX tilemap?
   .initHUD
 ;    JSL $809A79 ; Initialize HUD
     JSL $809A99 ; Initialize HUD
@@ -56,11 +62,11 @@ cm_start:
 
     ; skip sound effects if not gameplay ($7-13 allowed)
     %ai16()
-    LDA !GAMEMODE : CMP #$0006 : BMI .skipSFX
-    CMP #$0014 : BPL .skipSFX
+;    LDA !GAMEMODE : CMP #$0006 : BMI .skipSFX
+;    CMP #$0014 : BPL .skipSFX
 ;    JSL $91E633 ; Queue Samus movement sound effects (not found in X-Fusion)
-
-  .skipSFX
+;
+;  .skipSFX
     JSL play_music_long ; Play 2 lag frames of music and sound effects
 ;    JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
 
@@ -107,6 +113,21 @@ cm_init:
     LDA.w #MainMenu>>16 : STA !ram_cm_menu_bank
 
     JSL cm_calculate_max
+    RTS
+}
+
+ClearTopOfFXTilemap:
+{
+    LDX #$0EFE
+-   LDA #$0C4E : STA $7E4000,X
+    DEX #2 : BPL -
+
+    LDX $0330
+    LDA #$0700 : STA $D0,X
+    LDA #$4000 : STA $D2,X
+    LDA #$007E : STA $D4,X
+    LDA #$5880 : STA $D5,X
+    TXA : CLC : ADC #$0007 : STA $0330
     RTS
 }
 

@@ -1,6 +1,10 @@
 
 # Change Log
 
+## v2.1.1
+
+- Added music toggle
+
 ## v2.1.0
 
 - Fixed layer 3 corruptions when exiting menu (new solution)

@@ -38,18 +38,13 @@ cm_start:
     JSL cm_transfer_original_cgram
 
     ; Update HUD (in case we added missiles etc.)
-    LDA !GAMEMODE : CMP #$000E : BEQ .clearFX
-    LDA $1964 : BNE .setupFX
-  .clearFX
-    JSL $80A211 ; Queue clearing of FX tilemap
-    BRA .initHUD
-  .setupFX
-    LDA $196E : CMP #$0004 : BEQ .clearFXTop
-    CMP #$0002 : BNE +
-  .clearFXTop
-    JSR ClearTopOfFXTilemap
-+   JSL $83FE80 ; Setup FX tilemap?
-  .initHUD
+    %a8()
+    LDA #$80 : STA $802100
+    %a16()
+    JSL $8A890A ; X-Fusion routine that fixes layer 3 (called when unpausing)
+    %a8()
+    LDA #$0F : STA $0F2100
+    %a16()
 ;    JSL $809A79 ; Initialize HUD
     JSL $809A99 ; Initialize HUD
 ;    JSL $809B44 ; Handle HUD tilemap

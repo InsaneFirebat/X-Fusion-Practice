@@ -718,7 +718,7 @@ tel_norfairbubble:
     %cm_jsl("Cultivation Station", #action_teleport, #$0201)
 
 tel_norfairtunnel:
-    %cm_jsl("Crum Ball Tower", #action_teleport, #$0202)
+    %cm_jsl("Crum-Ball Tower", #action_teleport, #$0202)
 
 TeleportWreckedShipMenu:
     dw #tel_wreckedship
@@ -782,13 +782,14 @@ tel_tourian2:
     %cm_jsl("Cellar", #action_teleport, #$0502)
 
 tel_tourian3:
-    %cm_jsl("Freezer", #action_teleport, #$0503)
+    %cm_jsl("Freezer Hallway", #action_teleport, #$0503)
 
 TeleportCeresMenu:
     dw #tel_ceres0
     dw #tel_ceres1
     dw #tel_ceres2
     dw #tel_ceres3
+    dw #tel_ceres4
     dw #$0000
     %cm_header("SECT-6-NOC SAVE STATIONS")
 
@@ -803,6 +804,9 @@ tel_ceres2:
 
 tel_ceres3:
     %cm_jsl("Catacombs", #action_teleport, #$0603)
+
+tel_ceres4:
+    %cm_jsl("Entrance Lobby South", #action_teleport, #$0604)
 
 TeleportDebugMenu:
     dw #tel_debug0
@@ -1214,7 +1218,7 @@ GameMenu:
 ;    %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
 
 game_moonwalk:
-    %cm_toggle("Moon Walk", $7E09E4, #$FFFF, #0)
+    %cm_toggle_bit("Moon Walk", $7E09E4, #$FFFF, #0)
 
 ;game_iconcancel:
 ;    %cm_toggle("Icon Cancel", $7E09EA, #$0001, #0)
@@ -1297,3 +1301,7 @@ ctrl_reset_defaults:
     %sfxreset()
     JML init_sram_controller_shortcuts
     RTL
+
+
+; This label is used to seed RNG for the menu
+InitSRAMLabel:

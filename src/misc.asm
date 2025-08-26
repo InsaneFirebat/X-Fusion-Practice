@@ -33,7 +33,7 @@ MagicPants:
 
 
 ; label for HUD graphics
-org $82C5DD
+org $82C60C
 hudgfx_bin:
 
 
@@ -94,6 +94,7 @@ transfer_cgram_long:
 ;pullpc
 
 
+if 0 ; commented out because unused
 ; Rewrite load station lists so we can add our own
 org $80C4B5
 LoadStationLists:
@@ -273,6 +274,7 @@ LoadStationLists:
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000
 warnpc $80CD07
+endif
 
 
 cleartable

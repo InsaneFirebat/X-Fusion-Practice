@@ -20,6 +20,9 @@ endif
 
     JSL init_sram
 
+    LDA !sram_seed_X : STA !ram_seed_X
+    LDA !sram_seed_Y : STA !ram_seed_Y
+
   .done
     PLA
     JML $9585F4 ; overwritten code
@@ -40,6 +43,8 @@ init_sram:
     LDA #$0036 : STA !sram_customsfx_number
     LDA #$0028 : STA !sram_customsfx_confirm
     LDA #$0007 : STA !sram_customsfx_goback
+    LDA !SAFEWORD : STA !sram_seed_X
+    LDA.w #InitSRAMLabel : STA !sram_seed_X
 
   .controller_shortcuts ; called by ctrl_reset_defaults in mainmenu.asm
     LDA #$3000 : STA !sram_ctrl_menu ; Select + Start

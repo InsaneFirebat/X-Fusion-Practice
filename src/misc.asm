@@ -72,12 +72,46 @@ CriticalEnergyAlarm:
 %endfree(90)
 
 
+; Music toggle
+org $808F24
+    JSL hook_set_music_track
+    NOP : NOP
+
+org $808F65
+    JML hook_set_music_data
+
+
 %startfree(80)
+hook_set_music_track:
+{
+    STZ $07F6
+    PHA
+    LDA !sram_music_toggle : CMP #$01 : BNE .no_music
+    PLA : STA $2140
+    RTL
+
+  .no_music
+    PLA
+    RTL
+}
+
+hook_set_music_data:
+{
+    STA $07F3 : TAX
+    LDA !sram_music_toggle : CMP #$0002 : BEQ .fast_no_music
+    JML $808F69
+
+  .fast_no_music
+    JML $808F89
+}
+
 transfer_cgram_long:
+{
     LDX #$80 : STX $2100
     JSR $933A
     LDX #$0F : STX $2100
     RTL
+}
 %endfree(80)
 
 

@@ -1206,6 +1206,8 @@ GameMenu:
     dw #game_moonwalk
 ;    dw #game_iconcancel
     dw #$FFFF
+    dw #game_music_toggle
+    dw #$FFFF
     dw #game_debugmode
 ;    dw #game_debugbrightness
     dw #game_invincibility
@@ -1214,20 +1216,33 @@ GameMenu:
     dw #$0000
     %cm_header("GAME")
 
-;game_alternatetext:
-;    %cm_toggle("Japanese Text", $7E09E2, #$0001, #0)
-
 game_moonwalk:
     %cm_toggle_bit("Moon Walk", $7E09E4, #$FFFF, #0)
 
-;game_iconcancel:
-;    %cm_toggle("Icon Cancel", $7E09EA, #$0001, #0)
+game_music_toggle:
+    dw !ACTION_CHOICE
+    dl #!sram_music_toggle
+    dw .routine
+    db #$28, "Music", #$FF
+    db #$28, "        OFF", #$FF
+    db #$28, "         ON", #$FF
+    db #$28, "   FAST OFF", #$FF
+    db #$FF
+  .routine
+    ; Clear music queue
+    STZ $0629 : STZ $062B : STZ $062D : STZ $062F
+    STZ $0631 : STZ $0633 : STZ $0635 : STZ $0637
+    STZ $0639 : STZ $063B : STZ $063D : STZ $063F
+    CMP #$0001 : BEQ .resume_music
+    STZ $2140
+    RTL
+  .resume_music
+    LDA !MUSIC_DATA : CLC : ADC #$FF00 : PHA : STZ !MUSIC_DATA : PLA : JSL !MUSIC_ROUTINE
+    LDA !MUSIC_TRACK : PHA : STZ !MUSIC_TRACK : PLA : JSL !MUSIC_ROUTINE
+    RTL
 
 game_debugmode:
     %cm_toggle("Debug Mode", $7E05D1, #$0001, #0)
-
-;game_debugbrightness:
-;    %cm_toggle("Debug CPU Brightness", $7E0DF4, #$0001, #0)
 
 game_invincibility:
     %cm_toggle_bit("Invincibility", $7E0DE0, #$0007, #0)

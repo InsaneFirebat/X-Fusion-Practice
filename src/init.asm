@@ -38,11 +38,7 @@ init_sram:
     LDA !SAFEWORD : STA !sram_safeword
     LDA !SRAM_VERSION : STA !sram_initialized
     LDA #$0000 : STA !sram_energyalarm
-    LDA #$0037 : STA !sram_customsfx_move
-    LDA #$002F : STA !sram_customsfx_toggle
-    LDA #$0036 : STA !sram_customsfx_number
-    LDA #$0028 : STA !sram_customsfx_confirm
-    LDA #$0007 : STA !sram_customsfx_goback
+    LDA #$0001 : STA !sram_music_toggle
     LDA !SAFEWORD : STA !sram_seed_X
     LDA.w #InitSRAMLabel : STA !sram_seed_X
 

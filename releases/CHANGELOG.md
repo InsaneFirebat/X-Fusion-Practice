@@ -1,6 +1,15 @@
 
 # Change Log
 
+## v2.1.0
+
+ Fixed layer 3 corruptions when exiting menu (new solution)
+ Fixed tileset corruption when exiting menu
+ Fixed a crash when shinesparking into Ice-X
+ Fixed a couple NOC teleports
+ Fixed menu RNG seeding
+ Fixed moonwalk toggle (in practice menu) again
+
 ## v2.0.5
 
  Added Loud Pants to be used with Magic Pants

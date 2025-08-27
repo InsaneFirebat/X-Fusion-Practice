@@ -1,6 +1,10 @@
 
 # Change Log
 
+## v2.1.2
+
+- Fixed a rare graphics corruption when entering a room
+
 ## v2.1.1
 
 - Added music toggle

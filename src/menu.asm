@@ -6,7 +6,7 @@ print pc, " menu start"
 cm_start:
 {
     PHP : %ai16()
-    PHB : PHX : PHY
+    PHB
     PHK : PLB
 
     ; Ensure sound is enabled when menu is open
@@ -14,7 +14,8 @@ cm_start:
     STZ !DISABLE_SOUNDS
     LDA !PB_EXPLOSION_STATUS : PHA
     STZ !PB_EXPLOSION_STATUS
-;    JSL $82BE17 ; Cancel sound effects
+
+    ; Cancel sound effects
     LDA #$0002
     JSL $809049
     LDA #$0071
@@ -26,7 +27,7 @@ cm_start:
     JSL cm_draw
     JSL play_music_long ; Play 2 lag frames of music and sound effects
 
-    JSR cm_loop         ; Handle message box interaction
+    JSR cm_loop ; Main menu loop
 
     ; Restore sounds variables
     PLA : STA !PB_EXPLOSION_STATUS
@@ -45,9 +46,7 @@ cm_start:
     %a8()
     LDA #$0F : STA $0F2100
     %a16()
-;    JSL $809A79 ; Initialize HUD
     JSL $809A99 ; Initialize HUD
-;    JSL $809B44 ; Handle HUD tilemap
     JSL $809AD3 ; Handle HUD tilemap
     JSL ih_update_hud_code
 
@@ -55,26 +54,20 @@ cm_start:
     LDA !ram_seed_Y : STA !sram_seed_Y
     JSL restore_ppu_long ; Restore PPU registers and tilemaps
 
-    ; skip sound effects if not gameplay ($7-13 allowed)
-    %ai16()
-;    LDA !GAMEMODE : CMP #$0006 : BMI .skipSFX
-;    CMP #$0014 : BPL .skipSFX
-;    JSL $91E633 ; Queue Samus movement sound effects (not found in X-Fusion)
-;
-;  .skipSFX
     JSL play_music_long ; Play 2 lag frames of music and sound effects
-;    JSL maybe_trigger_pause_long ; Maybe trigger pause screen or return save confirmation selection
 
     %ai16()
     JSR cm_wait_for_lag_frame
-;    JSL $82BE17 ; Cancel sound effects
+
+    ; Cancel sound effects
     LDA #$0002
     JSL $809049
     LDA #$0071
     JSL $8090CB
     LDA #$0001
     JSL $80914D
-    PLY : PLX : PLB
+
+    PLB
     PLP
     RTL
 }

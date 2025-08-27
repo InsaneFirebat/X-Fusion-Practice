@@ -100,7 +100,7 @@ ih_after_room_transition:
     ; Reset realtime and gametime/transition timers
     LDA #$0000 : STA !ram_realtime_room : STA !ram_transition_counter
 
-    JML $8A9117
+    JML $8A9147
 }
 
 ih_update_hud_code:

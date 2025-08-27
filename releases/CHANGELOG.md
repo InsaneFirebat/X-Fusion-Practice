@@ -1,6 +1,10 @@
 
 # Change Log
 
+## v2.1.3
+
+- Capped max energy to prevent intentional X-Fusion crash
+
 ## v2.1.2
 
 - Fixed a rare graphics corruption when entering a room

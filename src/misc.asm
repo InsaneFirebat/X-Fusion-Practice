@@ -75,10 +75,14 @@ CriticalEnergyAlarm:
 ; Music toggle
 org $808F24
     JSL hook_set_music_track
-    NOP : NOP
+    BRA $00
 
 org $808F65
     JML hook_set_music_data
+
+org $849D0C
+    JSL EnergyCap
+    BRA $00
 
 
 %startfree(80)
@@ -103,6 +107,25 @@ hook_set_music_data:
 
   .fast_no_music
     JML $808F89
+}
+
+EnergyCap:
+{
+    LDA $09EA : CMP #$0002 : BEQ .hard
+    LDA #$0064 : CLC : ADC $09C2
+    CMP #$05DB : BEQ .store
+    BMI .store
+    LDA #$05DB : BRA .store
+
+  .hard
+    LDA #$0019 : CLC : ADC $09C2
+    CMP #$01C1 : BEQ .store
+    BMI .store
+    LDA #$01C1
+
+  .store
+    STA $09C4 : STA $09C2
+    RTL
 }
 
 transfer_cgram_long:

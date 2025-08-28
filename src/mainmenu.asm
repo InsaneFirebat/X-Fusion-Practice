@@ -803,10 +803,10 @@ tel_ceres2:
     %cm_jsl("Warehouse", #action_teleport, #$0602)
 
 tel_ceres3:
-    %cm_jsl("Catacombs", #action_teleport, #$0603)
+    %cm_jsl("Entrance Lobby South", #action_teleport, #$0603)
 
 tel_ceres4:
-    %cm_jsl("Entrance Lobby South", #action_teleport, #$0604)
+    %cm_jsl("Catacombs", #action_teleport, #$0604)
 
 TeleportDebugMenu:
     dw #tel_debug0

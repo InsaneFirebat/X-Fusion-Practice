@@ -30,7 +30,7 @@ ih_game_loop_code:
     ; inc transition timer
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
-    LDA !ram_magic_pants_enabled : BNE +
+    LDA !ram_magic_pants_enabled : BEQ +
     JSL MagicPants
 
     ; overwritten code + return

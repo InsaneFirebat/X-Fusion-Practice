@@ -3,7 +3,10 @@
 
 ## v2.1.4
 
+- Fixed a couple mixed up teleport names
 - Fixed max energy cap
+- Fixed energy tank counter in menu
+- Reset timers when teleporting
 
 ## v2.1.3
 

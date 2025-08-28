@@ -1316,7 +1316,3 @@ ctrl_reset_defaults:
     %sfxreset()
     JML init_sram_controller_shortcuts
     RTL
-
-
-; This label is used to seed RNG for the menu
-InitSRAMLabel:

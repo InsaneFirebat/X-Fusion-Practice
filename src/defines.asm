@@ -67,42 +67,18 @@
 !ram_cm_cursor_stack = !WRAM_MENU_START+$10       ; 16 bytes
 
 !ram_cm_cursor_max = !WRAM_MENU_START+$20
-!ram_cm_horizontal_cursor = !WRAM_MENU_START+$22
 !ram_cm_input_timer = !WRAM_MENU_START+$24
 !ram_cm_controller = !WRAM_MENU_START+$26
 !ram_cm_menu_bank = !WRAM_MENU_START+$28
 
 !ram_cm_etanks = !WRAM_MENU_START+$2A
-!ram_cm_reserve = !WRAM_MENU_START+$2C
 !ram_cm_leave = !WRAM_MENU_START+$2E
 !ram_cm_input_counter = !WRAM_MENU_START+$30
-!ram_cm_last_nmi_counter = !WRAM_MENU_START+$32
 
 !ram_cm_ctrl_mode = !WRAM_MENU_START+$34
 !ram_cm_ctrl_timer = !WRAM_MENU_START+$36
 !ram_cm_ctrl_last_input = !WRAM_MENU_START+$38
 !ram_cm_ctrl_assign = !WRAM_MENU_START+$3A
-!ram_cm_ctrl_swap = !WRAM_MENU_START+$3C
-
-!ram_cm_palette_border = !WRAM_MENU_START+$3E
-!ram_cm_palette_headeroutline = !WRAM_MENU_START+$40
-!ram_cm_palette_text = !WRAM_MENU_START+$42
-!ram_cm_palette_background = !WRAM_MENU_START+$44
-!ram_cm_palette_numoutline = !WRAM_MENU_START+$46
-!ram_cm_palette_numfill = !WRAM_MENU_START+$48
-!ram_cm_palette_toggleon = !WRAM_MENU_START+$4A
-!ram_cm_palette_seltext = !WRAM_MENU_START+$4C
-!ram_cm_palette_seltextbg = !WRAM_MENU_START+$4E
-!ram_cm_palette_numseloutline = !WRAM_MENU_START+$50
-!ram_cm_palette_numsel = !WRAM_MENU_START+$52
-
-!ram_seed_X = !WRAM_MENU_START+$60
-!ram_seed_Y = !WRAM_MENU_START+$62
-
-!ram_cm_sfxlib1 = !WRAM_MENU_START+$68
-!ram_cm_sfxlib2 = !WRAM_MENU_START+$6A
-!ram_cm_sfxlib3 = !WRAM_MENU_START+$6C
-!ram_cm_fast_scroll_menu_selection = !WRAM_MENU_START+$6E
 
 ; ^ FREE SPACE ^ up to +$7A
 
@@ -115,14 +91,6 @@
 
 ; The following RAM may be used multiple times,
 ; as long as it isn't used multiple times on the same menu page
-
-!ram_cm_watch_enemy_property = !WRAM_MENU_START+$80
-!ram_cm_watch_enemy_index = !WRAM_MENU_START+$82
-!ram_cm_watch_enemy_side = !WRAM_MENU_START+$84
-!ram_cm_watch_common_address = !WRAM_MENU_START+$86
-
-!ram_cm_phan_first_phase = !WRAM_MENU_START+$80
-!ram_cm_phan_second_phase = !WRAM_MENU_START+$82
 
 !ram_cm_varia = !WRAM_MENU_START+$80
 !ram_cm_gravity = !WRAM_MENU_START+$82
@@ -142,17 +110,7 @@
 !ram_cm_missile3 = !WRAM_MENU_START+$9E
 !ram_cm_missile4 = !WRAM_MENU_START+$A0
 
-!ram_cm_custompalette_blue = !WRAM_MENU_START+$80
-!ram_cm_custompalette_green = !WRAM_MENU_START+$82
-!ram_cm_custompalette_red = !WRAM_MENU_START+$84
-!ram_cm_custompalette = !WRAM_MENU_START+$86
-!ram_cm_dummy_on = !WRAM_MENU_START+$8A
-!ram_cm_dummy_off = !WRAM_MENU_START+$8C
-!ram_cm_dummy_num = !WRAM_MENU_START+$8E
-
 ; ^ FREE SPACE ^ up to +$CE
-; Note: +$B8 to +$CE range also used as frames held counters
-;       and is reset to zero when loading a savestate
 
 ; Reserve 48 bytes for CGRAM cache
 ; Currently first 28 bytes plus last 2 bytes are used
@@ -186,27 +144,9 @@ endif
 !sram_energyalarm = !SRAM_START+$2A
 !sram_music_toggle = !SRAM_START+$2C
 
-; FREE SPACE ^ up to +$5A
-
-!sram_seed_X = !SRAM_START+$82
-!sram_seed_Y = !SRAM_START+$84
-
 ; ^ FREE SPACE ^ up to +$BA4
 
 !sram_safeword = !SRAM_START+$BA6
-
-!sram_custom_header_normal = !SRAM_START+$BA8 ; $18 bytes
-!sram_custom_preset_safewords_normal = !SRAM_START+$BC0 ; $50 bytes
-!sram_custom_preset_names_normal = !SRAM_START+$C10 ; $3C0 bytes
-
-!sram_custom_header_tinystates = !SRAM_START+$E18 ; $18 bytes
-!sram_custom_preset_safewords_tinystates = !SRAM_START+$E30 ; $20 bytes
-!sram_custom_preset_names_tinystates = !SRAM_START+$E50 ; $180 bytes
-
-; SM specific things
-!SRAM_MUSIC_DATA = !SRAM_START+$0FD0
-!SRAM_MUSIC_TRACK = !SRAM_START+$0FD2
-!SRAM_SOUND_TIMER = !SRAM_START+$0FD4
 
 ; ^ FREE SPACE ^ up to +$0FFE
 
@@ -224,18 +164,6 @@ endif
 !IH_CONTROLLER_SEC_PREV = $99
 
 !HUD_TILEMAP = $7EC5C8
-
-!INPUT_BIND_UP = $7E09AA
-!INPUT_BIND_DOWN = $7E09AC
-!INPUT_BIND_LEFT = $7E09AE
-!INPUT_BIND_RIGHT = $7E09B0
-!IH_INPUT_SHOT = $7E09B2
-!IH_INPUT_JUMP = $7E09B4
-!IH_INPUT_RUN = $7E09B6
-!IH_INPUT_ITEM_CANCEL = $7E09B8
-!IH_INPUT_ITEM_SELECT = $7E09BA
-!IH_INPUT_ANGLE_DOWN = $7E09BC
-!IH_INPUT_ANGLE_UP = $7E09BE
 
 !MUSIC_ROUTINE = $808FC1
 !SFX_LIB1 = $80903F
@@ -405,14 +333,12 @@ endif
 !DEMO_CURRENT_SET = $1F55
 !DEMO_CURRENT_SCENE = $1F57
 
-!PLM_DELETE = $AAE3
-
 
 ; --------------------
 ; Aliases and Bitmasks
 ; --------------------
 
-!SRAM_VERSION = #$0018
+!SRAM_VERSION = #$0019
 !SAFEWORD = #$5AFE
 
 !IH_BLANK = $000F

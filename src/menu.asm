@@ -50,8 +50,6 @@ cm_start:
     JSL $809AD3 ; Handle HUD tilemap
     JSL ih_update_hud_code
 
-    LDA !ram_seed_X : STA !sram_seed_X
-    LDA !ram_seed_Y : STA !sram_seed_Y
     JSL restore_ppu_long ; Restore PPU registers and tilemaps
 
     JSL play_music_long ; Play 2 lag frames of music and sound effects
@@ -90,9 +88,8 @@ cm_init:
 
     ; Set up menu state
     %a16()
-    LDA #$0000
+    LDA #$0000 : STA !ram_cm_leave
     STA !ram_cm_stack_index : STA !ram_cm_cursor_stack
-    STA !ram_cm_horizontal_cursor : STA !ram_cm_leave
     STA !ram_cm_ctrl_mode : STA !ram_cm_ctrl_timer
     STA !IH_CONTROLLER_PRI_NEW : STA !IH_CONTROLLER_PRI
 

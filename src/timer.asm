@@ -11,7 +11,7 @@ org $9493FB ; hijack, runs when Samus hits a door BTS
 org $8A9141 ; hijack, runs when Samus is coming out of a room transition
     JML ih_after_room_transition
 
-org $8A800F
+org $8A800F ; hijack, runs at the beginning of the main game loop
     JSL ih_game_loop_code
 
 
@@ -30,10 +30,11 @@ ih_game_loop_code:
     ; inc transition timer
     LDA !ram_transition_counter : INC : STA !ram_transition_counter
 
+    LDA !ram_magic_pants_enabled : BNE +
     JSL MagicPants
 
     ; overwritten code + return
-    JML $808111
++   JML $808111
 }
 
 ih_before_room_transition:
@@ -67,9 +68,6 @@ endif
 
 ih_update_timers_early:
 {
-    ; Check if we've already run on this frame
-    LDA !ram_transition_flag : BNE .done
-
     ; Lag
     LDA !ram_realtime_room : SEC : SBC !ram_transition_counter : STA !ram_last_room_lag
 
@@ -120,7 +118,6 @@ ih_update_hud_code:
     LDA $C1 : ASL : TAY
     LDA.w HexToNumberGFX1,Y : STA !HUD_TILEMAP+$00,X
     LDA.w HexToNumberGFX2,Y : STA !HUD_TILEMAP+$02,X
-;    LDA #!HUD_DECIMAL : STA !HUD_TILEMAP,X
 
     ; Lag
     LDA !ram_last_room_lag

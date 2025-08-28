@@ -3,10 +3,7 @@
 %startfree(8B)
 MagicPants:
 {
-    LDA !ram_magic_pants_enabled : BNE +
-    RTL
-
-+   LDA $0A96 : CMP #$0009 : BEQ .check
+    LDA $0A96 : CMP #$0009 : BEQ .check
     LDA !ram_magic_pants_state : BEQ +
     LDA !ram_magic_pants_pal1 : STA $7EC188
     LDA !ram_magic_pants_pal2 : STA $7EC18A
@@ -136,19 +133,6 @@ transfer_cgram_long:
     RTL
 }
 %endfree(80)
-
-
-;org $92D246
-;; Repoint escape timer tiles
-;EscapeTimerTiles:
-;incbin ../resources/EscapeTimerTiles.bin
-;
-;pushpc
-;org $A7B423
-;    LDA.w #(EscapeTimerTiles>>8)&$FF00 : STA $00D3,Y
-;    LDA.w #EscapeTimerTiles : STA $00D2,Y
-;warnpc $A7B42F
-;pullpc
 
 
 if 0 ; commented out because unused
@@ -297,8 +281,8 @@ LoadStationLists:
     dw $B737, $B1F4, $0000, $0000, $0000, $00A1, $0000 ; Entrance Lobby
     dw $B75A, $B3F8, $0000, $0000, $0000, $00A1, $0000 ; East Turbo Tube Access
     dw $B77D, $B6C8, $0000, $0000, $0000, $00A1, $0020 ; Warehouse
-    dw $B7A0, $B50C, $0000, $0000, $0000, $00A1, $0020 ; Catacombs
-    dw $0000, $0000, $0000, $0000, $0000, $0000, $0000
+    dw $B7A0, $B50C, $0000, $0000, $0000, $00A1, $0020 ; Entrance Lobby South
+    dw $BCE8, $B698, $0000, $0000, $0000, $00A1, $0020 ; Catacombs
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000
     dw $0000, $0000, $0000, $0000, $0000, $0000, $0000

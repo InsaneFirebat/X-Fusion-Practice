@@ -100,8 +100,22 @@ cm_init:
     LDA.w #MainMenu : STA !ram_cm_menu_stack
     LDA.w #MainMenu>>16 : STA !ram_cm_menu_bank
 
+    JSL cm_count_etanks
     JSL cm_calculate_max
     RTS
+}
+
+cm_count_etanks:
+{
+    LDA !SAMUS_HP_MAX : STA $4204
+    %a8()
+    ; divide by 100
+    LDA #$64 : STA $4206
+    %a16()
+    PEA $0000 : PLA ; wait for math
+    ; 16-bit result
+    LDA $4214 : STA !ram_cm_etanks
+    RTL
 }
 
 ClearTopOfFXTilemap:

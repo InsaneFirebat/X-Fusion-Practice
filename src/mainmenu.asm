@@ -237,7 +237,7 @@ action_category:
     LDA.l .table,X : STA !SAMUS_PBS : STA !SAMUS_PBS_MAX : INX #2
     LDA.l .table,X : STA $09D4 : STA $09EC : STA $09EE : INX #2
 
-;    JSL cm_set_etanks_and_reserve
+    JSL cm_count_etanks
     %sfxconfirm()
     JML $90AC8D ; update beam gfx
 

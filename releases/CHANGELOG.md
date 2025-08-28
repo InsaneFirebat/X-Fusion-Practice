@@ -1,6 +1,10 @@
 
 # Change Log
 
+## v2.1.5
+
+- Added a toggle for Disruptor Beam
+
 ## v2.1.4
 
 - Fixed a couple mixed up teleport names

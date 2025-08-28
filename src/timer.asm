@@ -204,6 +204,17 @@ Draw3:
     BRA .done
 }
 
+ResetCounters:
+{
+    LDA #$0000
+    STA !ram_realtime_room : STA !ram_last_room_lag
+    STA !ram_transition_flag : STA !ram_transition_counter
+    STA !ram_last_realtime_room : STA !ram_last_realtime_door
+    STA !ram_lag_counter : STA !ram_last_door_lag_frames
+    STA !ram_room_has_set_rng
+    RTL
+}
+
 NumberGFXTable:
     dw !HUD_0, !HUD_1, !HUD_2, !HUD_3, !HUD_4, !HUD_5, !HUD_6, !HUD_7, !HUD_8, !HUD_9
 

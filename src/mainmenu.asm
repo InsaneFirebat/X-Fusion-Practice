@@ -899,8 +899,8 @@ action_teleport:
     LDA #$001F : STA !SAMUS_HP
 
   .branch
-;    JSL reset_all_counters
-;    JSL stop_all_sounds
+    JSL ResetCounters
+    ; Silence SFX
     LDA #$0002
     JSL $809049
     LDA #$0071

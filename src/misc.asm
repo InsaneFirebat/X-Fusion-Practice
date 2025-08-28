@@ -109,13 +109,13 @@ hook_set_music_data:
 EnergyCap:
 {
     LDA $09EA : CMP #$0002 : BEQ .hard
-    LDA #$0064 : CLC : ADC $09C2
+    LDA #$0064 : CLC : ADC $09C4
     CMP #$05DB : BEQ .store
     BMI .store
     LDA #$05DB : BRA .store
 
   .hard
-    LDA #$0019 : CLC : ADC $09C2
+    LDA #$0019 : CLC : ADC $09C4
     CMP #$01C1 : BEQ .store
     BMI .store
     LDA #$01C1

@@ -579,8 +579,8 @@ ToggleBeamsMenu:
     dw tb_wavebeam
     dw tb_widebeam
     dw tb_plasmabeam
-;    dw #$FFFF
-;    dw misc_hyperbeam
+    dw #$FFFF
+    dw misc_hyperbeam
     dw #$0000
     %cm_header("TOGGLE BEAMS")
 
@@ -928,7 +928,7 @@ action_debug_teleport:
 MiscMenu:
     dw #misc_bluesuit
     dw #misc_flashsuit
-;    dw #misc_hyperbeam
+    dw #misc_hyperbeam
     dw #$FFFF
     dw #misc_magicpants
     dw #misc_loudpants
@@ -948,43 +948,34 @@ misc_bluesuit:
 misc_flashsuit:
     %cm_toggle("Flash Suit", !SAMUS_SHINE_TIMER, #$0001, #0)
 
-;misc_hyperbeam:
-;    %cm_toggle_bit("Disruptor Beam", $7E0A76, #$8000, #.routine)
-;  .routine
-;    AND #$8000 : BEQ .off
-;    LDA #$0003
-;;    JSL $91E4AD ; setup Samus for Hyper Beam
-;    LDA #$1009 : STA !SAMUS_BEAMS_EQUIPPED
-;    JSL $90AC8D
-;    LDA #$8000 : STA $0A76
-;    STZ $0DC0
-;
-;    RTL
-;
-;  .off
-;    ; check for Spazer+Plasma
-;    LDA !SAMUS_BEAMS_COLLECTED : AND #$000C : CMP #$000C : BEQ .disableMurder
-;    LDA !SAMUS_BEAMS_COLLECTED : STA !SAMUS_BEAMS_EQUIPPED
-;    BRA .FXobjects
-;
-;  .disableMurder
-;    LDA !SAMUS_BEAMS_COLLECTED : AND #$000B : STA !SAMUS_BEAMS_EQUIPPED
-;
-;  .FXobjects
-;    LDX #$000E
-;
-;  .loopFXobjects
-;    LDA $1E7D,X : CMP #$E1F0 : BEQ .found
-;    DEX #2 : BPL .loopFXobjects
-;
-;  .found
-;    ; clear Hyper Beam palette FX object
-;    STZ $1E7D,X ; this is probably the only one that matters
-;    STZ $1E8D,X : STZ $1E9D,X : STZ $1EAD,X
-;    STZ $1EBD,X : STZ $1ECD,X : STZ $1EDD,X
-;
-;    JSL $90AC8D ; update beam gfx
-;    RTL
+misc_hyperbeam:
+    %cm_toggle_bit("Disruptor Beam", $7E0A76, #$8000, #.routine)
+  .routine
+    AND #$8000 : BEQ .off
+    LDA #$0003
+;    JSL $91E4AD ; setup Samus for Hyper Beam
+    LDA #$1003 : STA !SAMUS_BEAMS_EQUIPPED
+    LDA #$FFFF : STA !SAMUS_BEAMS_COLLECTED
+    LDA #$8000 : STA $0A76
+    JSL $90AC8D
+    STZ $0DC0
+
+    RTL
+
+  .off
+    LDX #$000E
+  .loopFXobjects
+    LDA $1E7D,X : CMP #$E1F0 : BEQ .found
+    DEX #2 : BPL .loopFXobjects
+
+  .found
+    ; clear Hyper Beam palette FX object
+    STZ $1E7D,X ; this is probably the only one that matters
+    STZ $1E8D,X : STZ $1E9D,X : STZ $1EAD,X
+    STZ $1EBD,X : STZ $1ECD,X : STZ $1EDD,X
+
+    JSL $90AC8D ; update beam gfx
+    RTL
 
 misc_magicpants:
     %cm_toggle("Magic Pants", !ram_magic_pants_enabled, #$0001, #.routine)

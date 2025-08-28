@@ -1,6 +1,10 @@
 
 # Change Log
 
+## v2.1.4
+
+- Fixed max energy cap
+
 ## v2.1.3
 
 - Capped max energy to prevent intentional X-Fusion crash

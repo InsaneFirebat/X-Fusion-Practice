@@ -454,7 +454,8 @@ endif
 !ACTION_NUMFIELD            = #$0008
 !ACTION_NUMFIELD_HEX        = #$000A
 !ACTION_NUMFIELD_WORD       = #$000C
-!ACTION_CHOICE              = #$000E
-!ACTION_CTRL_SHORTCUT       = #$0010
-!ACTION_JSL                 = #$0012
-!ACTION_JSL_SUBMENU         = #$0014
+!ACTION_NUMFIELD_HEX_WORD   = #$000E
+!ACTION_CHOICE              = #$0010
+!ACTION_CTRL_SHORTCUT       = #$0012
+!ACTION_JSL                 = #$0014
+!ACTION_JSL_SUBMENU         = #$0016

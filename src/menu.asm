@@ -505,6 +505,7 @@ cm_draw_action_table:
     dw draw_numfield
     dw draw_numfield_hex
     dw draw_numfield_word
+    dw draw_numfield_word_hex
     dw draw_choice
     dw draw_ctrl_shortcut
     dw draw_jsl
@@ -815,6 +816,65 @@ draw_numfield_word:
     CLC : ADC !DP_Palette : STA !ram_tilemap_buffer,X
 
   .done
+    RTS
+}
+
+draw_numfield_word_hex:
+{
+    ; grab the memory address (long)
+    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_Address
+    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : STA !DP_Address+2
+
+    ; skip bounds and increment values
+;    INC !DP_CurrentMenu : INC !DP_CurrentMenu ; min
+;    INC !DP_CurrentMenu : INC !DP_CurrentMenu ; max
+;    INC !DP_CurrentMenu : INC !DP_CurrentMenu ; inc, held inc
+;
+;    ; increment past JSL
+;    INC !DP_CurrentMenu : INC !DP_CurrentMenu
+
+    ; Draw the text
+    %item_index_to_vram_index()
+    PHX : JSR cm_draw_text : PLX
+
+    ; set position for the number
+    TXA : CLC : ADC #$002C : TAX
+
+    ; load the value
+    LDA [!DP_Address] : STA !DP_DrawValue
+
+    ; Clear out the area
+    LDA !MENU_BLANK : STA !ram_tilemap_buffer+0,X
+                      STA !ram_tilemap_buffer+2,X
+                      STA !ram_tilemap_buffer+4,X
+                      STA !ram_tilemap_buffer+6,X
+
+    ; Draw numbers
+    %a8()
+    PHB
+    LDA.b #HexMenuGFXTable>>16 : PHA : PLB
+    %a16()
+    ; (X000)
+    LDA !DP_DrawValue : AND #$F000 : XBA : LSR #3 : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer,X
+    ; (0X00)
+    LDA !DP_DrawValue : AND #$0F00 : XBA : ASL : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+2,X
+    ; (00X0)
+    LDA !DP_DrawValue : AND #$00F0 : LSR #3 : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+4,X
+    ; (000X)
+    LDA !DP_DrawValue : AND #$000F : ASL : TAY
+    LDA.w HexMenuGFXTable,Y : STA !ram_tilemap_buffer+6,X
+    PLB
+
+    ; overwrite palette bytes
+    %a8()
+    LDA #$24 : ORA !DP_Palette
+    STA !ram_tilemap_buffer+1,X : STA !ram_tilemap_buffer+3,X
+    STA !ram_tilemap_buffer+5,X : STA !ram_tilemap_buffer+7,X
+    %a16()
+
     RTS
 }
 
@@ -1298,6 +1358,7 @@ cm_execute_action_table:
     dw execute_numfield
     dw execute_numfield_hex
     dw execute_numfield_word
+    dw execute_numfield_word_hex
     dw execute_choice
     dw execute_ctrl_shortcut
     dw execute_jsl
@@ -1502,6 +1563,67 @@ execute_numfield_word:
   .end
     %ai16()
     %sfxnumber()
+    RTS
+}
+
+execute_numfield_word_hex:
+{
+;    ; grab the memory address (long)
+;    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_Address
+;    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : STA !DP_Address+2
+;
+;    ; grab minimum and maximum values
+;    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : STA !DP_Minimum
+;    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu : INC : STA !DP_Maximum ; INC for convenience
+;
+;    ; check for held inputs
+;    LDA !ram_cm_controller : BIT !IH_INPUT_HELD : BNE .input_held
+;    ; grab normal increment and skip past both
+;    LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu : INC !DP_CurrentMenu
+;    BRA .store_increment
+;
+;  .input_held
+;    ; grab faster increment and skip past both
+;    INC !DP_CurrentMenu : LDA [!DP_CurrentMenu] : INC !DP_CurrentMenu
+;
+;  .store_increment
+;    AND #$00FF : STA !DP_Increment
+;
+;    ; determine dpad direction
+;    LDA !ram_cm_controller : BIT #$0200 : BNE .pressed_left
+;    ; pressed right, inc
+;    LDA [!DP_Address] : CLC : ADC !DP_Increment
+;    CMP !DP_Maximum : BCS .set_to_min
+;    STA [!DP_Address] : BRA .jsl
+;
+;  .pressed_left ; dec
+;    LDA [!DP_Address] : SEC : SBC !DP_Increment : BMI .set_to_max
+;    CMP !DP_Minimum : BCC .set_to_max
+;    STA [!DP_Address] : BRA .jsl
+;
+;  .set_to_min
+;    LDA !DP_Minimum : STA [!DP_Address] : BRA .jsl
+;
+;  .set_to_max
+;    LDA !DP_Maximum : DEC : STA [!DP_Address]
+;
+;  .jsl
+;    ; grab JSL pointer and skip if zero
+;    LDA [!DP_CurrentMenu] : BEQ .end
+;    STA !DP_JSLTarget
+;
+;    ; Set return address for indirect JSL
+;    LDA !ram_cm_menu_bank : STA !DP_JSLTarget+2
+;    PHK : PEA .end-1
+;
+;    ; addr in A
+;    LDA [!DP_Address] : AND #$00FF : LDX #$0000
+;    JML.w [!DP_JSLTarget]
+;
+;  .end
+;    %ai16()
+;    %sfxnumber()
+    %sfxfail()
     RTS
 }
 

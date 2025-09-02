@@ -43,6 +43,7 @@ MainMenu:
     dw #mm_goto_events
     dw #mm_goto_misc
     dw #mm_goto_gamemenu
+    dw #mm_goto_memory
     dw #mm_goto_ctrlsmenu
     dw #$0000
     %cm_version_header("SM PRACTICE HACK")
@@ -56,6 +57,7 @@ MainMenuBanks:
     dw #EventsMenu>>16
     dw #MiscMenu>>16
     dw #GameMenu>>16
+    dw #MemoryMenu>>16
     dw #CtrlMenu>>16
 
 mm_goto_equipment:
@@ -72,6 +74,9 @@ mm_goto_misc:
 
 mm_goto_gamemenu:
     %cm_mainmenu("Game Options", #GameMenu)
+
+mm_goto_memory:
+    %cm_mainmenu("Memory Viewer", #MemoryMenu)
 
 mm_goto_ctrlsmenu:
     %cm_mainmenu("Controller Shortcuts", #CtrlMenu)
@@ -1243,6 +1248,40 @@ game_debugplms:
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
+
+
+; ----------
+; Memory Menu
+; ----------
+
+MemoryMenu:
+    dw #mem_samus_X
+    dw #mem_samus_X_sub
+    dw #mem_samus_Y
+    dw #mem_samus_Y_sub
+    dw #$FFFF
+    dw #mem_room_ID
+    dw #mem_door_ID
+    dw #$0000
+    %cm_header("COMMON MEMORY")
+
+mem_samus_X:
+    %cm_numfield_hex_word("Samus X Position", !SAMUS_X) ;, 0, $5FC, 1, $10, #0)
+
+mem_samus_X_sub:
+    %cm_numfield_hex_word("Samus X Sub-Position", !SAMUS_X_SUBPX) ;, 0, $FFFF, 1, $40, #0)
+
+mem_samus_Y:
+    %cm_numfield_hex_word("Samus Y Position", !SAMUS_Y) ;, 0, $8EF, 1, $10, #0)
+
+mem_samus_Y_sub:
+    %cm_numfield_hex_word("Samus X Sub-Position", !SAMUS_Y_SUBPX) ;, 0, $FFFF, 1, $40, #0)
+
+mem_room_ID:
+    %cm_numfield_hex_word("Room ID", !ROOM_ID) ;, $8000, $FFFF, 1, 1, #0)
+
+mem_door_ID:
+    %cm_numfield_hex_word("Door ID", !DOOR_ID) ;, $8000, $FFFF, 1, 1, #0)
 
 
 ; ----------

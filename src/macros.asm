@@ -130,16 +130,20 @@ table ../resources/normal.tbl
     db #$28, "<title>", #$FF
 endmacro
 
-macro cm_numfield_hex_word(title, addr, bitmask, jsltarget)
+macro cm_numfield_hex_word(title, addr) ;, start, end, increment, heldincrement, jsltarget)
 ; Displays a 16-bit value in hexadecimal
   .dm_action
     dw !ACTION_NUMFIELD_HEX_WORD
   .dm_addr
     dl <addr> ; 24bit RAM address to display/manipulate
-  .dm_bitmask
-    dw <bitmask> ; 16bit mask to cap value (for colors)
-  .dm_jsl
-    dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
+;  .dm_minMax
+;    dw <start>, <end> ; minimum and maximum values allowed
+;  .dm_inc
+;    db <increment> ; inc/dec amount when pressed
+;  .dm_heldinc
+;    db <heldincrement> ; inc/dec amount when direction is held (scroll faster)
+;  .dm_jsl
+;    dw <jsltarget> ; 16bit address to code in the same bank as current menu/submenu
   .dm_text
 table ../resources/normal.tbl
     db #$28, "<title>", #$FF

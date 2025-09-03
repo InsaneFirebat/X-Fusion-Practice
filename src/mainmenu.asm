@@ -823,6 +823,8 @@ TeleportDebugMenu:
     dw #tel_debug6
     dw #tel_debug7
     dw #tel_debug8
+    dw #tel_debug9
+    dw #tel_debugA
     dw #$0000
     %cm_header("SECT-X-DMX SAVE STATIONS")
 
@@ -836,7 +838,7 @@ tel_debug2:
     %cm_jsl("Metroid Chase with Dev Exit", #action_teleport, #$0702)
 
 tel_debug3:
-    %cm_jsl("SA-X Hallway of Death", #action_teleport, #$0703)
+    %cm_jsl("SA-X Hallway of Death Left", #action_teleport, #$0703)
 
 tel_debug4:
     %cm_jsl("DMX Elevator Top", #action_teleport, #$0704)
@@ -852,6 +854,12 @@ tel_debug7:
 
 tel_debug8:
     %cm_jsl("Omega Queen", #action_teleport, #$0708)
+
+tel_debug9:
+    %cm_jsl("Hornoad Sewer", #action_teleport, #$0709)
+
+tel_debugA:
+    %cm_jsl("SA-X Hallway of Death Right", #action_teleport, #$070A)
 
 if !DEV
 DebugTeleportMenu:
@@ -877,7 +885,7 @@ tel_debug_area:
     db #$FF
 
 tel_debug_station:
-    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, $16, 1, 4, #0)
+    %cm_numfield_hex("Station ID", !ram_tel_debug_station, 0, 4, 1, 4, #0)
 
 tel_debug_execute:
     %cm_jsl("TELEPORT", #action_debug_teleport, #$0000)

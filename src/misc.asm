@@ -137,7 +137,7 @@ transfer_cgram_long:
 
 if 0 ; commented out because unused
 ; Rewrite load station lists so we can add our own
-; 40/111 used
+; 43/151 used
 org $80C4B5
 LoadStationLists:
     dw .mainDeck, .SRX, .TRO, .PYR, .AQA, .ARC, .NOC, .DMX
@@ -163,6 +163,7 @@ LoadStationLists:
     dw $8A2F, $9664, $0000, $0000, $0000, $00A1, $FFE0 ; $04 - Twin Junctions West
     dw $8A52, $95C8, $0000, $0000, $0000, $00A1, $FFE0 ; $05 - Twin Junctions East
     dw $8A90, $9850, $0000, $0000, $0000, $00A1, $0020 ; $06 - East Spike Tower
+    dw $8A52, $95C8, $0000, $0000, $0000, $00B0, $FFE0 ; $07 - Twin Junctions East (autosave)
 
   .TRO
     dw $932D, $9D90, $0000, $0000, $0000, $00A1, $0020 ; $00 - Cloister
@@ -191,20 +192,23 @@ LoadStationLists:
   .NOC
     dw $B737, $B1F4, $0000, $0000, $0000, $00A1, $0000 ; $00 - Entrance Lobby North
     dw $B75A, $B3F8, $0000, $0000, $0000, $00A1, $0000 ; $01 - East Turbo Tube Access
-    dw $B77D, $B6C8, $0000, $0000, $0000, $00A1, $0020 ; $02 - Warehouse
+    dw $B77D, $B6E0, $0000, $0000, $0000, $00A1, $0020 ; $02 - Warehouse
     dw $B7A0, $B50C, $0000, $0000, $0000, $00A1, $0020 ; $03 - Entrance Lobby South
     dw $BCE8, $B698, $0000, $0000, $0000, $00A1, $0020 ; $04 - Catacombs
 
   .DMX
-    dw $BFB0, $B7C4, $0000, $0000, $0200, $0090, $0050 ; $00 - Xenometroid Birthplace
-    dw $C13C, $B854, $0004, $0000, $0000, $0090, $0050 ; $01 - Serpentine Break
-    dw $C182, $B86C, $0004, $0000, $0100, $0090, $FFB0 ; $02 - Metroid Chase with Dev Exit
-    dw $C1EB, $B89C, $0004, $0000, $0000, $0090, $FFB0 ; $03 - SA-X Hallway of Death
-    dw $C254, $B938, $0000, $0000, $0000, $0090, $0000 ; $04 - DMX Elevator Top
-    dw $C29A, $B8F0, $0000, $0100, $0000, $0090, $0050 ; $05 - Winding SA-X Chase
-    dw $C326, $B92C, $0004, $0300, $0000, $00A0, $0048 ; $06 - Golden Four Containment
-    dw $BF8D, $B950, $0000, $0000, $0100, $0090, $FFB0 ; $07 - Ventilation B
-    dw $C0F6, $B83C, $0000, $0000, $0000, $0090, $0048 ; $08 - Omega Queen
+    dw $BFB0, $B7DC, $0000, $0000, $0200, $0090, $0050 ; $00 - Xenometroid Birthplace
+    dw $C13C, $B86C, $0004, $0000, $0000, $0090, $0050 ; $01 - Serpentine Break
+    dw $C182, $B884, $0004, $0000, $0100, $0090, $FFB0 ; $02 - Metroid Chase with Dev Exit
+    dw $C1EB, $B8B4, $0004, $0000, $0000, $0090, $FFB0 ; $03 - SA-X Hallway of Death (left)
+    dw $C254, $B950, $0000, $0000, $0000, $0090, $0000 ; $04 - DMX Elevator Top
+    dw $C29A, $B908, $0000, $0100, $0000, $0090, $0050 ; $05 - Winding SA-X Chase
+    dw $C326, $B944, $0004, $0300, $0000, $00A0, $0048 ; $06 - Golden Four Containment
+    dw $BF8D, $B968, $0000, $0000, $0100, $0090, $FFB0 ; $07 - Ventilation B
+    dw $C0F6, $B854, $0000, $0000, $0000, $0090, $0048 ; $08 - Omega Queen
+    dw $C2E0, $B92C, $0000, $0000, $0000, $00A0, $0030 ; $09 - Hornoad Sewer
+    dw $C1EB, $B8B4, $0000, $0400, $0000, $0090, $0030 ; $0A - SA-X Hallway of Death (right)
+
 warnpc $80CD07
 endif
 

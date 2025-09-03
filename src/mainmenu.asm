@@ -1031,15 +1031,18 @@ EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
     dw #events_resetitems
-;    dw #$FFFF
+    dw #$FFFF
 ;    dw #events_goto_bosses
 ;    dw #$FFFF
-;    dw #events_zebesawake
-;    dw #events_maridiatubebroken
-;    dw #events_chozoacid
-;    dw #events_shaktool
-;    dw #events_tourian
-;    dw #events_metroid1
+    dw #events_AUX_SRX
+    dw #events_AUX_TRO
+    dw #events_AUX_PYR
+    dw #events_AUX_AQA
+    dw #events_AUX_ARC
+    dw #events_AUX_NOC
+    dw #$FFFF
+    dw #boss_nettori
+    dw #boss_neodraygon
 ;    dw #events_metroid2
 ;    dw #events_metroid3
 ;    dw #events_metroid4
@@ -1083,9 +1086,27 @@ events_resetitems:
     %sfxreset()
     RTL
 
-;events_goto_bosses:
-;    %cm_submenu("Bosses", #BossesMenu)
-;
+events_AUX_SRX:
+    %cm_toggle_bit("SRX", $7ED820, #$0002, #0)
+
+events_AUX_TRO:
+    %cm_toggle_bit("TRO", $7ED820, #$0004, #0)
+
+events_AUX_PYR:
+    %cm_toggle_bit("PYR", $7ED820, #$0008, #0)
+
+events_AUX_AQA:
+    %cm_toggle_bit("AQA", $7ED820, #$0010, #0)
+
+events_AUX_ARC:
+    %cm_toggle_bit("ARC", $7ED820, #$0020, #0)
+
+events_AUX_NOC:
+    %cm_toggle_bit("NOC", $7ED820, #$0040, #0)
+
+events_goto_bosses:
+    %cm_submenu("Bosses", #BossesMenu)
+
 ;events_zebesawake:
 ;    %cm_toggle_bit("Zebes Awake", $7ED820, #$0001, #0)
 ;
@@ -1123,13 +1144,13 @@ events_resetitems:
 ;    %cm_toggle_bit("Animals Saved", $7ED820, #$8000, #0)
 ;
 ;
-;; ------------
-;; Bosses menu
-;; ------------
+; ------------
+; Bosses menu
+; ------------
 ;
 ;BossesMenu:
-;    dw #boss_ceresridley
-;    dw #boss_bombtorizo
+;    dw #boss_nettori
+;    dw #boss_neodraygon
 ;    dw #boss_spospo
 ;    dw #boss_kraid
 ;    dw #boss_phantoon
@@ -1146,13 +1167,13 @@ events_resetitems:
 ;    dw #boss_ridley_statue
 ;    dw #$0000
 ;    %cm_header("BOSSES")
-;
-;boss_ceresridley:
-;    %cm_toggle_bit("Ceres Ridley", #$7ED82E, #$0001, #0)
-;
-;boss_bombtorizo:
-;    %cm_toggle_bit("Bomb Torizo", #$7ED828, #$0004, #0)
-;
+
+boss_nettori:
+    %cm_toggle_bit("Nettori", #$7ED82A, #$0001, #0)
+
+boss_neodraygon:
+    %cm_toggle_bit("Neo-Draygon", #$7ED82C, #$0001, #0)
+
 ;boss_spospo:
 ;    %cm_toggle_bit("Spore Spawn", #$7ED828, #$0200, #0)
 ;

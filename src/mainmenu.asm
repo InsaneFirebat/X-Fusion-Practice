@@ -1051,10 +1051,12 @@ EventsMenu:
     dw #events_goto_data
     dw #events_goto_nav
     dw #$FFFF
+    dw #events_aqa_water_level
+    dw #events_enable_map
     dw #events_omega_metroid
     dw #events_enter_big_red
     dw #events_earthquake_TRO
-    dw #events_hide_SAX
+    dw #events_sanctum_SAX
     dw #$0000
     %cm_header("EVENTS")
 
@@ -1104,6 +1106,18 @@ events_goto_data:
 events_goto_nav:
     %cm_submenu("Navigation Rooms", #EventsNavMenu)
 
+events_aqa_water_level:
+    dw !ACTION_CHOICE
+    dl $7E09CC
+    dw $0000
+    db $28, "AQA Water Lv.", #$FF
+    db $28, "       FULL", #$FF
+    db $28, "    PARTIAL", #$FF
+    db $28, "      EMPTY", #$FF
+    db $FF
+
+events_enable_map:
+    %cm_toggle_bit("Map Obtained", $7ED909, #$0001, #0)
 events_omega_metroid:
     %cm_toggle_bit("Omega Metroid Cleared", $7ED822, #$0001, #0)
 
@@ -1113,8 +1127,8 @@ events_enter_big_red:
 events_earthquake_TRO:
     %cm_toggle_bit("Earthquake in TRO", $7ED824, #$0004, #0)
 
-events_hide_SAX:
-    %cm_toggle_bit("Hide from SA-X", $7ED824, #$0008, #0)
+events_sanctum_SAX:
+    %cm_toggle_bit("Sanctum SA-X Encounter", $7ED824, #$0008, #0)
 
 EventsAUXMenu:
     dw #events_AUX_SRX
@@ -1147,6 +1161,9 @@ events_AUX_NOC:
 EventsDataMenu:
     dw #events_data_SRX
     dw #events_data_TRO
+    dw #events_data_PYR
+    dw #events_data_AQA
+    dw #events_data_ARC
     dw #$0000
     %cm_header("DATA ROOMS")
 
@@ -1156,12 +1173,27 @@ events_data_SRX:
 events_data_TRO:
     %cm_toggle_bit("TRO", $7ED821, #$0010, #0)
 
+events_data_PYR:
+    %cm_toggle_bit("PYR", $7ED821, #$0020, #0)
+
+events_data_AQA:
+    %cm_toggle_bit("AQA", $7ED821, #$0080, #0)
+
+events_data_ARC:
+    %cm_toggle_bit("ARC", $7ED821, #$0040, #0)
+
 EventsNavMenu:
+    dw #events_nav_MDK
     dw #events_nav_SRX
     dw #events_nav_TRO
     dw #events_nav_PYR
+    dw #events_nav_AQA
+    dw #events_nav_NOC
     dw #$0000
     %cm_header("NAVIGATION ROOMS")
+
+events_nav_MDK:
+    %cm_toggle_bit("MDK", $7ED831, #$1000, #0)
 
 events_nav_SRX:
     %cm_toggle_bit("SRX", $7ED831, #$0080, #0)
@@ -1172,6 +1204,11 @@ events_nav_TRO:
 events_nav_PYR:
     %cm_toggle_bit("PYR", $7ED832, #$0002, #0)
 
+events_nav_AQA:
+    %cm_toggle_bit("AQA", $7ED832, #$0010, #0)
+
+events_nav_NOC:
+    %cm_toggle_bit("NOC", $7ED832, #$0020, #0)
 
 ; ------------
 ; Bosses menu

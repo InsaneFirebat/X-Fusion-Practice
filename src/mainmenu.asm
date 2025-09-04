@@ -1052,6 +1052,7 @@ EventsMenu:
     dw #events_goto_nav
     dw #$FFFF
     dw #events_aqa_water_level
+    dw #events_enable_map
     dw #events_omega_metroid
     dw #events_enter_big_red
     dw #events_earthquake_TRO
@@ -1115,6 +1116,8 @@ events_aqa_water_level:
     db $28, "      EMPTY", #$FF
     db $FF
 
+events_enable_map:
+    %cm_toggle_bit("Map Obtained", $7ED909, #$0001, #0)
 events_omega_metroid:
     %cm_toggle_bit("Omega Metroid Cleared", $7ED822, #$0001, #0)
 

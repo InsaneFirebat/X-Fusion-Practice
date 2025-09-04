@@ -1193,7 +1193,7 @@ EventsNavMenu:
     %cm_header("NAVIGATION ROOMS")
 
 events_nav_MDK:
-    %cm_toggle_bit("MDK", $7ED831, #$1000, #0)
+    %cm_toggle_bit("MDK", $7ED831, #$0008, #0)
 
 events_nav_SRX:
     %cm_toggle_bit("SRX", $7ED831, #$0080, #0)

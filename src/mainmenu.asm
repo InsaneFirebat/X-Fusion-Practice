@@ -1160,13 +1160,13 @@ events_data_TRO:
     %cm_toggle_bit("TRO", $7ED821, #$0010, #0)
 
 events_data_PYR:
-    %cm_toggle_bit("PYR", $7ED821, #$0040, #0)
+    %cm_toggle_bit("PYR", $7ED821, #$0020, #0)
 
 events_data_AQA:
     %cm_toggle_bit("AQA", $7ED821, #$0080, #0)
 
 events_data_ARC:
-    %cm_toggle_bit("ARC", $7ED821, #$0020, #0)
+    %cm_toggle_bit("ARC", $7ED821, #$0040, #0)
 
 EventsNavMenu:
     dw #events_nav_MDK

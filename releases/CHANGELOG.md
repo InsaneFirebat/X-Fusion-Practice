@@ -1,7 +1,11 @@
 
 # Change Log
 
-## v2.2.0
+## v2.2.2
+
+- Added more toggles to the Events menu
+
+## v2.2.1
 
 - Added some toggles to the Events menu
 - Added missing teleports in DMX

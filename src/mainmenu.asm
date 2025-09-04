@@ -1109,7 +1109,7 @@ events_aqa_water_level:
     dw !ACTION_CHOICE
     dl $7E09CC
     dw $0000
-    db $28, "AQA Water Level", #$FF
+    db $28, "AQA Water Lv.", #$FF
     db $28, "       FULL", #$FF
     db $28, "    PARTIAL", #$FF
     db $28, "      EMPTY", #$FF

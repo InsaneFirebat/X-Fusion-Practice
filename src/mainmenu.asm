@@ -88,6 +88,7 @@ mm_goto_ctrlsmenu:
 ; ----------------
 ; Equipment menu
 ; ----------------
+print pc, " mainmenu equipment start"
 
 EquipmentMenu:
     dw #eq_refill
@@ -625,11 +626,13 @@ equipment_toggle_beams:
     LDA !SAMUS_BEAMS_COLLECTED : AND !DP_Increment : STA !SAMUS_BEAMS_COLLECTED
     JML $90AC8D ; update beam gfx
 }
+print pc, " mainmenu equipment end"
 
 
 ; ---------------
 ; Teleport menu
 ; ---------------
+print pc, " mainmenu teleport start"
 
 TeleportMenu:
     dw #tel_goto_crat
@@ -927,11 +930,13 @@ action_debug_teleport:
     ORA !ram_tel_debug_station : TAY
     JMP action_teleport
 }
+print pc, " mainmenu teleport end"
 
 
 ; -----------
 ; Misc menu
 ; -----------
+print pc, " mainmenu misc start"
 
 MiscMenu:
     dw #misc_bluesuit
@@ -1025,11 +1030,16 @@ misc_forcestand:
 
 misc_clearliquid:
     %cm_toggle_bit("Ignore Water this Room", $197E, #$0004, #0)
+print pc, " mainmenu misc end"
+%endfree(92)
 
 
 ; -----------
 ; Events menu
 ; -----------
+
+%startfree(9B)
+print pc, " mainmenu events start"
 
 EventsMenu:
     dw #events_resetevents
@@ -1182,11 +1192,15 @@ boss_zazzabi:
 
 boss_neodraygon:
     %cm_toggle_bit("Neo-Draygon", #$7ED82C, #$0001, #0)
+print pc, " mainmenu events end"
+%endfree(9B)
 
 
 ; ----------
 ; Game menu
 ; ----------
+%startfree(92)
+print pc, " mainmenu game start"
 
 GameMenu:
 ;    dw #game_alternatetext
@@ -1239,11 +1253,13 @@ game_debugplms:
 
 game_debugprojectiles:
     %cm_toggle_bit("Enable Projectiles", $7E198D, #$8000, #0)
+print pc, " mainmenu game end"
 
 
 ; ----------
 ; Memory Menu
 ; ----------
+print pc, " mainmenu memory start"
 
 MemoryMenu:
     dw #mem_samus_X
@@ -1273,11 +1289,13 @@ mem_room_ID:
 
 mem_door_ID:
     %cm_numfield_hex_word("Door ID", !DOOR_ID) ;, $8000, $FFFF, 1, 1, #0)
+print pc, " mainmenu memory end"
 
 
 ; ----------
 ; Ctrl Menu
 ; ----------
+print pc, " mainmenu ctrl end"
 
 CtrlMenu:
     dw #ctrl_menu
@@ -1337,5 +1355,6 @@ ctrl_reset_defaults:
     %sfxreset()
     JML init_sram_controller_shortcuts
     RTL
+print pc, " mainmenu ctrl end"
 
 %endfree(92)

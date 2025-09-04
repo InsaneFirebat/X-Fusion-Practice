@@ -965,17 +965,17 @@ misc_hyperbeam:
     %cm_toggle_bit("Disruptor Beam", $7E0A76, #$8000, #.routine)
   .routine
     AND #$8000 : BEQ .off
-    LDA #$0003
+;    LDA #$0003
 ;    JSL $91E4AD ; setup Samus for Hyper Beam
     LDA #$1003 : STA !SAMUS_BEAMS_EQUIPPED
     LDA #$FFFF : STA !SAMUS_BEAMS_COLLECTED
-    LDA #$8000 : STA $0A76
     JSL $90AC8D
     STZ $0DC0
-
     RTL
 
   .off
+    LDA !SAMUS_BEAMS_EQUIPPED : STA !SAMUS_BEAMS_COLLECTED
+
     LDX #$000E
   .loopFXobjects
     LDA $1E7D,X : CMP #$E1F0 : BEQ .found

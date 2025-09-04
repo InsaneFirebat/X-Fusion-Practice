@@ -1063,34 +1063,30 @@ EventsMenu:
 events_resetevents:
     %cm_jsl("Reset All Events", .routine, #$0000)
   .routine
-    LDA #$0000
-    STA $7ED820 : STA $7ED822 : STA $7ED824 : STA $7ED826
+    LDX #$0014
+    TYA
+-   STA $7ED820,X
+    DEX #2 : BPL -
     %sfxreset()
     RTL
 
 events_resetdoors:
     %cm_jsl("Reset All Doors", .routine, #$0000)
   .routine
-    PHP : %ai8()
-    LDX #$B0
-    LDA #$00
-  .loop
-    STA $7ED800,X
-    INX : CPX #$F0 : BNE .loop
-    PLP
+    LDX #$0040
+    TYA
+-   STA $7ED8B0,X
+    DEX #2 : BPL -
     %sfxreset()
     RTL
 
 events_resetitems:
     %cm_jsl("Reset All Items", .routine, #$0000)
   .routine
-    PHP : %ai8()
-    LDX #$70
-    LDA #$00
-  .loop
-    STA $7ED800,X
-    INX : CPX #$B0 : BNE .loop
-    PLP
+    LDX #$0070
+    TYA
+-   STA $7ED870,X
+    DEX #2 : BPL -
     %sfxreset()
     RTL
 

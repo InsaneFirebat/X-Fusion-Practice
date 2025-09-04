@@ -1054,7 +1054,7 @@ EventsMenu:
     dw #events_omega_metroid
     dw #events_enter_big_red
     dw #events_earthquake_TRO
-    dw #events_hide_SAX
+    dw #events_sanctum_SAX
     dw #$0000
     %cm_header("EVENTS")
 
@@ -1113,8 +1113,8 @@ events_enter_big_red:
 events_earthquake_TRO:
     %cm_toggle_bit("Earthquake in TRO", $7ED824, #$0004, #0)
 
-events_hide_SAX:
-    %cm_toggle_bit("Hide from SA-X", $7ED824, #$0008, #0)
+events_sanctum_SAX:
+    %cm_toggle_bit("Sanctum SA-X Encounter", $7ED824, #$0008, #0)
 
 EventsAUXMenu:
     dw #events_AUX_SRX

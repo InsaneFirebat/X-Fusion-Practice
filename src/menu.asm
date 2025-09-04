@@ -1839,8 +1839,6 @@ warnpc $92ED23
 print pc, " menu data2 end"
 
 
-%startfree(92)
 print pc, " mainmenu start"
 incsrc mainmenu.asm
 print pc, " mainmenu end"
-%endfree(92)

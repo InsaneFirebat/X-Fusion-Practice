@@ -1,4 +1,7 @@
 
+%startfree(92)
+
+
 ; ------------
 ; Menu Helpers
 ; ------------
@@ -1146,10 +1149,10 @@ EventsDataMenu:
     %cm_header("DATA ROOMS")
 
 events_data_SRX:
-    %cm_toggle_bit("SRX Data Station", $7ED821, #$0008, #0)
+    %cm_toggle_bit("SRX", $7ED821, #$0008, #0)
 
 events_data_TRO:
-    %cm_toggle_bit("TRO Data Station", $7ED821, #$0010, #0)
+    %cm_toggle_bit("TRO", $7ED821, #$0010, #0)
 
 EventsNavMenu:
     dw #events_nav_SRX
@@ -1159,13 +1162,13 @@ EventsNavMenu:
     %cm_header("NAVIGATION ROOMS")
 
 events_nav_SRX:
-    %cm_toggle_bit("SRX Navigation", $7ED831, #$0080, #0)
+    %cm_toggle_bit("SRX", $7ED831, #$0080, #0)
 
 events_nav_TRO:
-    %cm_toggle_bit("TRO Navigation", $7ED832, #$0001, #0)
+    %cm_toggle_bit("TRO", $7ED832, #$0001, #0)
 
 events_nav_PYR:
-    %cm_toggle_bit("PYR Navigation", $7ED832, #$0002, #0)
+    %cm_toggle_bit("PYR", $7ED832, #$0002, #0)
 
 
 ; ------------
@@ -1342,3 +1345,5 @@ ctrl_reset_defaults:
     %sfxreset()
     JML init_sram_controller_shortcuts
     RTL
+
+%endfree(92)

@@ -1178,7 +1178,7 @@ boss_nettori:
     %cm_toggle_bit("Nettori", #$7ED82A, #$0001, #0)
 
 boss_zazzabi:
-    %cm_toggle_bit("Neo-Draygon", #$7ED82A, #$0002, #0)
+    %cm_toggle_bit("Zazzabi", #$7ED82A, #$0002, #0)
 
 boss_neodraygon:
     %cm_toggle_bit("Neo-Draygon", #$7ED82C, #$0001, #0)

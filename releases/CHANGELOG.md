@@ -3,6 +3,12 @@
 
 ## v2.2.0
 
+- Added some toggles to the Events menu
+- Added missing teleports in DMX
+
+
+## v2.2.0
+
 - Added a menu to view certain memory addresses
 
 

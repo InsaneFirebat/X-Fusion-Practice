@@ -916,16 +916,8 @@ action_teleport:
 
   .branch
     JSL ResetCounters
-    ; Silence SFX
-    LDA #$0002
-    JSL $809049
-    LDA #$0071
-    JSL $8090CB
-    LDA #$0001
-    JSL $80914D
-
+    JSL SilenceSFX
     LDA #$0001 : STA !ram_cm_leave
-
     RTL
 }
 

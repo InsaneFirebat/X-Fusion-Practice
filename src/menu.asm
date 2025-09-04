@@ -14,14 +14,7 @@ cm_start:
     STZ !DISABLE_SOUNDS
     LDA !PB_EXPLOSION_STATUS : PHA
     STZ !PB_EXPLOSION_STATUS
-
-    ; Cancel sound effects
-    LDA #$0002
-    JSL $809049
-    LDA #$0071
-    JSL $8090CB
-    LDA #$0001
-    JSL $80914D
+    JSL SilenceSFX
 
     JSR cm_init
     JSL cm_draw
@@ -56,14 +49,7 @@ cm_start:
 
     %ai16()
     JSR cm_wait_for_lag_frame
-
-    ; Cancel sound effects
-    LDA #$0002
-    JSL $809049
-    LDA #$0071
-    JSL $8090CB
-    LDA #$0001
-    JSL $80914D
+    JSL SilenceSFX
 
     PLB
     PLP
@@ -1812,6 +1798,16 @@ cm_hex2dec:
     LDA $4216 : STA !DP_FirstDigit ; hundreds
 
     RTS
+}
+
+SilenceSFX:
+{
+    LDA #$0002
+    JSL $809049
+    LDA #$0071
+    JSL $8090CB
+    LDA #$0001
+    JML $80914D
 }
 print pc, " menu end"
 %endfree(9B)

@@ -2,11 +2,13 @@
 
 # About
 
-This is a very minimal practice hack due to the extreme lack of free space in the hack. Only savestates and a timer are available. This patch was adapted from the [Super Metroid Practice Hack](https://github.com/tewtal/sm_practice_hack).
+This patch was adapted from the [Super Metroid Practice Hack](https://github.com/tewtal/sm_practice_hack). It is a very minimal practice hack due to the extreme lack of free space in X-Fusion. Many important features had to be ommitted, such as presets and tinystates.
 
 # Savestate Feature
 
 By default, the inputs to create a savestate are `Select`+`Y`+`R`. Once a savestate has been created, you can press `Select`+`Y`+`L` by default to load the savestate. **Savestates cannot be created or loaded during door scrolling, music change, or when message boxes are active.**
+
+Savestates will only work on platforms that support 256k of SRAM. This includes SD2SNES/FXPAK, bsnes, Snes9x 1.61+, Mesen, MiSTer, and Super NT. A separate patch without this feature is provided for all other platforms.
 
 # Patching
 

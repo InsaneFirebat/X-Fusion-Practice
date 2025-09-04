@@ -1117,7 +1117,18 @@ events_aqa_water_level:
     db $FF
 
 events_enable_map:
-    %cm_toggle_bit("Map Obtained", $7ED909, #$0001, #0)
+    %cm_toggle_bit_inverted("Map Obtained", $7E0DF4, #$0001, #.routine)
+  .routine
+    %a8()
+    CMP #$01 : BNE .off
+    LDA #$FF
+    BRA .store
+  .off
+    LDA #$00
+  .store
+    STA $7ED909
+    RTL
+
 events_omega_metroid:
     %cm_toggle_bit("Omega Metroid Cleared", $7ED822, #$0001, #0)
 

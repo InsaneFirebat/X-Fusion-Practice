@@ -1035,28 +1035,21 @@ misc_clearliquid:
 ; -----------
 ; Events menu
 ; -----------
+
 EventsMenu:
     dw #events_resetevents
     dw #events_resetdoors
     dw #events_resetitems
     dw #$FFFF
-;    dw #events_goto_bosses
-;    dw #$FFFF
-    dw #events_AUX_SRX
-    dw #events_AUX_TRO
-    dw #events_AUX_PYR
-    dw #events_AUX_AQA
-    dw #events_AUX_ARC
-    dw #events_AUX_NOC
+    dw #events_goto_bosses
+    dw #events_goto_AUX
+    dw #events_goto_data
+    dw #events_goto_nav
     dw #$FFFF
-    dw #boss_nettori
-    dw #boss_neodraygon
-;    dw #events_metroid2
-;    dw #events_metroid3
-;    dw #events_metroid4
-;    dw #events_mb1glass
-;    dw #events_zebesexploding
-;    dw #events_animals
+    dw #events_omega_metroid
+    dw #events_enter_big_red
+    dw #events_earthquake_TRO
+    dw #events_hide_SAX
     dw #$0000
     %cm_header("EVENTS")
 
@@ -1094,6 +1087,40 @@ events_resetitems:
     %sfxreset()
     RTL
 
+events_goto_bosses:
+    %cm_submenu("Bosses", #BossesMenu)
+
+events_goto_AUX:
+    %cm_submenu("AUX Stations", #EventsAUXMenu)
+
+events_goto_data:
+    %cm_submenu("Data Rooms", #EventsDataMenu)
+
+events_goto_nav:
+    %cm_submenu("Navigation Rooms", #EventsNavMenu)
+
+events_omega_metroid:
+    %cm_toggle_bit("Omega Metroid Cleared", $7ED822, #$0001, #0)
+
+events_enter_big_red:
+    %cm_toggle_bit("Entered Big Red", $7ED824, #$0001, #0)
+
+events_earthquake_TRO:
+    %cm_toggle_bit("Earthquake in TRO", $7ED824, #$0004, #0)
+
+events_hide_SAX:
+    %cm_toggle_bit("Hide from SA-X", $7ED824, #$0008, #0)
+
+EventsAUXMenu:
+    dw #events_AUX_SRX
+    dw #events_AUX_TRO
+    dw #events_AUX_PYR
+    dw #events_AUX_AQA
+    dw #events_AUX_ARC
+    dw #events_AUX_NOC
+    dw #$0000
+    %cm_header("AUX STATIONS")
+
 events_AUX_SRX:
     %cm_toggle_bit("SRX", $7ED820, #$0002, #0)
 
@@ -1112,114 +1139,54 @@ events_AUX_ARC:
 events_AUX_NOC:
     %cm_toggle_bit("NOC", $7ED820, #$0040, #0)
 
-events_goto_bosses:
-    %cm_submenu("Bosses", #BossesMenu)
+EventsDataMenu:
+    dw #events_data_SRX
+    dw #events_data_TRO
+    dw #$0000
+    %cm_header("DATA ROOMS")
 
-;events_zebesawake:
-;    %cm_toggle_bit("Zebes Awake", $7ED820, #$0001, #0)
-;
-;events_maridiatubebroken:
-;    %cm_toggle_bit("Maridia Tube Broken", $7ED820, #$0800, #0)
-;
-;events_shaktool:
-;    %cm_toggle_bit("Shaktool Done Digging", $7ED820, #$2000, #0)
-;
-;events_chozoacid:
-;    %cm_toggle_bit("Chozo Lowered Acid", $7ED821, #$0010, #0)
-;
-;events_tourian:
-;    %cm_toggle_bit("Tourian Open", $7ED820, #$0400, #0)
-;
-;events_metroid1:
-;    %cm_toggle_bit("1st Metroids Cleared", $7ED822, #$0001, #0)
-;
-;events_metroid2:
-;    %cm_toggle_bit("2nd Metroids Cleared", $7ED822, #$0002, #0)
-;
-;events_metroid3:
-;    %cm_toggle_bit("3rd Metroids Cleared", $7ED822, #$0004, #0)
-;
-;events_metroid4:
-;    %cm_toggle_bit("4th Metroids Cleared", $7ED822, #$0008, #0)
-;
-;events_mb1glass:
-;    %cm_toggle_bit("MB1 Glass Broken", $7ED820, #$0004, #0)
-;
-;events_zebesexploding:
-;    %cm_toggle_bit("Zebes Set Ablaze", $7ED820, #$4000, #0)
-;
-;events_animals:
-;    %cm_toggle_bit("Animals Saved", $7ED820, #$8000, #0)
-;
-;
+events_data_SRX:
+    %cm_toggle_bit("SRX Data Station", $7ED821, #$0008, #0)
+
+events_data_TRO:
+    %cm_toggle_bit("TRO Data Station", $7ED821, #$0010, #0)
+
+EventsNavMenu:
+    dw #events_nav_SRX
+    dw #events_nav_TRO
+    dw #events_nav_PYR
+    dw #$0000
+    %cm_header("NAVIGATION ROOMS")
+
+events_nav_SRX:
+    %cm_toggle_bit("SRX Navigation", $7ED831, #$0080, #0)
+
+events_nav_TRO:
+    %cm_toggle_bit("TRO Navigation", $7ED832, #$0001, #0)
+
+events_nav_PYR:
+    %cm_toggle_bit("PYR Navigation", $7ED832, #$0002, #0)
+
+
 ; ------------
 ; Bosses menu
 ; ------------
-;
-;BossesMenu:
-;    dw #boss_nettori
-;    dw #boss_neodraygon
-;    dw #boss_spospo
-;    dw #boss_kraid
-;    dw #boss_phantoon
-;    dw #boss_botwoon
-;    dw #boss_draygon
-;    dw #boss_crocomire
-;    dw #boss_gt
-;    dw #boss_ridley
-;    dw #boss_mb
-;    dw #$FFFF
-;    dw #boss_kraid_statue
-;    dw #boss_phantoon_statue
-;    dw #boss_draygon_statue
-;    dw #boss_ridley_statue
-;    dw #$0000
-;    %cm_header("BOSSES")
+
+BossesMenu:
+    dw #boss_nettori
+    dw #boss_zazzabi
+    dw #boss_neodraygon
+    dw #$0000
+    %cm_header("BOSSES")
 
 boss_nettori:
     %cm_toggle_bit("Nettori", #$7ED82A, #$0001, #0)
 
+boss_zazzabi:
+    %cm_toggle_bit("Neo-Draygon", #$7ED82A, #$0002, #0)
+
 boss_neodraygon:
     %cm_toggle_bit("Neo-Draygon", #$7ED82C, #$0001, #0)
-
-;boss_spospo:
-;    %cm_toggle_bit("Spore Spawn", #$7ED828, #$0200, #0)
-;
-;boss_kraid:
-;    %cm_toggle_bit("Kraid", #$7ED828, #$0100, #0)
-;
-;boss_phantoon:
-;    %cm_toggle_bit("Phantoon", #$7ED82A, #$0100, #0)
-;
-;boss_botwoon:
-;    %cm_toggle_bit("Botwoon", #$7ED82C, #$0002, #0)
-;
-;boss_draygon:
-;    %cm_toggle_bit("Draygon", #$7ED82C, #$0001, #0)
-;
-;boss_crocomire:
-;    %cm_toggle_bit("Crocomire", #$7ED82A, #$0002, #0)
-;
-;boss_gt:
-;    %cm_toggle_bit("Golden Torizo", #$7ED82A, #$0004, #0)
-;
-;boss_ridley:
-;    %cm_toggle_bit("Ridley", #$7ED82A, #$0001, #0)
-;
-;boss_mb:
-;    %cm_toggle_bit("Mother Brain", #$7ED82C, #$0200, #0)
-;
-;boss_kraid_statue:
-;    %cm_toggle_bit("Kraid Statue", #$7ED820, #$0200, #0)
-;
-;boss_phantoon_statue:
-;    %cm_toggle_bit("Phantoon Statue", #$7ED820, #$0040, #0)
-;
-;boss_draygon_statue:
-;    %cm_toggle_bit("Draygon Statue", #$7ED820, #$0100, #0)
-;
-;boss_ridley_statue:
-;    %cm_toggle_bit("Ridley Statue", #$7ED820, #$0080, #0)
 
 
 ; ----------

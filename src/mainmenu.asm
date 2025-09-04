@@ -1051,6 +1051,7 @@ EventsMenu:
     dw #events_goto_data
     dw #events_goto_nav
     dw #$FFFF
+    dw #events_aqa_water_level
     dw #events_omega_metroid
     dw #events_enter_big_red
     dw #events_earthquake_TRO
@@ -1103,6 +1104,16 @@ events_goto_data:
 
 events_goto_nav:
     %cm_submenu("Navigation Rooms", #EventsNavMenu)
+
+events_aqa_water_level:
+    dw !ACTION_CHOICE
+    dl $7E09CC
+    dw $0000
+    db $28, "AQA Water Level", #$FF
+    db $28, "       FULL", #$FF
+    db $28, "    PARTIAL", #$FF
+    db $28, "      EMPTY", #$FF
+    db $FF
 
 events_omega_metroid:
     %cm_toggle_bit("Omega Metroid Cleared", $7ED822, #$0001, #0)
